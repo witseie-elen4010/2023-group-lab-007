@@ -2,7 +2,7 @@
 
 ## Description
 ---
-- Brief desctiption
+- Brief description
 - List of features
 - List of functionalities
 

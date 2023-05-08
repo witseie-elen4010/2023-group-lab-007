@@ -2,7 +2,6 @@ const path = require('path')
 const express = require('express')
 const router = express.Router()
 
-
 // const classList = require('./classList.js')
 
 router.get('/', function (req, res) {
@@ -15,7 +14,11 @@ router.get('/student_dashboard', function (req, res) {
   res.sendFile(path.join(__dirname, '../views', 'student_dashboard.html'))
 })
 router.get('/login', function (req, res) {
-  res.sendFile(path.join(__dirname, '../views', 'login.html'))
+  //Make this user object public to all views at a later stage
+  res.render('login', {
+    isAuthenticated: req.oidc.isAuthenticated(), user: req.oidc.user,
+  });
+  // res.sendFile(path.join(__dirname, '../views', 'login.ejs'))
 })
 router.get('/settings', function (req, res) {
   res.sendFile(path.join(__dirname, '../views', 'settings.html'))
