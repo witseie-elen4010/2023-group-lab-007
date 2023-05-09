@@ -8,28 +8,69 @@ router.get('/', function (req, res) {
   logger.info('Navigated to landing page [unknown user]');
 })
 router.get('/lecturer_dashboard', function (req, res) {
-  res.sendFile(path.join(__dirname, '../views', 'lecturer_dashboard.html'))
+  res.render('lecturer_dashboard', {
+    isAuthenticated: req.oidc.isAuthenticated(), user: req.oidc.user,
+  });
+  // res.sendFile(path.join(__dirname, '../views', 'lecturer_dashboard.html'))
   logger.info('Navigated to lecturer dashboard page [unknown user]');
 })
 router.get('/student_dashboard', function (req, res) {
-  res.sendFile(path.join(__dirname, '../views', 'student_dashboard.html'))
+  res.render('student_dashboard', {
+    isAuthenticated: req.oidc.isAuthenticated(), user: req.oidc.user,
+  });
   logger.info('Navigated to student dashboard page [unknown user]');
 })
-router.get('/login', function (req, res) {
+router.get('/loginorsignup', function (req, res) {
   logger.info('Navigated to login page [unknown user]');
   //Make this user object public to all views at a later stage
-  res.render('login', {
+  res.render('loginorsignup', {
     isAuthenticated: req.oidc.isAuthenticated(), user: req.oidc.user,
   });
 })
 router.get('/settings', function (req, res) {
+  res.render('settings', {
+    isAuthenticated: req.oidc.isAuthenticated(), user: req.oidc.user,
+  });
   logger.info('Navigated to settings page [unknown user]');
-  res.sendFile(path.join(__dirname, '../views', 'settings.html'))
 })
 router.get('/create_consultation', function (req, res) {
+  res.render('create_consultation', {
+    isAuthenticated: req.oidc.isAuthenticated(), user: req.oidc.user,
+  });
   logger.info('Navigated to create consultation page [unknown user]');
-  res.sendFile(path.join(__dirname, '../views', 'create_consultation.html'))
 })
+
+router.get('/loggedin', function (req, res) {
+  const isAuthenticated = req.oidc.isAuthenticated()
+
+  if (isAuthenticated) {
+    const userEmail = req.oidc.user.email;
+    if (userEmail.includes('@wits.co.za')) {
+      res.render('lecturer_dashboard', {
+        isAuthenticated: req.oidc.isAuthenticated(), user: req.oidc.user,
+      });
+      logger.info('Navigated to lecturer dashboard page [' + userEmail + ']');
+    } else if (userEmail.includes('@students.wits.ac.za')) {
+      res.render('student_dashboard', {
+        isAuthenticated: req.oidc.isAuthenticated(), user: req.oidc.user,
+      });
+      logger.info('Navigated to student dashboard page [' + userEmail + ']');
+    } else {
+      res.render('notamember', {
+        isAuthenticated: req.oidc.isAuthenticated(), user: req.oidc.user,
+      });
+      logger.info('Navigated to notamember page [' + userEmail + ']');
+    }
+  }
+  else {
+    res.render('notamember', {
+      isAuthenticated: req.oidc.isAuthenticated(), user: req.oidc.user,
+    });
+    logger.info('Navigated to notamember page [unknown user]');
+  }
+
+});
+
 
 
 // EXAMPLE CODE FOR RESTFUL API
