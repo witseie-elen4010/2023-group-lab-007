@@ -1,26 +1,33 @@
 const path = require('path')
 const express = require('express')
 const router = express.Router()
-
-
-// const classList = require('./classList.js')
+const logger = require("../../logger");
 
 router.get('/', function (req, res) {
   res.sendFile(path.join(__dirname, '../../index.html'))
+  logger.info('Navigated to landing page [unknown user]');
 })
 router.get('/lecturer_dashboard', function (req, res) {
   res.sendFile(path.join(__dirname, '../views', 'lecturer_dashboard.html'))
+  logger.info('Navigated to lecturer dashboard page [unknown user]');
 })
 router.get('/student_dashboard', function (req, res) {
   res.sendFile(path.join(__dirname, '../views', 'student_dashboard.html'))
+  logger.info('Navigated to student dashboard page [unknown user]');
 })
 router.get('/login', function (req, res) {
-  res.sendFile(path.join(__dirname, '../views', 'login.html'))
+  logger.info('Navigated to login page [unknown user]');
+  //Make this user object public to all views at a later stage
+  res.render('login', {
+    isAuthenticated: req.oidc.isAuthenticated(), user: req.oidc.user,
+  });
 })
 router.get('/settings', function (req, res) {
+  logger.info('Navigated to settings page [unknown user]');
   res.sendFile(path.join(__dirname, '../views', 'settings.html'))
 })
 router.get('/create_consultation', function (req, res) {
+  logger.info('Navigated to create consultation page [unknown user]');
   res.sendFile(path.join(__dirname, '../views', 'create_consultation.html'))
 })
 

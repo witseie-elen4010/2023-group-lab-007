@@ -1,0 +1,16 @@
+/* body {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+} */
+
+#loginlogout {
+  padding: 10px 20px;
+  /* add padding to the button */
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin: 3px;
+  /* position the button at the top-right corner */
+}
