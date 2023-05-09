@@ -22,5 +22,14 @@ The best reviewer is the person who will be able to give you the most thorough a
 - Balance giving explicit directions with just pointing out problems and letting the developer decide.
 - Encourage developers to simplify code or add code comments instead of just explaining the complexity to you.
 
+## Example review
+- Design: Approved
+- Functionality: Denied. You still need to impliment xx functionality
+- Complexity: Approved
+- Tests: Approved. No tests present but thats because only html was added
+- Naming: Approved
+- Comments: Approved
+- Style: Approved
+- Documentation: Approved. ADRS were updated
 
 Obtained from https://google.github.io/eng-practices/review/
