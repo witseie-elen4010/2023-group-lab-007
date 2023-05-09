@@ -1,15 +1,40 @@
-# Convert html to ejs
+# Implementing EJS over HTML in a Node and Express app
 
-## Description
-.ejs (Embedded JavaScript) is a template engine used for server-side rendering of dynamic web pages in Node.js applications. It allows developers to generate HTML pages with dynamic content by embedding JavaScript code directly into HTML markup. EJS templates can include variables, loops, conditionals, and functions, making it easier to generate dynamic content and maintain a clean separation of concerns between presentation and logic. EJS templates can be used to render dynamic web pages on the server-side and can also be used in client-side applications with frameworks such as Angular, React, and Vue. EJS is easy to learn and use, and it integrates seamlessly with Express, one of the most popular Node.js web frameworks.
+## Status
 
-## Why it was implimented
-- Allows for dynamic content generation and reuse of code blocks
-- Provides a clean separation of concerns between presentation and logic
-- Supports conditional statements, loops, and functions to create dynamic content
-- Integrates easily with Express, one of the most popular Node.js web frameworks
-- Makes it easier to manage and maintain large-scale applications
-- Enables developers to use familiar JavaScript syntax to write templates
-- Reduces the amount of repetitive code needed to generate dynamic content
-- Allows for easy sharing of templates between server-side and client-side applications
-- Provides a higher degree of flexibility in terms of generating dynamic content compared to HTML
+Accepted
+
+## Context
+
+We are building a Node.js and Express application that requires rendering HTML templates with dynamic content. We could use plain HTML files for this purpose, but this has several limitations and drawbacks, such as:
+
+- Limited ability to include dynamic content or logic
+- Code duplication across pages
+- Inability to reuse common elements across pages
+- Inability to leverage JavaScript modules or other frontend technologies
+
+After researching several options, we have decided to use Embedded JavaScript (EJS) as our templating language for this application.
+
+## Decision
+
+We will integrate EJS with our Node.js and Express app to handle rendering of HTML templates with dynamic content. This will involve the following steps:
+
+- Install the EJS module and any necessary plugins or dependencies
+- Configure Express to use EJS as the view engine
+- Create EJS templates for our web pages, using the appropriate syntax to include dynamic content and logic
+- Render the EJS templates with the appropriate data from our Node.js backend
+
+## Consequences
+
+### Pros
+
+- We will have a more flexible and powerful templating solution that can handle dynamic content and logic, as well as reuse common elements across pages
+- EJS templates are easier to read and write than raw HTML files, and provide a clear separation between content and presentation
+- EJS templates can leverage JavaScript modules and other frontend technologies, such as CSS preprocessors or client-side frameworks
+- Using EJS improves code consistency and maintainability by providing a standardized templating interface
+
+### Cons
+
+- We will have to learn and integrate a new technology, which may take some time and effort.
+- There may be some additional overhead and complexity associated with using a more feature-rich templating language, compared to plain HTML files
+- There may be some performance impact associated with rendering templates on the server-side, although this is usually negligible.
