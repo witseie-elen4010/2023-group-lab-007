@@ -4,7 +4,9 @@ const { auth } = require('express-openid-connect');
 const dotenv = require('dotenv').config();
 const ejs = require('ejs');
 const path = require('path');
+const logger = require("./logger");
 
+// Authzero configuration file
 const config = {
   authRequired: false,
   auth0Logout: true,
@@ -44,6 +46,11 @@ app.use('/cdn', express.static('public'));
 
 //Ejs needs to know where to find the views
 app.set('views', path.join(__dirname, 'src/views'));
+
+//Error route
+app.get('/404', (req, res) => {
+  res.sendStatus(404);
+})
 
 // Middleware to make the `user` object available for all views
 app.use(function (req, res, next) {

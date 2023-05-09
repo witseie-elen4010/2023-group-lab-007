@@ -1,9 +1,10 @@
 const path = require('path')
 const express = require('express')
+const logger = require("../../logger");
 
 const mainRouter = express.Router()
 mainRouter.get('/', function (req, res) {
-  console.log(req.oidc.isAuthenticated());
+  logger.info('Navigated to landing page [unknown user]');
   res.sendFile(path.join(__dirname, '../../index.html'))
 })
 
