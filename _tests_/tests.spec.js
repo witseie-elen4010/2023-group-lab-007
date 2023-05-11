@@ -4,6 +4,32 @@ test('This is a dummy test', () => {
   // Do nothing
 });
 
+const { getConsultations } = require('../public/scripts/student_dashboard');
+
+test('getConsultations returns the correct list of consultations', async () => {
+  const expected = [
+    {
+      date: '2023-05-15',
+      time: '10:00 - 12:00',
+      lecturer: 'John Doe'
+    },
+    {
+      date: '2023-05-17',
+      time: '14:00 - 16:00',
+      lecturer: 'Jane Smith'
+    },
+    {
+      date: '2023-05-19',
+      time: '09:00 - 11:00',
+      lecturer: 'Bob Johnson'
+    }
+  ];
+
+  const actual = await getConsultations();
+
+  expect(actual).toEqual(expected);
+});
+
 
 // EXAMPLE JEST TEST
 
