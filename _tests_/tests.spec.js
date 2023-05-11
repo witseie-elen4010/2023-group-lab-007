@@ -3,10 +3,9 @@
 test('This is a dummy test', () => {
   // Do nothing
 });
+const { get } = require('../src/studentConsultation.js');
 
-const { getConsultations } = require('../public/scripts/student_dashboard');
-
-test('getConsultations returns the correct list of consultations', async () => {
+test('get function returns the correct list of consultations', () => {
   const expected = [
     {
       date: '2023-05-15',
@@ -25,10 +24,11 @@ test('getConsultations returns the correct list of consultations', async () => {
     }
   ];
 
-  const actual = await getConsultations();
+  const actual = get();
 
   expect(actual).toEqual(expected);
 });
+
 
 
 // EXAMPLE JEST TEST
