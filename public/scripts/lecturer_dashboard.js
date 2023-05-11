@@ -9,16 +9,22 @@ let calendar = new FullCalendar.Calendar(calendarDiv, {
 });
 calendar.render();
 
-//List of default "consultations" to display
-const consultations = [
-    { title: 'Consultation 1', date: '2023-05-11' },
-    { title: 'Consultation 2', date: '2023-05-12' },
-    { title: 'Consultation 3', date: '2023-05-13' },
-];
+//fetch the consultations object stored in lecturerConsultation.js
+function getConsultations() {
+  return fetch('/class/api/consultations')
+    .then(response => response.json())
+    .then(data => {
+      const consultations = data.map(item => ({title: item.title, date: item.date}));
+      return consultations;
+    })
+    .catch(error => console.error(error));
+}
 
 //if the user presses the "show consultation" button, display the default consulation.
 if (showConsultation) {
-    showConsultation.addEventListener('click', () => {
+  showConsultation.addEventListener('click', () => {
+    getConsultations().then(consultations => {
+      console.log("[Unknown User] clicked show consultation button")
       if (!calendar) {
         calendar = new FullCalendar.Calendar(calendarDiv, {
           initialView: 'dayGridMonth',
@@ -31,4 +37,5 @@ if (showConsultation) {
         calendar.addEvent(event);
       });
     });
+  });
 }

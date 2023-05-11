@@ -3,6 +3,9 @@ const express = require('express')
 const router = express.Router()
 const logger = require("../../logger");
 
+const consultations = require('../lecturerConsultation.js').get();
+
+
 router.get('/', function (req, res) {
   res.sendFile(path.join(__dirname, '../../index.html'))
   logger.info('Navigated to landing page [unknown user]');
@@ -71,6 +74,9 @@ router.get('/loggedin', function (req, res) {
 
 });
 
+router.get('/api/consultations', function (req, res) {
+  res.json(consultations) // Respond with JSON
+})
 
 
 // EXAMPLE CODE FOR RESTFUL API
