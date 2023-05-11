@@ -1,9 +1,17 @@
 /* eslint-env jest */
 
+const student_dashboard = require('../public/scripts/student_dashboard.js')
 test('This is a dummy test', () => {
   // Do nothing
 });
 
+describe('teacherNames', () => {
+  it('should generate the correct full name', () => {
+    const teacher = { firstName: 'John', lastName: 'Doe' };
+    const fullName = `${teacher.firstName} ${teacher.lastName}`;
+    expect(fullName).toBe('John Doe');
+  });
+});
 
 // EXAMPLE JEST TEST
 
