@@ -1,6 +1,6 @@
 function getConsultations() {
   console.log('user clicked get Consultations button')
-  fetch('http://localhost:3000/class/api/consultations')
+  fetch('/class/api/consultations')
     .then(response => response.json())
     .then(data => {
       const consultations = data.map(item => `${item.date} ${item.time} with ${item.lecturer}`).join('<br>');
