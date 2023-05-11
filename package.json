@@ -24,6 +24,9 @@
   },
   "homepage": "https://github.com/witseie-elen4010/2023-group-lab-007#readme",
   "dependencies": {
+    "@fullcalendar/core": "^6.1.7",
+    "@fullcalendar/daygrid": "^6.1.7",
+    "@fullcalendar/interaction": "^6.1.7",
     "body-parser": "^1.20.2",
     "dotenv": "^16.0.3",
     "ejs": "^3.1.9",
