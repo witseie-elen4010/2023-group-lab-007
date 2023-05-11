@@ -5,12 +5,17 @@ test('This is a dummy test', () => {
   // Do nothing
 });
 
-describe('teacherNames', () => {
-  it('should generate the correct full name', () => {
-    const teacher = { firstName: 'John', lastName: 'Doe' };
-    const fullName = `${teacher.firstName} ${teacher.lastName}`;
-    expect(fullName).toBe('John Doe');
-  });
+const { get } = require('../src/lecturerConsultation.js');
+
+test('get function returns the list of lecturer consultations stored in the source file', () => {
+  const expected = [
+    { title: 'Consultation 1', date: '2023-05-11' },
+    { title: 'Consultation 2', date: '2023-05-12' },
+    { title: 'Consultation 3', date: '2023-05-13' },
+];
+  const real = get();
+
+  expect(real).toEqual(expected);
 });
 
 // EXAMPLE JEST TEST
