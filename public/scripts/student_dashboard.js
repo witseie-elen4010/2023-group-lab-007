@@ -3,7 +3,7 @@ const teacherNames = [
     firstName: "John", lastName: "Doe", 
     email: "john.doe@example.com", 
     slots: [new Date("2022-06-01T09:00:00"), new Date("2022-06-03T13:00:00"), new Date("2022-06-05T15:00:00")] 
-  },
+  }, 
   { 
     firstName: "Jane", lastName: "Smith", 
     email: "jane.smith@example.com", 
@@ -31,6 +31,7 @@ for (let i = 0; i < teacherNames.length; i++) {
   const option = document.createElement("option");
   option.text = fullName;
   option.value = teacher.email;
+ 
   dropdownMenu.appendChild(option);
 }
 
@@ -53,6 +54,7 @@ dropdownMenu.addEventListener('change', (e) => {
       const slot = slots[i];
       const slotItem = document.createElement("li");
       slotItem.innerText = slot.toLocaleString();
+
       slotList.appendChild(slotItem);
     }
 
@@ -62,3 +64,16 @@ dropdownMenu.addEventListener('change', (e) => {
     consultationSlots.innerHTML = '';
   }
 });
+function getConsultations() {
+  console.log('user clicked get Consultations button')
+  fetch('/class/api/studentConsultations')
+    .then(response => response.json())
+    .then(data => {
+      const consultations = data.map(item => `${item.date} ${item.time} with ${item.lecturer}`).join('<br>');
+      document.getElementById('consultation-list').innerHTML = consultations;
+    })
+    .catch(error => console.error(error));
+}
+
+document.getElementById('get-consultations-button').addEventListener('click', getConsultations);
+

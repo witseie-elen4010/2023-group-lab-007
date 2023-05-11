@@ -3,6 +3,32 @@
 test('This is a dummy test', () => {
   // Do nothing
 });
+const { getS } = require('../src/studentConsultation.js');
+
+test('get function returns the correct list of consultations', () => {
+  const expected = [
+    {
+      date: '2023-05-15',
+      time: '10:00 - 12:00',
+      lecturer: 'John Doe'
+    },
+    {
+      date: '2023-05-17',
+      time: '14:00 - 16:00',
+      lecturer: 'Jane Smith'
+    },
+    {
+      date: '2023-05-19',
+      time: '09:00 - 11:00',
+      lecturer: 'Bob Johnson'
+    }
+  ];
+
+  const actual = getS();
+
+  expect(actual).toEqual(expected);
+});
+
 
 const { get } = require('../src/lecturerConsultation.js');
 
@@ -13,7 +39,6 @@ test('get function returns the list of lecturer consultations stored in the sour
     { title: 'Consultation 3', date: '2023-05-13' },
 ];
   const real = get();
-
   expect(real).toEqual(expected);
 });
 

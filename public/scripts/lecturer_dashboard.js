@@ -53,7 +53,7 @@ calendar.render();
 
 //fetch the consultations object stored in lecturerConsultation.js
 function getConsultations() {
-  return fetch('/class/api/consultations')
+  return fetch('/class/api/lecturerConsultations')
     .then(response => response.json())
     .then(data => {
       const consultations = data.map(item => ({title: item.title, date: item.date}));
