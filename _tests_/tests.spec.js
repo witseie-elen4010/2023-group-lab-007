@@ -1,6 +1,5 @@
 /* eslint-env jest */
 
-const student_dashboard = require('../public/scripts/student_dashboard.js')
 test('This is a dummy test', () => {
   // Do nothing
 });
