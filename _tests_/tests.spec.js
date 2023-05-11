@@ -3,7 +3,7 @@
 test('This is a dummy test', () => {
   // Do nothing
 });
-const { get } = require('../src/studentConsultation.js');
+const { getS } = require('../src/studentConsultation.js');
 
 test('get function returns the correct list of consultations', () => {
   const expected = [
@@ -24,7 +24,7 @@ test('get function returns the correct list of consultations', () => {
     }
   ];
 
-  const actual = get();
+  const actual = getS();
 
   expect(actual).toEqual(expected);
 });
@@ -39,7 +39,6 @@ test('get function returns the list of lecturer consultations stored in the sour
     { title: 'Consultation 3', date: '2023-05-13' },
 ];
   const real = get();
-
   expect(real).toEqual(expected);
 });
 

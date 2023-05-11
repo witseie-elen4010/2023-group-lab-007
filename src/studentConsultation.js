@@ -19,7 +19,7 @@ const consultations = [
  
   // Public
 module.exports = {
-    get: function () {
+    getS: function () {
     return consultations
     },
 }

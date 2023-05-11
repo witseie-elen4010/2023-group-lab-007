@@ -5,7 +5,7 @@ const logger = require("../../logger");
 
 const lecturerConsultations = require('../lecturerConsultation.js').get();
 
-const studentConsultations = require('../studentConsultation.js').get();
+const studentConsultations = require('../studentConsultation.js').getS();
 router.get('/', function (req, res) {
   res.sendFile(path.join(__dirname, '../../index.html'))
   logger.info('Navigated to landing page [unknown user]');
