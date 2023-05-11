@@ -1,4 +1,5 @@
 function getConsultations() {
+  console.log('user clicked get Consultations button')
   fetch('http://localhost:3000/class/api/consultations')
     .then(response => response.json())
     .then(data => {
