@@ -2,7 +2,10 @@ const path = require('path')
 const express = require('express')
 const router = express.Router()
 const logger = require("../../logger");
-const consultations = require('../studentConsultation.js').get();
+
+const lectuerConsultations = require('../lecturerConsultation.js').get();
+
+const studentConsultations = require('../studentConsultation.js').get();
 router.get('/', function (req, res) {
   res.sendFile(path.join(__dirname, '../../index.html'))
   logger.info('Navigated to landing page [unknown user]');
@@ -72,9 +75,12 @@ router.get('/loggedin', function (req, res) {
 
 });
 
+router.get('/api/studentConsultations', function (req, res) {
+  res.json(studentConsultations) // Respond with JSON
+})
 
-router.get('/api/consultations', function (req, res) {
-  res.json(consultations) // Respond with JSON
+router.get('/api/lecturerConsultations', function (req, res) {
+  res.json(lecturerConsultations) // Respond with JSON
 })
 
 

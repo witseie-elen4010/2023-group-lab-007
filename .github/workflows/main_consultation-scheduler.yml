@@ -11,13 +11,13 @@ on:
 
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - name: Set up Node.js version
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v3
         with:
           node-version: '16.x'
 
@@ -26,9 +26,9 @@ jobs:
           npm install
           npm run build --if-present
           npm run test --if-present
-      
+
       - name: Upload artifact for deployment job
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: node-app
           path: .
@@ -42,15 +42,15 @@ jobs:
 
     steps:
       - name: Download artifact from build job
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: node-app
 
       - name: 'Deploy to Azure Web App'
-        uses: azure/webapps-deploy@v2
         id: deploy-to-webapp
+        uses: azure/webapps-deploy@v2
         with:
           app-name: 'consultation-scheduler'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_BA582D4EB8FE486AA73B10B009CD47EC }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_D52A5964D57D4BEAA4C1A41493DCD2B9 }}
           package: .

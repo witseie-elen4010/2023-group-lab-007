@@ -30,6 +30,18 @@ test('get function returns the correct list of consultations', () => {
 });
 
 
+const { get } = require('../src/lecturerConsultation.js');
+
+test('get function returns the list of lecturer consultations stored in the source file', () => {
+  const expected = [
+    { title: 'Consultation 1', date: '2023-05-11' },
+    { title: 'Consultation 2', date: '2023-05-12' },
+    { title: 'Consultation 3', date: '2023-05-13' },
+];
+  const real = get();
+
+  expect(real).toEqual(expected);
+});
 
 // EXAMPLE JEST TEST
 
