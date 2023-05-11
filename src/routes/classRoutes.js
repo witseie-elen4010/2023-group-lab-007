@@ -3,7 +3,7 @@ const express = require('express')
 const router = express.Router()
 const logger = require("../../logger");
 
-const lectuerConsultations = require('../lecturerConsultation.js').get();
+const lecturerConsultations = require('../lecturerConsultation.js').get();
 
 const studentConsultations = require('../studentConsultation.js').get();
 router.get('/', function (req, res) {
