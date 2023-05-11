@@ -3,6 +3,24 @@ const express = require('express')
 const router = express.Router()
 const logger = require("../../logger");
 
+const consultations = [
+  {
+    date: '2023-05-15',
+    time: '10:00 - 12:00',
+    lecturer: 'John Doe'
+  },
+  {
+    date: '2023-05-17',
+    time: '14:00 - 16:00',
+    lecturer: 'Jane Smith'
+  },
+  {
+    date: '2023-05-19',
+    time: '09:00 - 11:00',
+    lecturer: 'Bob Johnson'
+  }
+];
+
 router.get('/', function (req, res) {
   res.sendFile(path.join(__dirname, '../../index.html'))
   logger.info('Navigated to landing page [unknown user]');
@@ -20,6 +38,7 @@ router.get('/student_dashboard', function (req, res) {
   });
   logger.info('Navigated to student dashboard page [unknown user]');
 })
+
 router.get('/loginorsignup', function (req, res) {
   logger.info('Navigated to login page [unknown user]');
   //Make this user object public to all views at a later stage
@@ -71,6 +90,9 @@ router.get('/loggedin', function (req, res) {
 
 });
 
+router.get('/api/consultations', function (req, res) {
+  res.json(consultations) // Respond with JSON
+})
 
 
 // EXAMPLE CODE FOR RESTFUL API

@@ -5,15 +5,35 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="/cdn/scripts/student_dashboard.js"></script>
   <title>Document</title>
 </head>
 
 <body>
-  <h1>Student dashboard</h1>
+  <h1>Student dashboard Calender</h1>
   <% if (locals.isAuthenticated) { %>
     <h2 class="text-4xl mb-4">Welcome <%= user.given_name%>
     </h2>
     <% } %>
+    <button onclick="document.getElementById('my-paragraph').innerHTML = 'hi'">Click me!</button>
+    <p id="my-paragraph"></p>
+    <button onclick="getConsultations()">Get Consultations</button>
+    <p id="consultation-list"></p>
+  
+    <script>
+    function getConsultations() {
+      fetch('http://localhost:3000/class/api/consultations')
+        .then(response => response.json())
+        .then(data => {
+          const consultations = data.map(item => `${item.date} ${item.time} with ${item.lecturer}`).join('<br>');
+          document.getElementById('consultation-list').innerHTML = consultations;
+        })
+        .catch(error => console.error(error));
+    }
+    </script>
+ 
+    
+
 </body>
 
 </html>
