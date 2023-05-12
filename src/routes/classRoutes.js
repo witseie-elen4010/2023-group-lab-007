@@ -7,8 +7,30 @@ const lecturerConsultations = require('../lecturerConsultation.js').get();
 
 const studentConsultations = require('../studentConsultation.js').getS();
 router.get('/', function (req, res) {
-  res.sendFile(path.join(__dirname, '../../index.html'))
-  logger.info('Navigated to landing page [unknown user]');
+  const isAuthenticated = req.oidc.isAuthenticated()
+
+  if (isAuthenticated) {
+    const userEmail = req.oidc.user.email;
+    if (userEmail.includes('@wits.co.za')) {
+      res.render('lecturer_dashboard', {
+        isAuthenticated: req.oidc.isAuthenticated(), user: req.oidc.user,
+      });
+      logger.info('Navigated to lecturer dashboard page [' + userEmail + ']');
+    } else if (userEmail.includes('@students.wits.ac.za')) {
+      res.render('student_dashboard', {
+        isAuthenticated: req.oidc.isAuthenticated(), user: req.oidc.user,
+      });
+      logger.info('Navigated to student dashboard page [' + userEmail + ']');
+    } else {
+      res.render('notamember', {
+        isAuthenticated: req.oidc.isAuthenticated(), user: req.oidc.user,
+      });
+      logger.info('Navigated to notamember page [' + userEmail + ']');
+    }
+  } else {
+    res.redirect('/login');
+  }
+  
 })
 router.get('/lecturer_dashboard', function (req, res) {
   res.render('lecturer_dashboard', {
