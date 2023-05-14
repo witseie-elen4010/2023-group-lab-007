@@ -81,3 +81,36 @@ if (showConsultation) {
     });
   });
 }
+
+calendar.on('dateClick', function(info) {
+  const clickedDate = info.dateStr;
+  fetch(`/class/api/lecturerConsultations?date=${clickedDate}`)
+    .then(response => response.json())
+    .then(data => {
+      const select = document.getElementById('consultations');
+      select.innerHTML = '';
+      data.forEach(item => {
+        const option = document.createElement('option');
+        option.value = item.title;
+        option.textContent = item.title;
+        select.appendChild(option);
+      });
+    })
+    .catch(error => console.error(error));
+});
+
+const cancelBtn = document.querySelector('#cancelConsultation');
+cancelBtn.addEventListener('click', function() {
+  const selectedConsultation = document.getElementById('consultations').value;
+  const selectedDate = calendar.getDate().toISOString().substring(0, 10);
+  fetch(`/class/api/lecturerConsultations?date=${selectedDate}&title=${selectedConsultation}`, {
+    method: 'DELETE'
+  })
+    .then(response => response.json())
+    .then(data => {
+      console.log(data);
+      // Refresh the calendar to reflect the cancelled consultation
+      calendar.refetchEvents();
+    })
+    .catch(error => console.error(error));
+});
