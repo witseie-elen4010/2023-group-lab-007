@@ -2,10 +2,9 @@ const path = require('path')
 const express = require('express')
 const router = express.Router()
 const logger = require("../../logger");
-
 const lecturerConsultations = require('../lecturerConsultation.js').get();
-
 const studentConsultations = require('../studentConsultation.js').getS();
+
 router.get('/', function (req, res) {
   const isAuthenticated = req.oidc.isAuthenticated()
 
@@ -13,89 +12,114 @@ router.get('/', function (req, res) {
     const userEmail = req.oidc.user.email;
     if (userEmail.includes('@wits.co.za')) {
       res.render('lecturer_dashboard', {
-        isAuthenticated: req.oidc.isAuthenticated(), user: req.oidc.user,
+        isAuthenticated: req.oidc.isAuthenticated(), user: req.oidc.user, roll: "lecturer",
       });
       logger.info('Navigated to lecturer dashboard page [' + userEmail + ']');
     } else if (userEmail.includes('@students.wits.ac.za')) {
       res.render('student_dashboard', {
-        isAuthenticated: req.oidc.isAuthenticated(), user: req.oidc.user,
+        isAuthenticated: req.oidc.isAuthenticated(), user: req.oidc.user, roll: "student",
       });
       logger.info('Navigated to student dashboard page [' + userEmail + ']');
     } else {
       res.render('notamember', {
-        isAuthenticated: req.oidc.isAuthenticated(), user: req.oidc.user,
+        isAuthenticated: req.oidc.isAuthenticated(), user: req.oidc.user, roll: "other",
       });
       logger.info('Navigated to notamember page [' + userEmail + ']');
     }
   } else {
     res.redirect('/login');
   }
-  
 })
+
 router.get('/lecturer_dashboard', function (req, res) {
+  const isAuthenticated = req.oidc.isAuthenticated()
+  const userEmail = req.oidc.user.email;
+
+  //Replace with this on final version
+  // if (userEmail.includes('@wits.co.za')) {
+  //   res.render('lecturer_dashboard', {
+  //     isAuthenticated: req.oidc.isAuthenticated(), user: req.oidc.user, roll: "lecturer",
+  //   });
+  //   logger.info('Navigated to lecturer dashboard page [' + userEmail + ']');
+  // } else {
+  //   res.render('notamember', {
+  //     isAuthenticated: req.oidc.isAuthenticated(), user: req.oidc.user, roll: "other",
+  //   });
+  //   logger.info('Navigated to notamember page [' + userEmail + ']');
+  // }
+
   res.render('lecturer_dashboard', {
-    isAuthenticated: req.oidc.isAuthenticated(), user: req.oidc.user,
+    isAuthenticated: req.oidc.isAuthenticated(), user: req.oidc.user, roll: "lecturer",
   });
-  // res.sendFile(path.join(__dirname, '../views', 'lecturer_dashboard.html'))
-  logger.info('Navigated to lecturer dashboard page [unknown user]');
+  logger.info('Navigated to lecturer dashboard page [' + userEmail + ']');
 })
+
 router.get('/student_dashboard', function (req, res) {
+  const isAuthenticated = req.oidc.isAuthenticated()
+  const userEmail = req.oidc.user.email;
+
+  //Replace with this on final version
+  // if (userEmail.includes('@students.wits.co.za')) {
+  //   res.render('student_dashboard', {
+  //     isAuthenticated: req.oidc.isAuthenticated(), user: req.oidc.user, roll: "student",
+  //   });
+  //   logger.info('Navigated to lecturer dashboard page [' + userEmail + ']');
+  // } else {
+  //   res.render('notamember', {
+  //     isAuthenticated: req.oidc.isAuthenticated(), user: req.oidc.user, roll: "other",
+  //   });
+  //   logger.info('Navigated to notamember page [' + userEmail + ']');
+  // }
+
   res.render('student_dashboard', {
-    isAuthenticated: req.oidc.isAuthenticated(), user: req.oidc.user,
+    isAuthenticated: req.oidc.isAuthenticated(), user: req.oidc.user, roll: "student",
   });
-  logger.info('Navigated to student dashboard page [unknown user]');
+  logger.info('Navigated to student dashboard page [' + userEmail + ']');
 })
 
 router.get('/loginorsignup', function (req, res) {
-  logger.info('Navigated to login page [unknown user]');
+  const isAuthenticated = req.oidc.isAuthenticated()
+  const userEmail = req.oidc.user.email;
+
+  logger.info('Navigated to login page [' + userEmail + ']');
   //Make this user object public to all views at a later stage
   res.render('loginorsignup', {
     isAuthenticated: req.oidc.isAuthenticated(), user: req.oidc.user,
   });
 })
+
 router.get('/settings', function (req, res) {
+  const isAuthenticated = req.oidc.isAuthenticated()
+  const userEmail = req.oidc.user.email;
+
   res.render('settings', {
     isAuthenticated: req.oidc.isAuthenticated(), user: req.oidc.user,
   });
-  logger.info('Navigated to settings page [unknown user]');
+  logger.info('Navigated to settings page [' + userEmail + ']');
 })
+
 router.get('/create_consultation', function (req, res) {
-  res.render('create_consultation', {
-    isAuthenticated: req.oidc.isAuthenticated(), user: req.oidc.user,
-  });
-  logger.info('Navigated to create consultation page [unknown user]');
-})
-
-router.get('/loggedin', function (req, res) {
   const isAuthenticated = req.oidc.isAuthenticated()
+  const userEmail = req.oidc.user.email;
 
-  if (isAuthenticated) {
-    const userEmail = req.oidc.user.email;
-    if (userEmail.includes('@wits.co.za')) {
-      res.render('lecturer_dashboard', {
-        isAuthenticated: req.oidc.isAuthenticated(), user: req.oidc.user,
-      });
-      logger.info('Navigated to lecturer dashboard page [' + userEmail + ']');
-    } else if (userEmail.includes('@students.wits.ac.za')) {
-      res.render('student_dashboard', {
-        isAuthenticated: req.oidc.isAuthenticated(), user: req.oidc.user,
-      });
-      logger.info('Navigated to student dashboard page [' + userEmail + ']');
-    } else {
-      res.render('notamember', {
-        isAuthenticated: req.oidc.isAuthenticated(), user: req.oidc.user,
-      });
-      logger.info('Navigated to notamember page [' + userEmail + ']');
-    }
-  }
-  else {
-    res.render('notamember', {
-      isAuthenticated: req.oidc.isAuthenticated(), user: req.oidc.user,
-    });
-    logger.info('Navigated to notamember page [unknown user]');
-  }
+  //Replace with this on final version
+  // if (userEmail.includes('@students.wits.co.za')) {
+  //   res.render('create_consultation', {
+  //     isAuthenticated: req.oidc.isAuthenticated(), user: req.oidc.user, roll: "student",
+  //   });
+  //   logger.info('Navigated to lecturer dashboard page [' + userEmail + ']');
+  // } else {
+  //   res.render('notamember', {
+  //     isAuthenticated: req.oidc.isAuthenticated(), user: req.oidc.user, roll: "other",
+  //   });
+  //   logger.info('Navigated to notamember page [' + userEmail + ']');
+  // }
 
-});
+  res.render('create_consultation', {
+    isAuthenticated: req.oidc.isAuthenticated(), user: req.oidc.user, roll: "student",
+  });
+  logger.info('Navigated to create consultation page [' + userEmail + ']');
+})
 
 router.get('/api/studentConsultations', function (req, res) {
   res.json(studentConsultations) // Respond with JSON
@@ -104,37 +128,5 @@ router.get('/api/studentConsultations', function (req, res) {
 router.get('/api/lecturerConsultations', function (req, res) {
   res.json(lecturerConsultations) // Respond with JSON
 })
-
-
-// EXAMPLE CODE FOR RESTFUL API
-// //RESTFUL API                                     //Replace these with async ones in public scripts folder for exercise 7
-// router.get('/api/list', function (req, res) {
-//   res.json(classList.all()) // Respond with JSON
-// })
-
-// router.get('/api/get/:id', function (req, res) {
-//   res.json(classList.get(req.params.id)) // Notice the wildcard in the URL?
-//   
-// })
-// router.post('/api/create', function (req, res) {
-//   console.log('Adding the following student:', req.body.student)
-//   classList.add(req.body.student)
-//   res.redirect(req.baseUrl)
-// })
-// router.post('/api/delete', function (req, res) {
-//   const id = req.body.studentID
-//   console.log('this will delete a student entry:', id)
-//   if (id !== -1) {
-//     classList.delete(id)
-//   }
-//   res.redirect(req.baseUrl + '/delete')
-// })
-
-// router.post('/api/edit', function (req, res) {
-//   const id = req.body.studentID
-//   console.log('this will edit a student entry:', id)
-//   classList.edit(req.body.student, id)
-//   res.redirect(req.baseUrl + '/edit')
-// })
 
 module.exports = router

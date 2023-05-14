@@ -9,12 +9,12 @@ mainRouter.get('/', function (req, res) {
   if (isAuthenticated) {
     const userEmail = req.oidc.user.email;
     if (userEmail.includes('@wits.co.za')) {
-      res.render('index', {
+      res.render('index', {                                                                        //Change this to lecturer_dashboard after the nabar has been implimented
         isAuthenticated: req.oidc.isAuthenticated(), user: req.oidc.user, roll: "lecturer",
       });
       logger.info('Navigated to landing page [' + userEmail + ']');
     } else if (userEmail.includes('@students.wits.ac.za')) {
-      res.render('index', {
+      res.render('index', {                                                                       //Change this to student_dashboard after the nabar has been implimented
         isAuthenticated: req.oidc.isAuthenticated(), user: req.oidc.user, roll: "student",
       });
       logger.info('Navigated to landing page [' + userEmail + ']');

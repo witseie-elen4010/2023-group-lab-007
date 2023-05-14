@@ -13,7 +13,7 @@
 <body>
   <h1>Student dashboard Calender</h1>
   <% if (locals.isAuthenticated) { %>
-    <h2 class="text-4xl mb-4">Welcome <%= user.given_name%>
+    <h2 class="text-4xl mb-4">Welcome <%= user.nickname%>
     </h2>
     <% } %>
     <button id="get-consultations-button">Get Consultations</button>
