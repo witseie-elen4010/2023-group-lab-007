@@ -10,7 +10,7 @@
 
 The sprint velocity for this week was 7 out of 7 (Two sprints were combined)
 
-Retrospective meeting were held on Thursay at 9 PM and lasted for 2 hours
+Retrospective meeting was held on Thursday at 9 PM and lasted for 2 hours
 
 ## Tickets
 
