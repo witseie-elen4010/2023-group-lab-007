@@ -19,20 +19,28 @@
 </head>
 
 <body>
-  <h1>Lecturer dashboard</h1>
-  <% if (locals.isAuthenticated) { %>
-    <h2 class="text-4xl mb-4">Welcome <%= user.nickname%>
-    </h2>
-  <% } %>
-  <p>
-    Select the number of students allowed per consultation slot:
-    <select id="options" onchange="storeOption()">
-    <option value="">-- No. of Students --</option>
-    </select> 
-    <ul id = 'numberList'></ul>  
-  </p>
-  <button type="button" id="showConsultation">Show Consultations</button>
-  <div id="calendar"></div>
+  <header>
+    <%- include('./partials/navbar'); %>
+  </header>
+  <div class="jumbotron">
+    <h1>Lecturer dashboard</h1>
+    <% if (locals.isAuthenticated) { %>
+      <h2 class="text-4xl mb-4">Welcome <%= user.nickname%>
+      </h2>
+      <% } %>
+        <p>
+          Select the number of students allowed per consultation slot:
+          <select id="options" onchange="storeOption()">
+            <option value="">-- No. of Students --</option>
+          </select>
+        <ul id='numberList'></ul>
+        </p>
+        <button type="button" id="showConsultation">Show Consultations</button>
+        <div id="calendar"></div>
+  </div>
+  <footer>
+    <%- include('./partials/footer'); %>
+  </footer>
   <script src="/cdn/scripts/lecturer_dashboard.js"></script>
 </body>
 

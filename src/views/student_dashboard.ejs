@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -11,26 +12,35 @@
 </head>
 
 <body>
+  <header>
+    <%- include('./partials/navbar'); %>
+  </header>
   <h1>Student dashboard Calender</h1>
   <% if (locals.isAuthenticated) { %>
     <h2 class="text-4xl mb-4">Welcome <%= user.nickname%>
     </h2>
     <% } %>
-    <button id="get-consultations-button">Get Consultations</button>
-    <p id="consultation-list"></p>
-  <div class="container mt-5">
-    <h1>Student dashboard</h1>
-    <% if (locals.isAuthenticated) { %>
-      <h2 class="text-4xl mb-10">Welcome <%= user.given_name%></h2>
-    <% } %>
-    <div class="dropdown mb-4" style="margin-bottom: 2rem;">
-      <button class="btn btn-secondary dropdown-toggle" type="button" id="teacherListDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        Select Teacher
-      </button>
-      <select class="dropdown-menu" aria-labelledby="teacherListDropdown" id="teacherList"></select>
-    </div>
-    <div id="consultationSlots" style="padding-top: 3rem;"></div>
-  </div>
-  <script src="/cdn/scripts/student_dashboard.js"></script>
+      <button id="get-consultations-button">Get Consultations</button>
+      <p id="consultation-list"></p>
+      <div class="container mt-5">
+        <h1>Student dashboard</h1>
+        <% if (locals.isAuthenticated) { %>
+          <h2 class="text-4xl mb-10">Welcome <%= user.given_name%>
+          </h2>
+          <% } %>
+            <div class="dropdown mb-4" style="margin-bottom: 2rem;">
+              <button class="btn btn-secondary dropdown-toggle" type="button" id="teacherListDropdown"
+                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Select Teacher
+              </button>
+              <select class="dropdown-menu" aria-labelledby="teacherListDropdown" id="teacherList"></select>
+            </div>
+            <div id="consultationSlots" style="padding-top: 3rem;"></div>
+      </div>
+      <footer>
+        <%- include('./partials/footer'); %>
+      </footer>
+      <script src="/cdn/scripts/student_dashboard.js"></script>
 </body>
+
 </html>
