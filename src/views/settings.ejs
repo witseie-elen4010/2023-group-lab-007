@@ -21,49 +21,46 @@
   <header>
     <%- include('./partials/navbar'); %>
   </header>
-  <% if (locals.isAuthenticated) { %>
-    <h4 class="text-4xl mb-4">Hi <%= user.nickname%>
-    </h4>
-    <% } %>
-      <div class="container">
-        <h2>Specify a consultation period</h2>
-        <form>
-          <div class="form-group">
-            <label for="dayOfWeek">Day of the Week</label>
-            <select class="form-control" id="dayOfWeek">
-              <option>Monday</option>
-              <option>Tuesday</option>
-              <option>Wednesday</option>
-              <option>Thursday</option>
-              <option>Friday</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label for="timeRange">Start and End Time</label>
-            <input type="text" class="form-control" id="timepicker" name="start_time" placeholder="HH:MM AM/PM">
-            <p></p>
-            <input type="text" class="form-control" id="timepicker" name="end_time" placeholder="HH:MM AM/PM">
-          </div>
-          <button type="submit" class="btn btn-primary">Submit</button>
-        </form>
-        <p></p>
-        <h2>Entries</h2>
-        <ul id="entryList"></ul>
+  <div class="container" style="padding-top:3em;   max-width: 500px;
+  ">
+    <h2>Specify a consultation period</h2>
+    <form>
+      <div class="form-group">
+        <label for="dayOfWeek">Day of the Week</label>
+        <select class="form-control" id="dayOfWeek">
+          <option>Monday</option>
+          <option>Tuesday</option>
+          <option>Wednesday</option>
+          <option>Thursday</option>
+          <option>Friday</option>
+        </select>
       </div>
+      <div class="form-group">
+        <label for="timeRange">Start and End Time</label>
+        <input type="text" class="form-control" id="timepicker" name="start_time" placeholder="HH:MM AM/PM">
+        <p></p>
+        <input type="text" class="form-control" id="timepicker" name="end_time" placeholder="HH:MM AM/PM">
+      </div>
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+    <p></p>
+    <h2>Entries</h2>
+    <ul id="entryList"></ul>
+  </div>
 
-      <!-- Include the JavaScript files for jQuery and the timepicker plugin -->
-      <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-      <script
-        src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-timepicker/0.5.2/js/bootstrap-timepicker.min.js"></script>
-      <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+  <!-- Include the JavaScript files for jQuery and the timepicker plugin -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script
+    src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-timepicker/0.5.2/js/bootstrap-timepicker.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
 
-      <footer>
-        <%- include('./partials/footer'); %>
-      </footer>
-      <script src="/cdn/scripts/settings.js"></script>
-      <script
-        src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-timepicker/0.5.2/js/bootstrap-timepicker.min.js"></script>
+  <footer>
+    <%- include('./partials/footer'); %>
+  </footer>
+  <script src="/cdn/scripts/settings.js"></script>
+  <script
+    src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-timepicker/0.5.2/js/bootstrap-timepicker.min.js"></script>
 </body>
 
 </html>
