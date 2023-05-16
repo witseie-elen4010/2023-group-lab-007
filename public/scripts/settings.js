@@ -1,4 +1,7 @@
-const form = document.querySelector('form');
+const form = document.querySelector('#consPeriod');
+const maxStudentsForm = document.querySelector('#maximumStudents');
+const maxConsultationsForm = document.querySelector('#maximumConsultations');
+const maxDurationForm = document.querySelector('#maximumDuration');
 const entryList = document.getElementById('entryList');
 let entries = [];
 
@@ -18,6 +21,21 @@ form.addEventListener('submit', (event) => {
   entries.push(entry);
 
   displayEntries();
+});
+
+maxStudentsForm.addEventListener('submit', (event) => {
+  event.preventDefault();
+  const maxStudents = document.querySelector('input[name="maxStudents"]').value;
+});
+
+maxConsultationsForm.addEventListener('submit', (event) => {
+  event.preventDefault();
+  const maxConsultations = document.querySelector('input[name="maxConsultations"]').value;
+});
+
+maxDurationForm.addEventListener('submit', (event) => {
+  event.preventDefault();
+  const maxDuration = document.querySelector('select[name="maxDuration"]').value;
 });
 
 function displayEntries() {
@@ -65,5 +83,12 @@ $(document).ready(function () {
     }
   });
 
+  // Code to disable options not divisible by 15
+  $("#durationPicker option").each(function () {
+    var value = parseInt($(this).val());
+    if (value % 15 !== 0) {
+      $(this).prop("disabled", true);
+    }
+  });
 });
 

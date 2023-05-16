@@ -21,10 +21,10 @@
   <header>
     <%- include('./partials/navbar'); %>
   </header>
-  <div class="container" style="padding-top:3em;   max-width: 500px;
+  <div class="container" style="padding-top:3em; padding-bottom:5em;  max-width: 500px;
   ">
     <h2>Specify a consultation period</h2>
-    <form>
+    <form id="consPeriod">
       <div class="form-group">
         <label for="dayOfWeek">Day of the Week</label>
         <select class="form-control" id="dayOfWeek">
@@ -44,8 +44,50 @@
       <button type="submit" class="btn btn-primary">Submit</button>
     </form>
     <p></p>
-    <h2>Entries</h2>
+    <h4>Current periods:</h4>
     <ul id="entryList"></ul>
+
+    <h2>Consultation settings</h2>
+    <form id="maximumStudents">
+      <div class="form-group">
+        <label for="numberPicker">Specify the max number of students per consultation</label>
+        <div class="input-group">
+          <input type="number" class="form-control" id="numberPicker" name="maxStudents" min="0" max="100" value="0">
+          <div class="input-group-append">
+            <button type="submit" class="btn btn-secondary">Update</button>
+          </div>
+        </div>
+      </div>
+    </form>
+    <form id="maximumConsultations">
+      <div class="form-group">
+        <label for="numberPicker">Specify the max number of consulatations per period/day</label>
+        <div class="input-group">
+          <input type="number" class="form-control" id="numberPicker" name="maxConsultations" min="0" max="100"
+            value="0">
+          <div class="input-group-append">
+            <button type="submit" class="btn btn-secondary">Update</button>
+          </div>
+        </div>
+      </div>
+    </form>
+    <form id="maximumDuration">
+      <div class="form-group">
+        <label for="durationPicker">Select max duration of a consultation (in minutes):</label>
+        <div class="input-group">
+          <select class="form-control" id="durationPicker" name="maxDuration">
+            <% for (let i=0; i <=120; i +=15) { %>
+              <option value="<%= i %>">
+                <%= i %> minutes
+              </option>
+              <% } %>
+          </select>
+          <div class="input-group-append">
+            <button type="submit" class="btn btn-secondary">Update</button>
+          </div>
+        </div>
+      </div>
+    </form>
   </div>
 
   <!-- Include the JavaScript files for jQuery and the timepicker plugin -->
@@ -61,6 +103,9 @@
   <script src="/cdn/scripts/settings.js"></script>
   <script
     src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-timepicker/0.5.2/js/bootstrap-timepicker.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 
 </html>
