@@ -31,6 +31,25 @@
     </div>
     <div id="consultationSlots" style="padding-top: 3rem;"></div>
   </div>
+
+  <h1>Consultation Search</h1>
+
+    <label for="searchDay">Search by Day of the Week:</label>
+    <select id="searchDay">
+        <option value="">-- Select a day --</option>
+        <option value="Monday">Monday</option>
+        <option value="Tuesday">Tuesday</option>
+        <option value="Wednesday">Wednesday</option>
+        <option value="Thursday">Thursday</option>
+        <option value="Friday">Friday</option>
+        <option value="Saturday">Saturday</option>
+        <option value="Sunday">Sunday</option>
+    </select>
+    <button onclick="searchConsultations()">Search</button>
+
+    <div id="searchResults">
+        <!-- Search results will be displayed here -->
+    </div>
   <script src="/cdn/scripts/student_dashboard.js"></script>
 </body>
 </html>
