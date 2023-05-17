@@ -14,7 +14,7 @@ const consultationDetailsScheme = {
 
 const consultationPeriodsScheme = {
   lecturerId: Number,
-  dayOfWeek: Number,
+  dayOfWeek: String,
   startTime: String,
   endTime: String,
   durationMinutes: Number,
