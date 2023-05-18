@@ -16,40 +16,27 @@
  <link rel="stylesheet" type="text/css" href="/cdn/css/lecturer_dashboard.css">
 </head>
 
-<body>
-      <p id="consultation-list"></p>
+<body>  
+    <input type="hidden" id="user-data" value='<%- JSON.stringify(user) %>'>
   <div class="container mt-5">
     <h1>Student dashboard</h1>
     <% if (locals.isAuthenticated) { %>
       <h2 class="text-4xl mb-10">Welcome <%= user.given_name%></h2>
     <% } %>
-    <div class="dropdown mb-4" style="margin-bottom: 2rem;">
-      <button class="btn btn-secondary dropdown-toggle" type="button" id="teacherListDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        Select Teacher
-      </button>
-      <select class="dropdown-menu" aria-labelledby="teacherListDropdown" id="teacherList"></select>
+    <!-- Other parts of your code -->
+    <div class="form-group" style="margin-bottom: 2rem;">
+      <label for="teacherList">Select Teacher</label>
+      <select class="form-control" id="teacherList"></select>
     </div>
-    <h2>Consultation Search</h2>
-
-    <label for="searchDay">Search by Day of the Week:</label>
-    <select id="searchDay">
-        <option value="">-- Select a day --</option>
-        <option value="Monday">Monday</option>
-        <option value="Tuesday">Tuesday</option>
-        <option value="Wednesday">Wednesday</option>
-        <option value="Thursday">Thursday</option>
-        <option value="Friday">Friday</option>
-        <option value="Saturday">Saturday</option>
-        <option value="Sunday">Sunday</option>
-    </select>
-    <button onclick="searchConsultations()">Search</button>
-
-    <div id="searchResults">
-        <!-- Search results will be displayed here -->
+    <div class="form-group" style="margin-bottom: 2rem;">
+      <label for="slotList">Select Consultation Slot</label>
+      <select class="form-control" id="slotList"></select>
     </div>
+    <button id="bookButton" class="btn btn-primary" disabled>Book</button>
     <div id="consultationSlots" style="padding-top: 3rem;"></div>
     <button type="button" id="showConsultation">Show Consultations</button>
     <div id="calendar"></div>
+
   <script src="/cdn/scripts/student_dashboard.js"></script>
 </body>
 </html>
