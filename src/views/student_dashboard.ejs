@@ -13,17 +13,11 @@
 
  <!-- FullCalendar Main JS -->
  <script src='https://unpkg.com/fullcalendar@5/main.min.js'></script>
- <link rel="stylesheet" type="text/css" href="/cdn/css/lecturer_dashboard.css"> //change to calendar.css?? Also the file is empty at the moment
+ <link rel="stylesheet" type="text/css" href="/cdn/css/lecturer_dashboard.css">
 </head>
 
 <body>
-  <h1>Student dashboard Calender</h1>
-  <% if (locals.isAuthenticated) { %>
-    <h2 class="text-4xl mb-4">Welcome <%= user.given_name%>
-    </h2>
-    <% } %>
-    <button id="get-consultations-button">Get Consultations</button>
-    <p id="consultation-list"></p>
+      <p id="consultation-list"></p>
   <div class="container mt-5">
     <h1>Student dashboard</h1>
     <% if (locals.isAuthenticated) { %>
@@ -35,11 +29,7 @@
       </button>
       <select class="dropdown-menu" aria-labelledby="teacherListDropdown" id="teacherList"></select>
     </div>
-    <div id="consultationSlots" style="padding-top: 3rem;"></div>
-    <button type="button" id="showConsultation">Show Consultations</button>
-    <div id="calendar"></div>
-
-  <h1>Consultation Search</h1>
+    <h2>Consultation Search</h2>
 
     <label for="searchDay">Search by Day of the Week:</label>
     <select id="searchDay">
@@ -57,6 +47,9 @@
     <div id="searchResults">
         <!-- Search results will be displayed here -->
     </div>
+    <div id="consultationSlots" style="padding-top: 3rem;"></div>
+    <button type="button" id="showConsultation">Show Consultations</button>
+    <div id="calendar"></div>
   <script src="/cdn/scripts/student_dashboard.js"></script>
 </body>
 </html>
