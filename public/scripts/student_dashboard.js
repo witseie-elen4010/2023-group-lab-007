@@ -14,11 +14,89 @@ const bookButton = document.querySelector('#bookButton');
 const defaultOption = document.createElement("option");
 const userDataInput = document.querySelector('#user-data');
 const user = JSON.parse(userDataInput.value);
+const calendarBtn = document.querySelector('#calendarBtn')
+const calendarDiv = document.querySelector('#calendar')
+const lecturerDetails = fillLecturerField()
+
 
 defaultOption.text = "Select a teacher";
 defaultOption.value = "";
 dropdownMenu.appendChild(defaultOption);
 dropdownMenu.selectedIndex = 0; // Set the default option as selected
+
+bookButton.addEventListener('click', () => {
+  const selectedLecturerId = dropdownMenu.value;
+  const selectedSlot = slotDropdownMenu.value;
+  lecturerDetails.then(detailsArray => {
+    const selectedLecturer = detailsArray.find(detail => detail.lecturerId === selectedLecturerId);
+    console.log(`${user.given_name} has booked a consultation with ${selectedLecturer ? selectedLecturer.firstName + ' ' + selectedLecturer.lastName : 'none'} at ${selectedSlot}`)
+  });
+});
+dropdownMenu.addEventListener('change', async (e) => {
+  const selectedTeacher = e.target.value;
+  //const selectedTeacher = lecturerDetails.find(teacher => teacher.email === teacherEmail);
+  
+  // Clear out the previous slots
+  while (slotDropdownMenu.options.length > 0) {
+    slotDropdownMenu.remove(0);
+  }
+
+  if (selectedTeacher) {
+    // I am assuming that teacher object has an id field that represents the lecturerId
+    const slots = await searchConsultations(selectedTeacher);
+    console.log(slots[0])
+
+    for (let i = 0; i < slots.length; i++) {
+      const slot = slots[i];
+      for(let j=0;j<4;j++){
+        const option = document.createElement("option");
+        option.text = getDateString(getNextDate(slot.dayOfWeek, j))+' '+slot.startTime+'-'+slot.endTime;
+        option.value = slot.dayOfWeek;
+
+        slotDropdownMenu.add(option);
+      }
+    }
+  }
+})
+// Initialize the calendar
+let calendar = new FullCalendar.Calendar(calendarDiv, {
+  initialView: 'dayGridMonth',
+  height: 'auto' // or '100%'
+  
+  //checkButtonStatus();
+});
+
+slotDropdownMenu.addEventListener('change', (e) => {
+  const slotIndex = e.target.value;
+  console.log(`Selected slot: ${slotIndex}`);
+  
+  // Enable the book button when a slot is selected
+  checkButtonStatus();
+});
+calendar.render()
+
+//if the user presses the "show consultation" button, display the default consulation.
+if (showConsultation) {
+  console.log('Clicked show consultation button')
+  showConsultation.addEventListener('click', () => {
+    getConsultations().then(consultations => {
+      console.log("[Unknown User] clicked show consultation button")
+      if (!calendar) {
+        calendar = new FullCalendar.Calendar(calendarDiv, {
+          initialView: 'dayGridMonth',
+        });
+        calendar.render()
+      }     
+      // Remove all existing events from the calendar
+      calendar.getEvents().forEach((event) => event.remove())
+      // Add all the consultations to the calendar
+      consultations.forEach(event => {
+        calendar.addEvent(event)
+      })
+    })
+  })
+}
+
 async function fillLecturerField(){
   const lecturerDetails = await getLecturerDetails();
   for (let i = 0; i < Object.keys(lecturerDetails).length; i++) {
@@ -34,7 +112,6 @@ async function fillLecturerField(){
   return lecturerDetails
 }
 
-const lecturerDetails = fillLecturerField()
 function getDateString(date){
   const year = date.getFullYear();
   const month = date.getMonth() + 1; // getMonth returns a zero-based value (where 0 is January)
@@ -66,65 +143,7 @@ function getNextDate(day, j) {
     throw new Error(`Invalid day name: ${dayName}`);
   }
 }
-dropdownMenu.addEventListener('change', async (e) => {
-  const selectedTeacher = e.target.value;
-  //const selectedTeacher = lecturerDetails.find(teacher => teacher.email === teacherEmail);
-  
-  // Clear out the previous slots
-  while (slotDropdownMenu.options.length > 0) {
-    slotDropdownMenu.remove(0);
-  }
 
-  if (selectedTeacher) {
-    // I am assuming that teacher object has an id field that represents the lecturerId
-    const slots = await searchConsultations(selectedTeacher);
-    console.log(slots[0])
-
-    for (let i = 0; i < slots.length; i++) {
-      const slot = slots[i];
-      for(let j=0;j<4;j++){
-        const option = document.createElement("option");
-        option.text = getDateString(getNextDate(slot.dayOfWeek, j))+' '+slot.startTime+'-'+slot.endTime;
-        option.value = slot.dayOfWeek;
-
-        slotDropdownMenu.add(option);
-      }
-    }
-  }
-})
-// function getConsultations() {
-//   console.log('user clicked get Consultations button')
-//   fetch('/class/api/studentConsultations')
-//     .then(response => response.json())
-    // .then(data => {
-    //   const consultations = data.map(item => `${item.date} ${item.time} with ${item.lecturer}`).join('<br>');
-    //   document.getElementById('consultation-list').innerHTML = consultations;
-    // })
-//     .catch(error => console.error(error));
-// }
-
-// document.getElementById('get-consultations-button').addEventListener('click', getConsultations);
-
-const calendarBtn = document.querySelector('#calendarBtn')
-const calendarDiv = document.querySelector('#calendar')
-
-// Initialize the calendar
-let calendar = new FullCalendar.Calendar(calendarDiv, {
-  initialView: 'dayGridMonth',
-  height: 'auto' // or '100%'
-  
-  //checkButtonStatus();
-});
-
-slotDropdownMenu.addEventListener('change', (e) => {
-  const slotIndex = e.target.value;
-  console.log(`Selected slot: ${slotIndex}`);
-  
-  // Enable the book button when a slot is selected
-  checkButtonStatus();
-});
-
-calendar.render()
 
 //fetch the consultations object stored in lecturerConsultation.js
 function getConsultations() {
@@ -136,14 +155,18 @@ function getConsultations() {
   })
   .catch(error => console.error(error))
 }
-bookButton.addEventListener('click', () => {
-  const selectedLecturerId = dropdownMenu.value;
-  const selectedSlot = slotDropdownMenu.value;
-  lecturerDetails.then(detailsArray => {
-    const selectedLecturer = detailsArray.find(detail => detail.lecturerId === selectedLecturerId);
-    console.log(`${user.given_name} has booked a consultation with ${selectedLecturer ? selectedLecturer.firstName + ' ' + selectedLecturer.lastName : 'none'} at ${selectedSlot}`)
-  });
-});
+
+//fetch the consultations object stored in lecturerConsultation.js
+function getConsultations() {
+  return fetch('/class/api/studentConsultations')
+  .then(response => response.json())
+  .then(data => {
+    const consultations = data.map(item => ({title: item.lecturer, date: item.date,}));
+    return consultations
+  })
+  .catch(error => console.error(error))
+}
+
 
 function searchConsultations(Id) {
   const url = `/consultationPeriodsSearch?lecturerId=${Id}`
