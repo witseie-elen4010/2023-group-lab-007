@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "test": "jest"
+    "test": "jest --detectOpenHandles"
   },
   "jest": {
     "collectCoverage": true,
@@ -32,10 +32,13 @@
     "ejs": "^3.1.9",
     "express": "^4.18.2",
     "express-openid-connect": "^2.16.0",
+    "mongoose": "^7.1.1",
+    "supertest": "^6.3.3",
     "winston": "^3.8.2"
   },
   "devDependencies": {
     "jest": "^29.5.0",
-    "jsdom": "^22.0.0"
+    "jsdom": "^22.0.0",
+    "mongodb-memory-server": "^8.12.2"
   }
 }

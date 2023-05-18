@@ -171,6 +171,28 @@ app.get('/lecturerDetails', async (req, res) => {
   }
 })
 
+// Define a route to handle the consultation details request
+app.get('/consultationDetailSearch', async (req, res) => {
+  try {
+    const consultationDetailsData = await consultationDetails.find({})
+    res.json(consultationDetailsData)
+  } catch (err) {
+    console.error(err)
+    res.sendStatus(500)
+  }
+})
+
+app.delete('/removeConsultation/:consultationID', async (req, res) => {
+  try {
+    const consultationID = parseInt(req.params.consultationID);
+    await consultationDetails.deleteOne({ consultationId: consultationID });
+    res.json({ message: 'Consultation removed successfully' });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
 // Route for inserting new data into consultationDetails collection
 app.post('/consultationDetails', async (req, res) => {
   try {
@@ -186,6 +208,6 @@ app.post('/consultationDetails', async (req, res) => {
   }
 })
 
-
 app.listen(port)
 console.log('Express server running on port 3000')
+module.exports = app;
