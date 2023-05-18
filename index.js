@@ -171,6 +171,17 @@ app.get('/consultationDetailSearch', async (req, res) => {
   }
 })
 
+app.delete('/removeConsultation/:consultationID', async (req, res) => {
+  try {
+    const consultationID = parseInt(req.params.consultationID);
+    await consultationDetails.deleteOne({ consultationId: consultationID });
+    res.json({ message: 'Consultation removed successfully' });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
 // Route for inserting new data into consultationDetails collection
 app.post('/consultationDetails', async (req, res) => {
   try {
