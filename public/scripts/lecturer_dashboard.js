@@ -39,9 +39,6 @@ function updateList() {
   });
 }
 
-
-//const logger = require("../../logger");
-const calendarBtn = document.querySelector('#calendarBtn');
 const calendarDiv = document.querySelector('#calendar');
 
 // Initialize the calendar
@@ -51,66 +48,61 @@ let calendar = new FullCalendar.Calendar(calendarDiv, {
 });
 calendar.render();
 
-//fetch the consultations object stored in lecturerConsultation.js
 function getConsultations() {
-  return fetch('/class/api/lecturerConsultations')
-    .then(response => response.json())
-    .then(data => {
-      const consultations = data.map(item => ({title: item.title, date: item.date}));
-      return consultations;
+  const url = '/consultationDetailSearch';
+
+  return fetch(url)
+    .then((response) => response.json())
+    .then((data) => {
+      const result = data.map(item => ({
+        title: "\tConsultation " + item.consultationId, // Update to the correct property name
+        date: item.date, // Update to the correct property name
+        startTime: item.startTime,
+        endTime: item.endTime
+      }));
+      console.log(result)
+      return result
     })
-    .catch(error => console.error(error));
+    .catch((error) => {
+      console.error("Error fetching consultations:", error);
+    });
 }
 
-//if the user presses the "show consultation" button, display the default consulation.
-if (showConsultation) {
-  showConsultation.addEventListener('click', () => {
-    getConsultations().then(consultations => {
-      console.log("[Unknown User] clicked show consultation button")
-      if (!calendar) {
-        calendar = new FullCalendar.Calendar(calendarDiv, {
-          initialView: 'dayGridMonth',
-        });
-        calendar.render();
-      }
-      
-      // Add all the consultations to the calendar
-      consultations.forEach(event => {
-        calendar.addEvent(event);
-      });
+// Display the consultations on the calendar
+function displayConsultations(consultations) {
+  console.log("[Unknown User] clicked show consultation button");
+  if (!calendar) {
+    calendar = new FullCalendar.Calendar(calendarDiv, {
+      initialView: "dayGridMonth",
     });
+    calendar.render();
+  }
+  // Remove all existing events from the calendar
+  calendar.getEvents().forEach((event) => event.remove());
+  // Add all the consultations to the calendar
+  consultations.forEach((consultation) => {
+    const start = new Date(`${consultation.date}T${consultation.startTime}`);
+    const end = new Date(`${consultation.date}T${consultation.endTime}`);
+    const event = {
+      title: consultation.title,
+      start: start,
+      end: end,
+      date: start,
+    };
+    calendar.addEvent(event);
   });
 }
 
-calendar.on('dateClick', function(info) {
-  const clickedDate = info.dateStr;
-  fetch(`/class/api/lecturerConsultations?date=${clickedDate}`)
-    .then(response => response.json())
-    .then(data => {
-      const select = document.getElementById('consultations');
-      select.innerHTML = '';
-      data.forEach(item => {
-        const option = document.createElement('option');
-        option.value = item.title;
-        option.textContent = item.title;
-        select.appendChild(option);
+const showConsultation = document.getElementById("showConsultation");
+if (showConsultation) {
+  showConsultation.addEventListener("click", () => {
+    getConsultations()
+      .then((data) => {
+        console.log(data)
+        displayConsultations(data);
+      })
+      .catch((error) => {
+        console.error("Error fetching consultations:", error);
       });
-    })
-    .catch(error => console.error(error));
-});
-
-const cancelBtn = document.querySelector('#cancelConsultation');
-cancelBtn.addEventListener('click', function() {
-  const selectedConsultation = document.getElementById('consultations').value;
-  const selectedDate = calendar.getDate().toISOString().substring(0, 10);
-  fetch(`/class/api/lecturerConsultations?date=${selectedDate}&title=${selectedConsultation}`, {
-    method: 'DELETE'
-  })
-    .then(response => response.json())
-    .then(data => {
-      console.log(data);
-      // Refresh the calendar to reflect the cancelled consultation
-      calendar.refetchEvents();
-    })
-    .catch(error => console.error(error));
-});
+  });
+}
