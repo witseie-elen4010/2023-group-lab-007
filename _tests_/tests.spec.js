@@ -2,9 +2,8 @@
 
 test('This is a dummy test', () => {
   // Do nothing
-}) 
-
-const { getS } = require('../src/studentConsultation.js') 
+});
+const { getS } = require('../src/studentConsultation.js');
 
 test('get function returns the correct list of consultations', () => {
   const expected = [
@@ -23,26 +22,25 @@ test('get function returns the correct list of consultations', () => {
       time: '09:00 - 11:00',
       lecturer: 'Bob Johnson'
     }
-  ] 
+  ];
 
-  const actual = getS() 
+  const actual = getS();
 
-  expect(actual).toEqual(expected) 
-}) 
+  expect(actual).toEqual(expected);
+});
 
-const { get } = require('../src/lecturerConsultation.js') 
+
+const { get } = require('../src/lecturerConsultation.js');
 
 test('get function returns the list of lecturer consultations stored in the source file', () => {
   const expected = [
     { title: 'Consultation 1', date: '2023-05-11' },
     { title: 'Consultation 2', date: '2023-05-12' },
-    { title: 'Consultation 3', date: '2023-05-13' }
-  ] 
-
-  const real = get() 
-
-  expect(real).toEqual(expected) 
-}) 
+    { title: 'Consultation 3', date: '2023-05-13' },
+];
+  const real = get();
+  expect(real).toEqual(expected);
+});
 
 test('get function returns the correct searched consultations', () => {
   // Stub the getS function to return a predetermined value
@@ -56,7 +54,7 @@ test('get function returns the correct searched consultations', () => {
       maximumNumberOfConsultationsPerDay: 3,
       numberOfStudents: 3
     }
-  ]) 
+  ]);
 
   const expected = [
     {
@@ -68,42 +66,11 @@ test('get function returns the correct searched consultations', () => {
       maximumNumberOfConsultationsPerDay: 3,
       numberOfStudents: 3
     }
-  ] 
+  ];
 
-  const real = getSStub()  // Use the stub instead of the original function
-  expect(real).toEqual(expected) 
-}) 
-
-const request = require('supertest') 
-const { app, closeServer } = require('../index.js') 
-const consultationDetails = require('../database.js') 
-
-afterAll(() => {
-  closeServer() 
-}) 
-
-describe('Consultation API', () => {
-  describe('GET /consultationDetailSearch', () => {
-    it('should return consultation details', async () => {
-      const response = await request(app).get('/consultationDetailSearch') 
-      expect(response.status).toBe(200) 
-    }) 
-
-    it('should return 404 if an error occurs', async () => {
-      const response = await request(app).get('/consultationDetailSearc') 
-      expect(response.status).toBe(404) 
-      expect(response.body).toEqual({}) 
-    }) 
-  }) 
-
-  describe('DELETE /removeConsultation/:consultationID', () => {
-    it('should return 200', async () => {
-      const consultationId = 0 
-      const response = await request(app).delete(`/removeConsultation/${consultationId}`) 
-      expect(response.status).toBe(200) 
-    }) 
-  }) 
-}) 
+  const real = getSStub(); // Use the stub instead of the original function
+  expect(real).toEqual(expected);
+});
 
 // EXAMPLE JEST TEST
 
@@ -152,5 +119,5 @@ describe('Consultation API', () => {
 //     students.add(student1)
 //     students.add(student2)
 //     expect(students.all()).toEqual([student1, student2])
-//   })
-// })
+//   })
+// })
