@@ -96,7 +96,18 @@ if (showConsultation) {
     })
   })
 }
-//function to get the lecturer details from the database and fill the dropdown menu with their names
+
+//if the user presses the "hide consultation on calendar" button, hide the consultations displayed on the calendar
+if (hideConsultation) {
+  console.log('Clicked hide consultation button') //log to the web console
+  hideConsultation.addEventListener('click', () => {
+  
+    // Remove all existing events from the calendar
+    calendar.getEvents().forEach((event) => event.remove())
+
+  })
+}
+
 async function fillLecturerField(){
   const lecturerDetails = await getLecturerDetails();
   for (let i = 0; i < Object.keys(lecturerDetails).length; i++) {
