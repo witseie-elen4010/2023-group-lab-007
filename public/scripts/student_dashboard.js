@@ -122,9 +122,6 @@ bookButton.addEventListener('click', () => {
   });
 });
 
-
-document.getElementById('get-consultations-button').addEventListener('click', getConsultations);
-
 function searchConsultations(Id) {
   const url = `/consultationPeriodsSearch?lecturerId=${Id}`
   // Make an AJAX request to the server to fetch consultation periods
