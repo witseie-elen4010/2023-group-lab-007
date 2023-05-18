@@ -1,3 +1,5 @@
+//const { lecturerDetails } = require("../../database");
+
 const teacherNames = [
   { 
     firstName: "John", lastName: "Doe", 
@@ -69,6 +71,7 @@ const teacherNames = [
   }
 ];
 
+
 const daysOfWeek={Sunday:0,
   Monday:1,
   Tuesday:2,
@@ -88,17 +91,22 @@ defaultOption.text = "Select a teacher";
 defaultOption.value = "";
 dropdownMenu.appendChild(defaultOption);
 dropdownMenu.selectedIndex = 0; // Set the default option as selected
-for (let i = 0; i < teacherNames.length; i++) {
-  const teacher = teacherNames[i];
-  const fullName = `${teacher.firstName} ${teacher.lastName}`;
+async function fillLecturerField(){
+  const lecturerDetails = await getLecturerDetails();
+  for (let i = 0; i < Object.keys(lecturerDetails).length; i++) {
+    const teacher = lecturerDetails[i];
+    const fullName = `${teacher.firstName} ${teacher.lastName}`;
 
-  const option = document.createElement("option");
-  option.text = fullName;
-  option.value = teacher.email;
- 
-  dropdownMenu.appendChild(option);
+    const option = document.createElement("option");
+    option.text = fullName;
+    option.value = teacher.lecturerId;
+  
+    dropdownMenu.appendChild(option);
+  }
+  return lecturerDetails
 }
 
+const lecturerDetails = fillLecturerField()
 function getDateString(date){
   const year = date.getFullYear();
   const month = date.getMonth() + 1; // getMonth returns a zero-based value (where 0 is January)
@@ -130,10 +138,9 @@ function getNextDate(day) {
     throw new Error(`Invalid day name: ${dayName}`);
   }
 }
-
-dropdownMenu.addEventListener('change', (e) => {
-  const teacherEmail = e.target.value;
-  const selectedTeacher = teacherNames.find(teacher => teacher.email === teacherEmail);
+dropdownMenu.addEventListener('change', async (e) => {
+  const selectedTeacher = e.target.value;
+  //const selectedTeacher = lecturerDetails.find(teacher => teacher.email === teacherEmail);
   
   // Clear out the previous slots
   while (slotDropdownMenu.options.length > 0) {
@@ -141,12 +148,14 @@ dropdownMenu.addEventListener('change', (e) => {
   }
 
   if (selectedTeacher) {
-    const slots = selectedTeacher.slots;
+    // I am assuming that teacher object has an id field that represents the lecturerId
+    const slots = await searchConsultations(selectedTeacher);
+    console.log(slots[0])
 
     for (let i = 0; i < slots.length; i++) {
       const slot = slots[i];
       const option = document.createElement("option");
-      option.text = getDateString(getNextDate(slot.day))+' '+slot.startTime+'-'+slot.endTime;
+      option.text = getDateString(getNextDate(slot.dayOfWeek))+' '+slot.startTime+'-'+slot.endTime;
       option.value = i;
 
       slotDropdownMenu.add(option);
@@ -155,7 +164,6 @@ dropdownMenu.addEventListener('change', (e) => {
   
   checkButtonStatus();
 });
-
 
 slotDropdownMenu.addEventListener('change', (e) => {
   const slotIndex = e.target.value;
@@ -179,53 +187,31 @@ bookButton.addEventListener('click', () => {
   const selectedTeacherEmail = dropdownMenu.value;
   const selectedSlotIndex = slotDropdownMenu.value;
 
-  const selectedTeacher = teacherNames.find(teacher => teacher.email === selectedTeacherEmail);
+  const selectedTeacher = lecturerDetails.find(teacher => teacher.email === selectedTeacherEmail);
   const selectedSlot = selectedTeacher ? selectedTeacher.slots[selectedSlotIndex] : null;
 
   //console.log(`Selected lecturer: ${selectedTeacher ? selectedTeacher.firstName + ' ' + selectedTeacher.lastName : 'none'} );
   //console.log(`Selected timeslot: ${selectedSlot ? selectedSlot.toLocaleString() : 'none'}`);
   console.log(`${user.given_name} has booked a consultation with ${selectedTeacher ? selectedTeacher.firstName + ' ' + selectedTeacher.lastName : 'none'} at ${selectedSlot ? getDateString(getNextDate(selectedSlot.day)) : 'none'}`)
+  console.log(searchConsultations(selectedSlot.day))
 });
 
 document.getElementById('get-consultations-button').addEventListener('click', getConsultations);
 
-function searchConsultations() {
-  const searchDay = document.getElementById("searchDay").value
-  const url = `/consultationPeriodsSearch?dayOfWeek=${searchDay}`
-
-
+function searchConsultations(Id) {
+  const url = `/consultationPeriodsSearch?lecturerId=${Id}`
   // Make an AJAX request to the server to fetch consultation periods
-  fetch(url)
-      .then(response => response.json())
-      .then(data => {
-          // Process the returned data and display results
-          displayResults(data);
-      })
-      .catch(error => {
-          console.error("Error fetching consultation periods:", error);
-      });
+  return fetch(url)
+    .then(response => response.json())
+    .catch(error => {
+      console.error("Error fetching consultation periods:", error);
+    });
 }
 
-function displayResults(results) {
-  const searchResultsDiv = document.getElementById("searchResults");
-  searchResultsDiv.innerHTML = ""; // Clear previous results
 
-  if (results.length === 0) {
-      searchResultsDiv.innerHTML = "No consultations found for the selected day.";
-  } else {
-      const ul = document.createElement("ul");
-      results.forEach(result => {
-          const li = document.createElement("li");
-          li.innerHTML = `
-              <p>Day of the week: ${result.dayOfWeek}</p>
-              <p>Start Time: ${result.startTime}</p>
-              <p>End Time: ${result.endTime}</p>
-              <p>Duration: ${result.durationMinutes} minutes</p>
-              <p>Max Consultations per Day: ${result.maximumNumberOfConsultationsPerDay}</p>
-              <p>Number of Students: ${result.numberOfStudents}</p>
-          `;
-          ul.appendChild(li);
-      });
-      searchResultsDiv.appendChild(ul);
-  }
+function getLecturerDetails() {
+  const url = '/lecturerDetails';
+  return fetch(url)
+    .then(response => response.json())
+    .catch(error => console.error('Error fetching lecturer details:', error));
 }
