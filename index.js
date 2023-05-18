@@ -26,6 +26,7 @@ if (!config.baseURL && !process.env.BASE_URL && process.env.PORT && process.env.
 // auth router attaches /login, /logout, and /callback routes to the baseURL
 app.use(auth(config));
 
+//set view engine to ejs 
 app.set('view engine', 'ejs');
 
 // loading body-parser
@@ -43,7 +44,7 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.use('/', mainRouter)
 app.use('/class', classRouter)
 
-//Public folder
+//Specify where to find static files
 app.use('/cdn', express.static('public'));
 
 //Ejs needs to know where to find the views

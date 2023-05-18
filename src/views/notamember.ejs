@@ -12,18 +12,29 @@
 </head>
 
 <body>
-  <% if (roll=='other' ) { %>
-    <h1 class="text-4xl mb-4">You are not a member of this organization. Please login with the correct details</h1>
-    </h1>
-    <% } %>
-      <div id="loginlogout">
-        <% if (isAuthenticated) { %>
-          <button type="button" class="btn btn-success" id="logoutBtn">logout</button>
-          <% } else { %>
-            <button type="button" class="btn btn-success" id="loginBtn">login</button>
-            <% } %>
+  <div aria-live="polite" aria-atomic="true" style="position: relative; min-height: 600px;">
+    <!-- Position it -->
+    <div style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);">
+      <div class="toast show" auto id="loginAlert">
+        <div class="toast-header">
+          <strong class="me-auto"><i class="bi bi-exclamation-circle"></i> Error </strong>
+          <!-- <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button> -->
+        </div>
+        <div class="toast-body">
+          <div>
+            <strong>Invalid Credentials</strong>
+            <p> To login as a student use your student email account (domain: @students.wits.ac.za) and to login as
+              a lecturer please use your
+              university lecturer account (domain: @wits.ac.za)
+            </p>
+          </div>
+          <!-- AuthZero -->
+          <div>To logout then login please <a href="/logout">click here!</a></div>
+        </div>
       </div>
-      <script src="/cdn/scripts/login.js"></script>
+    </div>
+  </div>
+  <!-- <script src="/cdn/scripts/login.js"></script> -->
 </body>
 
 </html>
