@@ -41,10 +41,27 @@ function updateList() {
 
 const calendarDiv = document.querySelector('#calendar');
 
-// Initialize the calendar
+// Event click callback function
+function handleEventClick(info) {
+  const selectedTitle = info.event.title;
+  console.log("Selected consultation title:", selectedTitle);
+  const consultationsDropdown = document.getElementById("consultations");
+  // Remove previous options from the dropdown
+  while (consultationsDropdown.firstChild) {
+    consultationsDropdown.removeChild(consultationsDropdown.firstChild);
+  }
+  // Add the selected event title as the only option in the dropdown
+  const optionElem = document.createElement('option');
+  optionElem.value = selectedTitle;
+  optionElem.textContent = selectedTitle;
+  consultationsDropdown.appendChild(optionElem);
+}
+
+// Initialize the calendar with eventClick callback
 let calendar = new FullCalendar.Calendar(calendarDiv, {
   initialView: 'dayGridMonth',
-  height: 'auto' // or '100%'
+  height: 'auto',
+  eventClick: handleEventClick
 });
 calendar.render();
 
@@ -55,7 +72,7 @@ function getConsultations() {
     .then((response) => response.json())
     .then((data) => {
       const result = data.map(item => ({
-        title: "\tConsultation " + item.consultationId, // Update to the correct property name
+        title: item.consultationId, // Update to the correct property name
         date: item.date, // Update to the correct property name
         startTime: item.startTime,
         endTime: item.endTime
@@ -68,12 +85,12 @@ function getConsultations() {
     });
 }
 
-// Display the consultations on the calendar
 function displayConsultations(consultations) {
   console.log("[Unknown User] clicked show consultation button");
   if (!calendar) {
     calendar = new FullCalendar.Calendar(calendarDiv, {
       initialView: "dayGridMonth",
+      eventClick: handleEventClick // Add eventClick callback
     });
     calendar.render();
   }
