@@ -5,6 +5,8 @@ const dotenv = require('dotenv').config();
 const ejs = require('ejs');
 const path = require('path');
 const logger = require("./logger");
+const { lecturerDetails, consultationDetails, consultationPeriods, studentBooking, studentDetails } = require('./database')
+const insertData = require('./insertData')
 
 // Authzero configuration file
 const config = {
@@ -58,6 +60,121 @@ app.use(function (req, res, next) {
   // console.log(req.oidc.user);
   next();
 });
+
+require('./database').connect().then(() => {
+  console.log('Connected to MongoDB!')
+}).catch((error) => {
+  console.error('Failed to connect to MongoDB:', error)
+})
+
+app.get('/', async (req, res) => {
+  try {
+    const lecturerDetailsData = await lecturerDetails.find({})
+    const consultationDetailsData = await consultationDetails.find({})
+    const consultationPeriodsData = await consultationPeriods.find({})
+    const studentBookingData = await studentBooking.find({})
+    const studentDetailsData = await studentDetails.find({})
+
+    res.render('index', {
+      consultationDetails: consultationDetailsData,
+      consultationPeriods: consultationPeriodsData,
+      lecturerDetails: lecturerDetailsData,
+      studentBooking: studentBookingData,
+      studentDetails: studentDetailsData
+    })
+  } catch (err) {
+    console.error(err)
+    res.sendStatus(500)
+  }
+})
+
+// Route for inserting new data into lecturerDetails collection
+app.post('/lecturerDetails', async (req, res) => {
+  try {
+    const newData = req.body // Assumes the request body contains the new data
+
+    // Insert the new data into the lecturerDetails collection
+    await insertData.insertLecturerDetails(newData)
+
+    res.sendStatus(200)
+  } catch (err) {
+    console.error(err)
+    res.sendStatus(500)
+  }
+})
+
+// Route for inserting new data into studentDetails collection
+app.post('/studentDetails', async (req, res) => {
+  try {
+    const newData = req.body // Assumes the request body contains the new data
+
+    // Insert the new data into the studentDetails collection
+    await insertData.insertStudentDetails(newData)
+
+    res.sendStatus(200)
+  } catch (err) {
+    console.error(err)
+    res.sendStatus(500)
+  }
+})
+
+// Route for inserting new data into studentBooking collection
+app.post('/studentBooking', async (req, res) => {
+  try {
+    const newData = req.body // Assumes the request body contains the new data
+
+    // Insert the new data into the studentBooking collection
+    await insertData.insertStudentBooking(newData)
+
+    res.sendStatus(200)
+  } catch (err) {
+    console.error(err)
+    res.sendStatus(500)
+  }
+})
+
+// Route for inserting new data into consultationPeriods collection
+app.post('/consultationPeriods', async (req, res) => {
+  try {
+    const newData = req.body // Assumes the request body contains the new data
+
+    // Insert the new data into the consultationPeriods collection
+    await insertData.insertConsultationPeriods(newData)
+
+    res.sendStatus(200)
+  } catch (err) {
+    console.error(err)
+    res.sendStatus(500)
+  }
+})
+
+// Define a route to handle the consultation details request
+app.get('/consultationPeriodsSearch', async (req, res) => {
+  try {
+    const selectedDay = req.query.dayOfWeek
+    const consultationPeriodsData = await consultationPeriods.find({ dayOfWeek: selectedDay })
+    res.json(consultationPeriodsData)
+  } catch (err) {
+    console.error(err)
+    res.sendStatus(500)
+  }
+})
+
+// Route for inserting new data into consultationDetails collection
+app.post('/consultationDetails', async (req, res) => {
+  try {
+    const newData = req.body // Assumes the request body contains the new data
+
+    // Insert the new data into the consultationDetails collection
+    await insertData.insertConsultationDetails(newData)
+
+    res.sendStatus(200)
+  } catch (err) {
+    console.error(err)
+    res.sendStatus(500)
+  }
+})
+
 
 app.listen(port)
 console.log('Express server running on port 3000')

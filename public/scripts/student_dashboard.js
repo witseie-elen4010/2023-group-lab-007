@@ -98,24 +98,45 @@ function getConsultations() {
   .catch(error => console.error(error))
 }
 
-//if the user presses the "show consultation" button, display the default consulation.
-if (showConsultation) {
-  console.log('Clicked show consultation button')
-  showConsultation.addEventListener('click', () => {
-    getConsultations().then(consultations => {
-      console.log("[Unknown User] clicked show consultation button")
-      if (!calendar) {
-        calendar = new FullCalendar.Calendar(calendarDiv, {
-          initialView: 'dayGridMonth',
-        });
-        calendar.render()
-      }     
-      // Remove all existing events from the calendar
-      calendar.getEvents().forEach((event) => event.remove())
-      // Add all the consultations to the calendar
-      consultations.forEach(event => {
-        calendar.addEvent(event)
+document.getElementById('get-consultations-button').addEventListener('click', getConsultations);
+
+function searchConsultations() {
+  const searchDay = document.getElementById("searchDay").value
+  const url = `/consultationPeriodsSearch?dayOfWeek=${searchDay}`
+
+
+  // Make an AJAX request to the server to fetch consultation periods
+  fetch(url)
+      .then(response => response.json())
+      .then(data => {
+          // Process the returned data and display results
+          displayResults(data);
       })
-    })
-  })
+      .catch(error => {
+          console.error("Error fetching consultation periods:", error);
+      });
+}
+
+function displayResults(results) {
+  const searchResultsDiv = document.getElementById("searchResults");
+  searchResultsDiv.innerHTML = ""; // Clear previous results
+
+  if (results.length === 0) {
+      searchResultsDiv.innerHTML = "No consultations found for the selected day.";
+  } else {
+      const ul = document.createElement("ul");
+      results.forEach(result => {
+          const li = document.createElement("li");
+          li.innerHTML = `
+              <p>Day of the week: ${result.dayOfWeek}</p>
+              <p>Start Time: ${result.startTime}</p>
+              <p>End Time: ${result.endTime}</p>
+              <p>Duration: ${result.durationMinutes} minutes</p>
+              <p>Max Consultations per Day: ${result.maximumNumberOfConsultationsPerDay}</p>
+              <p>Number of Students: ${result.numberOfStudents}</p>
+          `;
+          ul.appendChild(li);
+      });
+      searchResultsDiv.appendChild(ul);
+  }
 }

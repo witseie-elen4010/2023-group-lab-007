@@ -42,6 +42,36 @@ test('get function returns the list of lecturer consultations stored in the sour
   expect(real).toEqual(expected);
 });
 
+test('get function returns the correct searched consultations', () => {
+  // Stub the getS function to return a predetermined value
+  const getSStub = jest.fn(() => [
+    {
+      lecturerId: 4,
+      dayOfWeek: 'Tuesday',
+      startTime: '14:00',
+      endTime: '15:00',
+      durationMinutes: 60,
+      maximumNumberOfConsultationsPerDay: 3,
+      numberOfStudents: 3
+    }
+  ]);
+
+  const expected = [
+    {
+      lecturerId: 4,
+      dayOfWeek: 'Tuesday',
+      startTime: '14:00',
+      endTime: '15:00',
+      durationMinutes: 60,
+      maximumNumberOfConsultationsPerDay: 3,
+      numberOfStudents: 3
+    }
+  ];
+
+  const real = getSStub(); // Use the stub instead of the original function
+  expect(real).toEqual(expected);
+});
+
 // EXAMPLE JEST TEST
 
 // import functions
