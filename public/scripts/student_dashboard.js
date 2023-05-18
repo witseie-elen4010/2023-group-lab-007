@@ -92,7 +92,7 @@ function getConsultations() {
   return fetch('/class/api/studentConsultations')
   .then(response => response.json())
   .then(data => {
-    const consultations = data.map(item => ({title: item.lecturer, date: item.date}));
+    const consultations = data.map(item => ({title: item.lecturer, date: item.date,}));
     return consultations;
   })
   .catch(error => console.error(error));
@@ -109,12 +109,13 @@ if (showConsultation) {
           initialView: 'dayGridMonth',
         });
         calendar.render();
-      }
-      
+      }     
+      // Remove all existing events from the calendar
+      calendar.getEvents().forEach((event) => event.remove())
       // Add all the consultations to the calendar
       consultations.forEach(event => {
-        calendar.addEvent(event);
-      });
-    });
-  });
+        calendar.addEvent(event)
+      })
+    })
+  })
 }
