@@ -115,7 +115,7 @@ function displayConsultations(consultations) {
 const showConsultation = document.getElementById("showConsultation")
 if (showConsultation) {
   showConsultation.addEventListener("click", () => {
-    console.log("Show Consultation button clicked"); // Check if this message is logged when the button is clicked
+    console.log("Show Consultation button clicked")  // Check if this message is logged when the button is clicked
     getConsultations()
       .then((data) => {
         console.log(data)
@@ -128,46 +128,46 @@ if (showConsultation) {
 }
 
 async function removeConsultation() {
-  const selectedOption = document.getElementById("consultations").options[0];
-  console.log(selectedOption);
+  const selectedOption = document.getElementById("consultations").options[0] 
+  console.log(selectedOption) 
   if (!selectedOption) {
-    console.log("No event selected from the calendar");
-    return;
+    console.log("No event selected from the calendar") 
+    return
   }
 
-  const consultationID = parseInt(selectedOption.dataset.consultationID);
+  const consultationID = parseInt(selectedOption.dataset.consultationID) 
   if (!consultationID) {
-    console.error("Invalid consultation ID");
-    return;
+    console.error("Invalid consultation ID") 
+    return 
   }
-  console.log("Selected consultation ID:", consultationID);
+  console.log("Selected consultation ID:", consultationID) 
 
   try {
-    const confirmation = confirm("Are you sure you want to cancel the consultation?");
+    const confirmation = confirm("Are you sure you want to cancel the consultation?") 
     if (!confirmation) {
-      console.log("Consultation cancellation canceled by user");
-      return;
+      console.log("Consultation cancellation canceled by user") 
+      return 
     }
     const response = await fetch(`/removeConsultation/${consultationID}`, {
       method: "DELETE",
-    });
-    const data = await response.json();
-    console.log("Consultation removed from the database:", data);
+    }) 
+    const data = await response.json() 
+    console.log("Consultation removed from the database:", data) 
 
     // Refresh the consultations on the calendar
-    const consultations = await getConsultations();
-    displayConsultations(consultations);
+    const consultations = await getConsultations() 
+    displayConsultations(consultations) 
   } catch (error) {
-    console.error("Error removing consultation:", error);
+    console.error("Error removing consultation:", error) 
   }
 }
 
-const cancelConsultation = document.getElementById("cancelConsultation");
+const cancelConsultation = document.getElementById("cancelConsultation") 
 if (cancelConsultation) {
   cancelConsultation.addEventListener("click", () => {
-    console.log("Cancel Consultation button clicked");
+    console.log("Cancel Consultation button clicked") 
     removeConsultation().catch((error) => {
-      console.error("Error removing consultation:", error);
-    });
-  });
+      console.error("Error removing consultation:", error) 
+    }) 
+  }) 
 }
