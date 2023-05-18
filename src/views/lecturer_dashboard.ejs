@@ -19,11 +19,10 @@
 </head>
 
 <body>
+  <header>
+    <%- include('./partials/navbar'); %>
+  </header>
   <h1>Lecturer dashboard</h1>
-  <% if (locals.isAuthenticated) { %>
-    <h2 class="text-4xl mb-4">Welcome <%= user.given_name%>
-    </h2>
-  <% } %>
   <p>
     Select the number of students allowed per consultation slot:
     <select id="options" onchange="storeOption()">
@@ -38,6 +37,9 @@
   <select id="consultations">
     <option value="">-- Select Consultation --</option>
   </select>  
+  <footer>
+    <%- include('./partials/footer'); %>
+  </footer>
 </body>
 
 </html>

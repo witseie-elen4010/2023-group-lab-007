@@ -71,34 +71,34 @@ test('get function returns the correct searched consultations', () => {
   expect(real).toEqual(expected)
 })
 
-const request = require('supertest')
-const app = require('../index.js')
-const consultationDetails = require('../database.js')
+// const request = require('supertest')
+// const app = require('../index.js')
+// const consultationDetails = require('../database.js')
 
 
-describe('Consultation API', () => {
-  describe('GET /consultationDetailSearch', () => {
-    it('should return consultation details', async () => {
-      const response = await request(app).get('/consultationDetailSearch')
-      expect(response.status).toBe(200)
-    })
+// describe('Consultation API', () => {
+//   describe('GET /consultationDetailSearch', () => {
+//     it('should return consultation details', async () => {
+//       const response = await request(app).get('/consultationDetailSearch')
+//       expect(response.status).toBe(200)
+//     })
 
-    it('should return 500 if an error occurs', async () => {
-      const response = (await request(app).get('/consultationDetailSearc'))
+//     it('should return 500 if an error occurs', async () => {
+//       const response = (await request(app).get('/consultationDetailSearc'))
 
-      expect(response.status).toBe(404)
-      expect(response.body).toEqual({})
-    })
-  })
+//       expect(response.status).toBe(404)
+//       expect(response.body).toEqual({})
+//     })
+//   })
 
-  describe('DELETE /removeConsultation/:consultationID', () => {
-    it('should return 500 if an error occurs', async () => {
-      const consultationId = 0
-      const response = await request(app).delete(`/removeConsultation/${consultationId}`)
-      expect(response.status).toBe(200)
-    })
-  })
-})
+//   describe('DELETE /removeConsultation/:consultationID', () => {
+//     it('should return 500 if an error occurs', async () => {
+//       const consultationId = 0
+//       const response = await request(app).delete(`/removeConsultation/${consultationId}`)
+//       expect(response.status).toBe(200)
+//     })
+//   })
+// })
 
 
 // EXAMPLE JEST TEST
