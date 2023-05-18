@@ -8,52 +8,52 @@ const daysOfWeek={Sunday:0,
   Friday:5,
   Saturday:6
 }
-const dropdownMenu = document.querySelector('#teacherList');
-const slotDropdownMenu = document.querySelector('#slotList');
-const bookButton = document.querySelector('#bookButton');
-const defaultOption = document.createElement("option");
-const userDataInput = document.querySelector('#user-data');
-const user = JSON.parse(userDataInput.value);
+const dropdownMenu = document.querySelector('#teacherList')
+const slotDropdownMenu = document.querySelector('#slotList')
+const bookButton = document.querySelector('#bookButton')
+const defaultOption = document.createElement("option")
+const userDataInput = document.querySelector('#user-data')
+const user = JSON.parse(userDataInput.value)
 const calendarBtn = document.querySelector('#calendarBtn')
 const calendarDiv = document.querySelector('#calendar')
 const lecturerDetails = fillLecturerField()
 
 
-defaultOption.text = "Select a teacher";
-defaultOption.value = "";
-dropdownMenu.appendChild(defaultOption);
+defaultOption.text = "Select a teacher"
+defaultOption.value = ""
+dropdownMenu.appendChild(defaultOption)
 dropdownMenu.selectedIndex = 0; // Set the default option as selected
 
 bookButton.addEventListener('click', () => {
-  const selectedLecturerId = dropdownMenu.value;
-  const selectedSlot = slotDropdownMenu.value;
+  const selectedLecturerId = dropdownMenu.value
+  const selectedSlot = slotDropdownMenu.value
   lecturerDetails.then(detailsArray => {
-    const selectedLecturer = detailsArray.find(detail => detail.lecturerId === selectedLecturerId);
+    const selectedLecturer = detailsArray.find(detail => detail.lecturerId === selectedLecturerId)
     console.log(`${user.given_name} has booked a consultation with ${selectedLecturer ? selectedLecturer.firstName + ' ' + selectedLecturer.lastName : 'none'} at ${selectedSlot}`)
   });
 });
 dropdownMenu.addEventListener('change', async (e) => {
-  const selectedTeacher = e.target.value;
+  const selectedTeacher = e.target.value
   //const selectedTeacher = lecturerDetails.find(teacher => teacher.email === teacherEmail);
   
   // Clear out the previous slots
   while (slotDropdownMenu.options.length > 0) {
-    slotDropdownMenu.remove(0);
+    slotDropdownMenu.remove(0)
   }
 
   if (selectedTeacher) {
     // I am assuming that teacher object has an id field that represents the lecturerId
-    const slots = await searchConsultations(selectedTeacher);
+    const slots = await searchConsultations(selectedTeacher)
     console.log(slots[0])
 
     for (let i = 0; i < slots.length; i++) {
-      const slot = slots[i];
+      const slot = slots[i]
       for(let j=0;j<4;j++){
-        const option = document.createElement("option");
-        option.text = getDateString(getNextDate(slot.dayOfWeek, j))+' '+slot.startTime+'-'+slot.endTime;
-        option.value = slot.dayOfWeek;
+        const option = document.createElement("option")
+        option.text = getDateString(getNextDate(slot.dayOfWeek, j))+' '+slot.startTime+'-'+slot.endTime
+        option.value = slot.dayOfWeek
 
-        slotDropdownMenu.add(option);
+        slotDropdownMenu.add(option)
       }
     }
   }
@@ -67,11 +67,11 @@ let calendar = new FullCalendar.Calendar(calendarDiv, {
 });
 
 slotDropdownMenu.addEventListener('change', (e) => {
-  const slotIndex = e.target.value;
-  console.log(`Selected slot: ${slotIndex}`);
+  const slotIndex = e.target.value
+  console.log(`Selected slot: ${slotIndex}`)
   
   // Enable the book button when a slot is selected
-  checkButtonStatus();
+  checkButtonStatus()
 });
 calendar.render()
 
@@ -111,88 +111,79 @@ if (hideConsultation) {
 async function fillLecturerField(){
   const lecturerDetails = await getLecturerDetails();
   for (let i = 0; i < Object.keys(lecturerDetails).length; i++) {
-    const teacher = lecturerDetails[i];
-    const fullName = `${teacher.firstName} ${teacher.lastName}`;
+    const teacher = lecturerDetails[i]
+    const fullName = `${teacher.firstName} ${teacher.lastName}`
 
-    const option = document.createElement("option");
-    option.text = fullName;
-    option.value = teacher.lecturerId;
+    const option = document.createElement("option")
+    option.text = fullName
+    option.value = teacher.lecturerId
   
-    dropdownMenu.appendChild(option);
+    dropdownMenu.appendChild(option)
   }
   return lecturerDetails
 }
-
+//get correct string format from date object
 function getDateString(date){
-  const year = date.getFullYear();
-  const month = date.getMonth() + 1; // getMonth returns a zero-based value (where 0 is January)
-  const day = date.getDate();
+  const year = date.getFullYear()
+  const month = date.getMonth() + 1 // getMonth returns a zero-based value (where 0 is January)
+  const day = date.getDate()
   
-  const formattedDate = `${year}-${month < 10 ? '0' + month : month}-${day < 10 ? '0' + day : day}`;
+  const formattedDate = `${year}-${month < 10 ? '0' + month : month}-${day < 10 ? '0' + day : day}`
   //option.text = formattedDate;
   return formattedDate
 }
 
 function checkButtonStatus() {
-  const teacherSelected = dropdownMenu.value !== "";
-  const slotSelected = slotDropdownMenu.value !== "";
+  const teacherSelected = dropdownMenu.value !== ""
+  const slotSelected = slotDropdownMenu.value !== ""
 
   if (teacherSelected && slotSelected) {
-    bookButton.removeAttribute('disabled');
+    bookButton.removeAttribute('disabled')
   } else {
-    bookButton.setAttribute('disabled', 'true');
+    bookButton.setAttribute('disabled', 'true')
   }
 }
+//function to return the dates of the next 4 coming {dayoftheweek}
 function getNextDate(day, j) {
-  const today = new Date();
-  const targetDay = daysOfWeek[day];
+  const today = new Date()
+  const targetDay = daysOfWeek[day]
   if (targetDay !== undefined) {
-    const daysUntilNextTargetDay = (targetDay - today.getDay() + 7) % 7;
-    today.setDate(today.getDate() + ((j*7)+daysUntilNextTargetDay));
+    const daysUntilNextTargetDay = (targetDay - today.getDay() + 7) % 7
+    today.setDate(today.getDate() + ((j*7)+daysUntilNextTargetDay))
     return today;
   } else {
-    throw new Error(`Invalid day name: ${dayName}`);
+    throw new Error(`Invalid day name: ${dayName}`)
   }
 }
 
 
-//fetch the consultations object stored in lecturerConsultation.js
-function getConsultations() {
-  return fetch('/class/api/studentConsultations')
-  .then(response => response.json())
-  .then(data => {
-    const consultations = data.map(item => ({title: item.lecturer, date: item.date,}));
-    return consultations
-  })
-  .catch(error => console.error(error))
-}
 
 //fetch the consultations object stored in lecturerConsultation.js
 function getConsultations() {
   return fetch('/class/api/studentConsultations')
   .then(response => response.json())
   .then(data => {
-    const consultations = data.map(item => ({title: item.lecturer, date: item.date,}));
+    const consultations = data.map(item => ({title: item.lecturer, date: item.date,}))
     return consultations
   })
   .catch(error => console.error(error))
 }
 
-
+//call the api to get the consultation periods for a specific lecturer
 function searchConsultations(Id) {
   const url = `/consultationPeriodsSearch?lecturerId=${Id}`
   // Make an AJAX request to the server to fetch consultation periods
   return fetch(url)
     .then(response => response.json())
     .catch(error => {
-      console.error("Error fetching consultation periods:", error);
+      console.error("Error fetching consultation periods:", error)
     });
 }
 
-
+// call the api to get the lecturer details from the database
 function getLecturerDetails() {
-  const url = '/lecturerDetails';
+  const url = '/lecturerDetails'
   return fetch(url)
     .then(response => response.json())
-    .catch(error => console.error('Error fetching lecturer details:', error));
+    .catch(error => console.error('Error fetching lecturer details:', error))
 }
