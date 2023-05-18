@@ -91,8 +91,29 @@ dropdownMenu.addEventListener('change', async (e) => {
       }
     }
   }
+})
+// function getConsultations() {
+//   console.log('user clicked get Consultations button')
+//   fetch('/class/api/studentConsultations')
+//     .then(response => response.json())
+    // .then(data => {
+    //   const consultations = data.map(item => `${item.date} ${item.time} with ${item.lecturer}`).join('<br>');
+    //   document.getElementById('consultation-list').innerHTML = consultations;
+    // })
+//     .catch(error => console.error(error));
+// }
+
+// document.getElementById('get-consultations-button').addEventListener('click', getConsultations);
+
+const calendarBtn = document.querySelector('#calendarBtn')
+const calendarDiv = document.querySelector('#calendar')
+
+// Initialize the calendar
+let calendar = new FullCalendar.Calendar(calendarDiv, {
+  initialView: 'dayGridMonth',
+  height: 'auto' // or '100%'
   
-  checkButtonStatus();
+  //checkButtonStatus();
 });
 
 slotDropdownMenu.addEventListener('change', (e) => {
@@ -103,15 +124,17 @@ slotDropdownMenu.addEventListener('change', (e) => {
   checkButtonStatus();
 });
 
+calendar.render()
+
+//fetch the consultations object stored in lecturerConsultation.js
 function getConsultations() {
-  console.log('user clicked get Consultations button')
-  fetch('/class/api/studentConsultations')
-    .then(response => response.json())
-    .then(data => {
-      const consultations = data.map(item => `${item.date} ${item.time} with ${item.lecturer}`).join('<br>');
-      document.getElementById('consultation-list').innerHTML = consultations;
-    })
-    .catch(error => console.error(error));
+  return fetch('/class/api/studentConsultations')
+  .then(response => response.json())
+  .then(data => {
+    const consultations = data.map(item => ({title: item.lecturer, date: item.date,}));
+    return consultations
+  })
+  .catch(error => console.error(error))
 }
 bookButton.addEventListener('click', () => {
   const selectedLecturerId = dropdownMenu.value;
