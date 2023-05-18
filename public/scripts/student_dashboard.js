@@ -97,9 +97,9 @@ if (showConsultation) {
   })
 }
 
-//if the user presses the "show consultation" button, display the default consulation.
+//if the user presses the "hide consultation on calendar" button, hide the consultations displayed on the calendar
 if (hideConsultation) {
-  console.log('Clicked hide consultation button')
+  console.log('Clicked hide consultation button') //log to the web console
   hideConsultation.addEventListener('click', () => {
   
     // Remove all existing events from the calendar
