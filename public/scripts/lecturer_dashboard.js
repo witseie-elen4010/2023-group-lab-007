@@ -130,23 +130,35 @@ if (showConsultation) {
 async function removeConsultation() {
   const selectedOption = document.getElementById("consultations").options[0];
   console.log(selectedOption);
-  if (selectedOption) {
-    const consultationID = parseInt(selectedOption.dataset.consultationID);
-    console.log("Selected consultation ID:", consultationID);
+  if (!selectedOption) {
+    console.log("No event selected from the calendar");
+    return;
+  }
 
-    try {
-      const response = await fetch(`/removeConsultation/${consultationID}`, {
-        method: "DELETE",
-      });
-      const data = await response.json();
-      console.log("Consultation removed from the database:", data);
+  const consultationID = parseInt(selectedOption.dataset.consultationID);
+  if (!consultationID) {
+    console.error("Invalid consultation ID");
+    return;
+  }
+  console.log("Selected consultation ID:", consultationID);
 
-      // Refresh the consultations on the calendar
-      const consultations = await getConsultations();
-      displayConsultations(consultations);
-    } catch (error) {
-      console.error("Error removing consultation:", error);
+  try {
+    const confirmation = confirm("Are you sure you want to cancel the consultation?");
+    if (!confirmation) {
+      console.log("Consultation cancellation canceled by user");
+      return;
     }
+    const response = await fetch(`/removeConsultation/${consultationID}`, {
+      method: "DELETE",
+    });
+    const data = await response.json();
+    console.log("Consultation removed from the database:", data);
+
+    // Refresh the consultations on the calendar
+    const consultations = await getConsultations();
+    displayConsultations(consultations);
+  } catch (error) {
+    console.error("Error removing consultation:", error);
   }
 }
 

@@ -29,7 +29,6 @@ test('get function returns the correct list of consultations', () => {
   expect(actual).toEqual(expected);
 });
 
-
 const { get } = require('../src/lecturerConsultation.js');
 
 test('get function returns the list of lecturer consultations stored in the source file', () => {
@@ -41,6 +40,36 @@ test('get function returns the list of lecturer consultations stored in the sour
   const real = get();
   expect(real).toEqual(expected);
 });
+
+const request = require('supertest');
+const app = require('../index.js');
+const consultationDetails = require('../database.js');
+
+
+describe('Consultation API', () => {
+  describe('GET /consultationDetailSearch', () => {
+    it('should return consultation details', async () => {
+      const response = await request(app).get('/consultationDetailSearch')
+      expect(response.status).toBe(200);
+    });
+
+    it('should return 500 if an error occurs', async () => {
+      const response = (await request(app).get('/consultationDetailSearc'))
+
+      expect(response.status).toBe(404);
+      expect(response.body).toEqual({});
+    });
+  });
+
+  describe('DELETE /removeConsultation/:consultationID', () => {
+    it('should return 500 if an error occurs', async () => {
+      const consultationId = 0;
+      const response = await request(app).delete(`/removeConsultation/${consultationId}`);
+      expect(response.status).toBe(200);
+    });
+  });
+});
+
 
 // EXAMPLE JEST TEST
 
