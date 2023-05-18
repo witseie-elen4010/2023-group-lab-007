@@ -25,45 +25,45 @@ const dropdownMenu = document.querySelector('#teacherList');
 const consultationSlots = document.querySelector('#consultationSlots');
 
 for (let i = 0; i < teacherNames.length; i++) {
-  const teacher = teacherNames[i];
+  const teacher = teacherNames[i]
   const fullName = `${teacher.firstName} ${teacher.lastName}`;
 
-  const option = document.createElement("option");
-  option.text = fullName;
-  option.value = teacher.email;
+  const option = document.createElement("option")
+  option.text = fullName
+  option.value = teacher.email
  
-  dropdownMenu.appendChild(option);
+  dropdownMenu.appendChild(option)
 }
 
 const dropdownToggle = document.querySelector('#teacherListDropdown');
 dropdownToggle.addEventListener('click', (e) => {
-  e.preventDefault();
-  dropdownMenu.classList.toggle('show');
-  console.log('Clicked teacher dropdown [unknown user]');
-});
+  e.preventDefault()
+  dropdownMenu.classList.toggle('show')
+  console.log('Clicked teacher dropdown [unknown user]')
+})
 
 dropdownMenu.addEventListener('change', (e) => {
   const teacherEmail = e.target.value;
-  const selectedTeacher = teacherNames.find(teacher => teacher.email === teacherEmail);
+  const selectedTeacher = teacherNames.find(teacher => teacher.email === teacherEmail)
   console.log(`Selected teacher: ${selectedTeacher ? selectedTeacher.firstName + ' ' + selectedTeacher.lastName : 'none'} [unknown user]`);
   if (selectedTeacher) {
-    const slots = selectedTeacher.slots;
-    const slotList = document.createElement("ul");
+    const slots = selectedTeacher.slots
+    const slotList = document.createElement("ul")
 
     for (let i = 0; i < slots.length; i++) {
-      const slot = slots[i];
-      const slotItem = document.createElement("li");
-      slotItem.innerText = slot.toLocaleString();
+      const slot = slots[i]
+      const slotItem = document.createElement("li")
+      slotItem.innerText = slot.toLocaleString()
 
-      slotList.appendChild(slotItem);
+      slotList.appendChild(slotItem)
     }
 
-    consultationSlots.innerHTML = '';
-    consultationSlots.appendChild(slotList);
+    consultationSlots.innerHTML = ''
+    consultationSlots.appendChild(slotList)
   } else {
-    consultationSlots.innerHTML = '';
+    consultationSlots.innerHTML = ''
   }
-});
+})
 // function getConsultations() {
 //   console.log('user clicked get Consultations button')
 //   fetch('/class/api/studentConsultations')
@@ -77,15 +77,15 @@ dropdownMenu.addEventListener('change', (e) => {
 
 // document.getElementById('get-consultations-button').addEventListener('click', getConsultations);
 
-const calendarBtn = document.querySelector('#calendarBtn');
-const calendarDiv = document.querySelector('#calendar');
+const calendarBtn = document.querySelector('#calendarBtn')
+const calendarDiv = document.querySelector('#calendar')
 
 // Initialize the calendar
 let calendar = new FullCalendar.Calendar(calendarDiv, {
   initialView: 'dayGridMonth',
   height: 'auto' // or '100%'
 });
-calendar.render();
+calendar.render()
 
 //fetch the consultations object stored in lecturerConsultation.js
 function getConsultations() {
@@ -93,9 +93,9 @@ function getConsultations() {
   .then(response => response.json())
   .then(data => {
     const consultations = data.map(item => ({title: item.lecturer, date: item.date,}));
-    return consultations;
+    return consultations
   })
-  .catch(error => console.error(error));
+  .catch(error => console.error(error))
 }
 
 //if the user presses the "show consultation" button, display the default consulation.
@@ -108,7 +108,7 @@ if (showConsultation) {
         calendar = new FullCalendar.Calendar(calendarDiv, {
           initialView: 'dayGridMonth',
         });
-        calendar.render();
+        calendar.render()
       }     
       // Remove all existing events from the calendar
       calendar.getEvents().forEach((event) => event.remove())
