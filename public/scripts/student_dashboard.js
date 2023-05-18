@@ -97,6 +97,17 @@ if (showConsultation) {
   })
 }
 
+//if the user presses the "show consultation" button, display the default consulation.
+if (hideConsultation) {
+  console.log('Clicked hide consultation button')
+  hideConsultation.addEventListener('click', () => {
+  
+    // Remove all existing events from the calendar
+    calendar.getEvents().forEach((event) => event.remove())
+
+  })
+}
+
 async function fillLecturerField(){
   const lecturerDetails = await getLecturerDetails();
   for (let i = 0; i < Object.keys(lecturerDetails).length; i++) {
