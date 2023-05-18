@@ -151,9 +151,20 @@ app.post('/consultationPeriods', async (req, res) => {
 // Define a route to handle the consultation details request
 app.get('/consultationPeriodsSearch', async (req, res) => {
   try {
-    const selectedDay = req.query.dayOfWeek
-    const consultationPeriodsData = await consultationPeriods.find({dayOfWeek: selectedDay })
+    const selectedLecturer = req.query.lecturerId
+    const consultationPeriodsData = await consultationPeriods.find({ lecturerId: selectedLecturer })
     res.json(consultationPeriodsData)
+  } catch (err) {
+    console.error(err)
+    res.sendStatus(500)
+  }
+})
+
+// Define a route to handle the consultation details request
+app.get('/lecturerDetails', async (req, res) => {
+  try {
+    const lecturerDetailsData = await lecturerDetails.find({})
+    res.json(lecturerDetailsData)
   } catch (err) {
     console.error(err)
     res.sendStatus(500)
