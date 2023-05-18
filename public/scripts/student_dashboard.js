@@ -188,3 +188,44 @@ bookButton.addEventListener('click', () => {
 });
 
 document.getElementById('get-consultations-button').addEventListener('click', getConsultations);
+
+function searchConsultations() {
+  const searchDay = document.getElementById("searchDay").value
+  const url = `/consultationPeriodsSearch?dayOfWeek=${searchDay}`
+
+
+  // Make an AJAX request to the server to fetch consultation periods
+  fetch(url)
+      .then(response => response.json())
+      .then(data => {
+          // Process the returned data and display results
+          displayResults(data);
+      })
+      .catch(error => {
+          console.error("Error fetching consultation periods:", error);
+      });
+}
+
+function displayResults(results) {
+  const searchResultsDiv = document.getElementById("searchResults");
+  searchResultsDiv.innerHTML = ""; // Clear previous results
+
+  if (results.length === 0) {
+      searchResultsDiv.innerHTML = "No consultations found for the selected day.";
+  } else {
+      const ul = document.createElement("ul");
+      results.forEach(result => {
+          const li = document.createElement("li");
+          li.innerHTML = `
+              <p>Day of the week: ${result.dayOfWeek}</p>
+              <p>Start Time: ${result.startTime}</p>
+              <p>End Time: ${result.endTime}</p>
+              <p>Duration: ${result.durationMinutes} minutes</p>
+              <p>Max Consultations per Day: ${result.maximumNumberOfConsultationsPerDay}</p>
+              <p>Number of Students: ${result.numberOfStudents}</p>
+          `;
+          ul.appendChild(li);
+      });
+      searchResultsDiv.appendChild(ul);
+  }
+}
