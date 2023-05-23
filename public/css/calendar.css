@@ -1,0 +1,12 @@
+.calendar-day{
+    width: 100px;
+    height: 100px;
+    max-width: 100px;
+    min-width: 100px;
+}
+
+.calendar-table {
+    margin: 0 auto;
+    width: 100%;
+}
+
