@@ -15,7 +15,6 @@ const consultations = [
       lecturer: 'Bob Johnson'
     }
   ];
-  
  
   // Public
 module.exports = {

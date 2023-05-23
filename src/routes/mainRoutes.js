@@ -2,6 +2,8 @@ const path = require('path')
 const express = require('express')
 const logger = require("../../logger");
 const router = express.Router()
+const { lecturerDetails, consultationDetails, consultationPeriods, studentBooking, studentDetails } = require('../schemas/tablesSchemas')
+const insertData = require('../services/insert_service')
 
 router.get('/', function (req, res) {
   const isAuthenticated = req.oidc.isAuthenticated()
@@ -26,6 +28,22 @@ router.get('/', function (req, res) {
     }
   } else {
     res.redirect('/login');
+  }
+})
+
+router.get('/stuff', async (req, res) => {
+  try {
+    const lecturerDetailsData = await lecturerDetails.find({})
+    // const consultationDetailsData = await consultationDetails.find({})
+    const consultationPeriodsData = await consultationPeriods.find({})
+    const studentBookingData = await studentBooking.find({})
+    const studentDetailsData = await studentDetails.find({})
+    const consultationDetailsData = await consultationDetails.aggregate(pipeline)
+    console.log(consultationDetailsData[0].student_booking[0].student_details)
+    res.render('lecturer_dashboard');
+  } catch (err) {
+    console.error(err)
+    res.sendStatus(500)
   }
 })
 

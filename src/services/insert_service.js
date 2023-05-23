@@ -1,6 +1,6 @@
-const { lecturerDetails, studentDetails, consultationDetails, studentBooking, consultationPeriods } = require('./database')
+const { lecturerDetails, studentDetails, consultationDetails, studentBooking, consultationPeriods } = require('./dbProvider')
 // Function to insert new data into the lecturerDetails collection
-async function insertLecturerDetails (newData) {
+async function insertLecturerDetails(newData) {
   try {
     const document = new lecturerDetails(newData)
     await document.save()
@@ -11,7 +11,7 @@ async function insertLecturerDetails (newData) {
 }
 
 // Function to insert new data into the studentDetails collection
-async function insertStudentDetails (newData) {
+async function insertStudentDetails(newData) {
   try {
     const document = new studentDetails(newData)
     await document.save()
@@ -22,7 +22,7 @@ async function insertStudentDetails (newData) {
 }
 
 // Function to insert new data into the consultationDetails collection
-async function insertConsultationDetails (newData) {
+async function insertConsultationDetails(newData) {
   try {
     const document = new consultationDetails(newData)
     await document.save()
@@ -33,7 +33,7 @@ async function insertConsultationDetails (newData) {
 }
 
 // Function to insert new data into the studentBooking collection
-async function insertStudentBooking (newData) {
+async function insertStudentBooking(newData) {
   try {
     const document = new studentBooking(newData)
     await document.save()
@@ -44,7 +44,7 @@ async function insertStudentBooking (newData) {
 }
 
 // Function to insert new data into the consultationPeriods collection
-async function insertConsultationPeriods (newData) {
+async function insertConsultationPeriods(newData) {
   try {
     const document = new consultationPeriods(newData)
     await document.save()
