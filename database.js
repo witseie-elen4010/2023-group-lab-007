@@ -1,4 +1,4 @@
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
 
 // Define the schemas for different collections
 const consultationDetailsScheme = {
@@ -9,8 +9,8 @@ const consultationDetailsScheme = {
   maximumNumberOfStudents: String,
   status: String,
   startTime: String,
-  endTime: String
-}
+  endTime: String,
+};
 
 const consultationPeriodsScheme = {
   lecturerId: Number,
@@ -19,104 +19,102 @@ const consultationPeriodsScheme = {
   endTime: String,
   durationMinutes: Number,
   maximumNumberOfConsultationsPerDay: Number,
-  numberOfStudents: Number
-}
+  numberOfStudents: Number,
+};
 
 const lecturerDetailsScheme = {
   lecturerId: Number,
   emailAddress: String,
   firstName: String,
   lastName: String,
-  password: String
-}
+  password: String,
+};
 
 const studentDetailsScheme = {
   studentNumber: String,
   emailAddress: String,
   firstName: String,
   lastName: String,
-  password: String
-}
+  password: String,
+};
 
 const studentBookingScheme = {
   consultationId: Number,
   studentNumber: String,
-  role: String
-}
+  role: String,
+};
 
 // Create models based on the defined schemas
-const lecturerDetails = mongoose.model('lecturer_details', lecturerDetailsScheme)
-const consultationPeriods = mongoose.model('consultation_periods', consultationPeriodsScheme)
-const studentBooking = mongoose.model('student_booking', studentBookingScheme)
-const studentDetails = mongoose.model('student_details', studentDetailsScheme)
-const consultationDetails = mongoose.model('consultation_details', consultationDetailsScheme)
+const lecturerDetails = mongoose.model('lecturer_details', lecturerDetailsScheme);
+const consultationPeriods = mongoose.model('consultation_periods', consultationPeriodsScheme);
+const studentBooking = mongoose.model('student_bookings', studentBookingScheme);
+const studentDetails = mongoose.model('student_details', studentDetailsScheme);
+const consultationDetails = mongoose.model('consultation_details', consultationDetailsScheme);
+
+// Define the pipeline
+const pipeline = [
+  {
+    $lookup: {
+      from: 'student_bookings',
+      localField: 'consultationId',
+      foreignField: 'consultationId',
+      as: 'student_booking',
+      pipeline: [
+        {
+          $lookup: {
+            from: 'student_details',
+            localField: 'studentNumber',
+            foreignField: 'studentNumber',
+            as: 'student_details',
+          },
+        },
+      ],
+    },
+  },
+  {
+    $lookup: {
+      from: 'lecturer_details',
+      localField: 'lecturerId',
+      foreignField: 'lecturerId',
+      as: 'lecturer_details',
+      pipeline: [
+        {
+          $lookup: {
+            from: 'consultation_period',
+            localField: 'lecturerId',
+            foreignField: 'lecturerId',
+            as: 'consultation_period',
+          },
+        },
+      ],
+    },
+  },
+];
 
 // Export the models and the connect function
 module.exports = {
-  connect () {
+  connect() {
     return new Promise((resolve, reject) => {
       mongoose.connect('mongodb+srv://2305164:VZ2jrn9qYUe048tx@cluster.8cexuwk.mongodb.net/StudentConsultationDB', {
         useUnifiedTopology: true,
-        useNewUrlParser: true
-      })
+        useNewUrlParser: true,
+      });
 
       mongoose.connection.on('connected', () => {
-        console.log('Connected to MongoDB!')
-        resolve() // Resolve the promise when connected to MongoDB
-      })
+        console.log('Connected to MongoDB!');
+        resolve(); // Resolve the promise when connected to MongoDB
+      });
 
       mongoose.connection.on('error', (error) => {
-        console.error('Failed to connect to MongoDB:', error)
-        reject(error) // Reject the promise if there's an error connecting to MongoDB
-      })
-    }).then(() => {
-      const pipeline = [
-        {
-          $lookup: {
-            from: 'student_booking',
-            localField: 'consultationId',
-            foreignField: 'consultationId',
-            as: 'studentBooking',
-            pipeline: [
-              {
-                $lookup: {
-                  from: 'student_details',
-                  localField: 'studentNumber',
-                  foreignField: 'studentNumber',
-                  as: 'studentDetails'
-                }
-              }
-            ]
-          }
-        },
-        {
-          $lookup: {
-            from: 'lecturer_details',
-            localField: 'lecturerId',
-            foreignField: 'lecturerId',
-            as: 'lecturerDetails',
-            pipeline: [
-              {
-                $lookup: {
-                  from: 'consultation_period',
-                  localField: 'lecturerId',
-                  foreignField: 'lecturerId',
-                  as: 'consultationPeriod'
-                }
-              }
-            ]
-          }
-        }
-      ]
-
-      return consultationDetails.aggregate(pipeline).catch((error) => {
-        console.error(error)
-      })
-    })
+        console.error('Failed to connect to MongoDB:', error);
+        reject(error); // Reject the promise if there's an error connecting to MongoDB
+      });
+    });
   },
+  pipeline,
   lecturerDetails,
   consultationDetails,
   consultationPeriods,
   studentBooking,
-  studentDetails
-}
+  studentDetails,
+};

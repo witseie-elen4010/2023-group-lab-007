@@ -5,7 +5,7 @@ const dotenv = require('dotenv').config();
 const ejs = require('ejs');
 const path = require('path');
 const logger = require("./logger");
-const { lecturerDetails, consultationDetails, consultationPeriods, studentBooking, studentDetails } = require('./database')
+const { pipeline, lecturerDetails, consultationDetails, consultationPeriods, studentBooking, studentDetails } = require('./database')
 const insertData = require('./insertData')
 
 // Authzero configuration file
@@ -71,12 +71,13 @@ require('./database').connect().then(() => {
 app.get('/', async (req, res) => {
   try {
     const lecturerDetailsData = await lecturerDetails.find({})
-    const consultationDetailsData = await consultationDetails.find({})
+    // const consultationDetailsData = await consultationDetails.find({})
     const consultationPeriodsData = await consultationPeriods.find({})
     const studentBookingData = await studentBooking.find({})
     const studentDetailsData = await studentDetails.find({})
-
-    res.render('index', {
+    const consultationDetailsData = await consultationDetails.aggregate(pipeline)
+    console.log(consultationDetailsData)
+    res.render('/', {
       consultationDetails: consultationDetailsData,
       consultationPeriods: consultationPeriodsData,
       lecturerDetails: lecturerDetailsData,
