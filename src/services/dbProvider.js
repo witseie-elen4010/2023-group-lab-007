@@ -6,7 +6,7 @@ const {
   lecturerDetailsScheme,
   studentDetailsScheme,
   studentBookingScheme,
-} = require('./src/schemas/tablesSchemas');
+} = require('../schemas/tablesSchemas');
 
 // Create models based on the defined schemas
 const lecturerDetails = mongoose.model('lecturer_details', lecturerDetailsScheme);
@@ -14,46 +14,6 @@ const consultationPeriods = mongoose.model('consultation_periods', consultationP
 const studentBooking = mongoose.model('student_bookings', studentBookingScheme);
 const studentDetails = mongoose.model('student_details', studentDetailsScheme);
 const consultationDetails = mongoose.model('consultation_details', consultationDetailsScheme);
-
-// Define the pipeline
-const pipeline = [
-  {
-    $lookup: {
-      from: 'student_bookings',
-      localField: 'consultationId',
-      foreignField: 'consultationId',
-      as: 'student_booking',
-      pipeline: [
-        {
-          $lookup: {
-            from: 'student_details',
-            localField: 'studentNumber',
-            foreignField: 'studentNumber',
-            as: 'student_details',
-          },
-        },
-      ],
-    },
-  },
-  {
-    $lookup: {
-      from: 'lecturer_details',
-      localField: 'lecturerId',
-      foreignField: 'lecturerId',
-      as: 'lecturer_details',
-      pipeline: [
-        {
-          $lookup: {
-            from: 'consultation_period',
-            localField: 'lecturerId',
-            foreignField: 'lecturerId',
-            as: 'consultation_period',
-          },
-        },
-      ],
-    },
-  },
-];
 
 // Export the models and the connect function
 module.exports = {
@@ -75,7 +35,6 @@ module.exports = {
       });
     });
   },
-  pipeline,
   lecturerDetails,
   consultationDetails,
   consultationPeriods,

@@ -2,7 +2,7 @@ const path = require('path')
 const express = require('express')
 const logger = require("../../logger");
 const router = express.Router()
-const { pipeline, lecturerDetails, consultationDetails, consultationPeriods, studentBooking, studentDetails } = require('../../database')
+const { lecturerDetails, consultationDetails, consultationPeriods, studentBooking, studentDetails } = require('../schemas/tablesSchemas')
 const insertData = require('../../insertData')
 
 router.get('/', function (req, res) {

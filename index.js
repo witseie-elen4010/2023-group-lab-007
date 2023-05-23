@@ -5,7 +5,7 @@ const dotenv = require('dotenv').config();
 const ejs = require('ejs');
 const path = require('path');
 const logger = require("./logger");
-const { pipeline, lecturerDetails, consultationDetails, consultationPeriods, studentBooking, studentDetails } = require('./database')
+const {lecturerDetails, consultationDetails, consultationPeriods, studentBooking, studentDetails } = require('./src/services/dbProvider');
 const insertData = require('./insertData')
 
 // Authzero configuration file
@@ -62,33 +62,33 @@ app.use(function (req, res, next) {
   next();
 });
 
-require('./database').connect().then(() => {
+require('./src/services/dbProvider').connect().then(() => {
   console.log('Connected to MongoDB!')
 }).catch((error) => {
   console.error('Failed to connect to MongoDB:', error)
 })
 
-app.get('/', async (req, res) => {
-  try {
-    const lecturerDetailsData = await lecturerDetails.find({})
-    // const consultationDetailsData = await consultationDetails.find({})
-    const consultationPeriodsData = await consultationPeriods.find({})
-    const studentBookingData = await studentBooking.find({})
-    const studentDetailsData = await studentDetails.find({})
-    const consultationDetailsData = await consultationDetails.aggregate(pipeline)
-    console.log(consultationDetailsData)
-    res.render('/', {
-      consultationDetails: consultationDetailsData,
-      consultationPeriods: consultationPeriodsData,
-      lecturerDetails: lecturerDetailsData,
-      studentBooking: studentBookingData,
-      studentDetails: studentDetailsData
-    })
-  } catch (err) {
-    console.error(err)
-    res.sendStatus(500)
-  }
-})
+// app.get('/', async (req, res) => {
+//   try {
+//     const lecturerDetailsData = await lecturerDetails.find({})
+//     // const consultationDetailsData = await consultationDetails.find({})
+//     const consultationPeriodsData = await consultationPeriods.find({})
+//     const studentBookingData = await studentBooking.find({})
+//     const studentDetailsData = await studentDetails.find({})
+//     const consultationDetailsData = await consultationDetails.aggregate(pipeline)
+//     console.log(consultationDetailsData)
+//     res.render('/', {
+//       consultationDetails: consultationDetailsData,
+//       consultationPeriods: consultationPeriodsData,
+//       lecturerDetails: lecturerDetailsData,
+//       studentBooking: studentBookingData,
+//       studentDetails: studentDetailsData
+//     })
+//   } catch (err) {
+//     console.error(err)
+//     res.sendStatus(500)
+//   }
+// })
 
 // Route for inserting new data into lecturerDetails collection
 app.post('/lecturerDetails', async (req, res) => {
