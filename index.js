@@ -5,8 +5,8 @@ const dotenv = require('dotenv').config();
 const ejs = require('ejs');
 const path = require('path');
 const logger = require("./logger");
-const {lecturerDetails, consultationDetails, consultationPeriods, studentBooking, studentDetails } = require('./src/services/dbProvider');
-const insertData = require('./insertData')
+const { lecturerDetails, consultationDetails, consultationPeriods, studentBooking, studentDetails } = require('./src/services/dbProvider');
+const insertData = require('./src/services/insert');
 
 // Authzero configuration file
 const config = {

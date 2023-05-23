@@ -156,8 +156,6 @@ function getNextDate(day, j) {
   }
 }
 
-
-
 //fetch the consultations object stored in lecturerConsultation.js
 function getConsultations() {
   return fetch('/class/api/studentConsultations')

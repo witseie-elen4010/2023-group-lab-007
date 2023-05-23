@@ -1,4 +1,4 @@
-const { lecturerDetails, studentDetails, consultationDetails, studentBooking, consultationPeriods } = require('./src/services/dbProvider')
+const { lecturerDetails, studentDetails, consultationDetails, studentBooking, consultationPeriods } = require('./dbProvider')
 // Function to insert new data into the lecturerDetails collection
 async function insertLecturerDetails(newData) {
   try {
