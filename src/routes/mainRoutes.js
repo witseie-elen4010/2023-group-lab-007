@@ -3,7 +3,7 @@ const express = require('express')
 const logger = require("../../logger");
 const router = express.Router()
 const { lecturerDetails, consultationDetails, consultationPeriods, studentBooking, studentDetails } = require('../schemas/tablesSchemas')
-const insertData = require('../services/insert')
+const insertData = require('../services/insert_service')
 
 router.get('/', function (req, res) {
   const isAuthenticated = req.oidc.isAuthenticated()

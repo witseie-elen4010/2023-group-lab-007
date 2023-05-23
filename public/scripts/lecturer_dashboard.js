@@ -69,7 +69,7 @@ let calendar = new FullCalendar.Calendar(calendarDiv, {
 calendar.render()
 
 function getConsultations() {
-  const url = '/consultationDetailSearch'
+  const url = '/class/api/consultationDetailSearch'
   return fetch(url)
     .then((response) => response.json())
     .then((data) => {
@@ -148,7 +148,7 @@ async function removeConsultation() {
       console.log("Consultation cancellation canceled by user") 
       return 
     }
-    const response = await fetch(`/removeConsultation/${consultationID}`, {
+    const response = await fetch(`/class/api/removeConsultation/${consultationID}`, {
       method: "DELETE",
     }) 
     const data = await response.json() 

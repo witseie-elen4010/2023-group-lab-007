@@ -1,12 +1,13 @@
 //const { lecturerDetails } = require("../../database");
 
-const daysOfWeek={Sunday:0,
-  Monday:1,
-  Tuesday:2,
-  Wednesday:3,
-  Thursday:4,
-  Friday:5,
-  Saturday:6
+const daysOfWeek = {
+  Sunday: 0,
+  Monday: 1,
+  Tuesday: 2,
+  Wednesday: 3,
+  Thursday: 4,
+  Friday: 5,
+  Saturday: 6
 }
 const dropdownMenu = document.querySelector('#teacherList')
 const slotDropdownMenu = document.querySelector('#slotList')
@@ -17,7 +18,6 @@ const user = JSON.parse(userDataInput.value)
 const calendarBtn = document.querySelector('#calendarBtn')
 const calendarDiv = document.querySelector('#calendar')
 const lecturerDetails = fillLecturerField()
-
 
 defaultOption.text = "Select a teacher"
 defaultOption.value = ""
@@ -35,7 +35,7 @@ bookButton.addEventListener('click', () => {
 dropdownMenu.addEventListener('change', async (e) => {
   const selectedTeacher = e.target.value
   //const selectedTeacher = lecturerDetails.find(teacher => teacher.email === teacherEmail);
-  
+
   // Clear out the previous slots
   while (slotDropdownMenu.options.length > 0) {
     slotDropdownMenu.remove(0)
@@ -48,11 +48,10 @@ dropdownMenu.addEventListener('change', async (e) => {
 
     for (let i = 0; i < slots.length; i++) {
       const slot = slots[i]
-      for(let j=0;j<4;j++){
+      for (let j = 0; j < 4; j++) {
         const option = document.createElement("option")
-        option.text = getDateString(getNextDate(slot.dayOfWeek, j))+' '+slot.startTime+'-'+slot.endTime
+        option.text = getDateString(getNextDate(slot.dayOfWeek, j)) + ' ' + slot.startTime + '-' + slot.endTime
         option.value = slot.dayOfWeek
-
         slotDropdownMenu.add(option)
       }
     }
@@ -62,14 +61,14 @@ dropdownMenu.addEventListener('change', async (e) => {
 let calendar = new FullCalendar.Calendar(calendarDiv, {
   initialView: 'dayGridMonth',
   height: 'auto' // or '100%'
-  
+
   //checkButtonStatus();
 });
 
 slotDropdownMenu.addEventListener('change', (e) => {
   const slotIndex = e.target.value
   console.log(`Selected slot: ${slotIndex}`)
-  
+
   // Enable the book button when a slot is selected
   checkButtonStatus()
 });
@@ -86,7 +85,7 @@ if (showConsultation) {
           initialView: 'dayGridMonth',
         });
         calendar.render()
-      }     
+      }
       // Remove all existing events from the calendar
       calendar.getEvents().forEach((event) => event.remove())
       // Add all the consultations to the calendar
@@ -101,14 +100,14 @@ if (showConsultation) {
 if (hideConsultation) {
   console.log('Clicked hide consultation button') //log to the web console
   hideConsultation.addEventListener('click', () => {
-  
+
     // Remove all existing events from the calendar
     calendar.getEvents().forEach((event) => event.remove())
 
   })
 }
 
-async function fillLecturerField(){
+async function fillLecturerField() {
   const lecturerDetails = await getLecturerDetails();
   for (let i = 0; i < Object.keys(lecturerDetails).length; i++) {
     const teacher = lecturerDetails[i]
@@ -117,17 +116,17 @@ async function fillLecturerField(){
     const option = document.createElement("option")
     option.text = fullName
     option.value = teacher.lecturerId
-  
+
     dropdownMenu.appendChild(option)
   }
   return lecturerDetails
 }
 //get correct string format from date object
-function getDateString(date){
+function getDateString(date) {
   const year = date.getFullYear()
   const month = date.getMonth() + 1 // getMonth returns a zero-based value (where 0 is January)
   const day = date.getDate()
-  
+
   const formattedDate = `${year}-${month < 10 ? '0' + month : month}-${day < 10 ? '0' + day : day}`
   //option.text = formattedDate;
   return formattedDate
@@ -149,7 +148,7 @@ function getNextDate(day, j) {
   const targetDay = daysOfWeek[day]
   if (targetDay !== undefined) {
     const daysUntilNextTargetDay = (targetDay - today.getDay() + 7) % 7
-    today.setDate(today.getDate() + ((j*7)+daysUntilNextTargetDay))
+    today.setDate(today.getDate() + ((j * 7) + daysUntilNextTargetDay))
     return today;
   } else {
     throw new Error(`Invalid day name: ${dayName}`)
@@ -159,17 +158,17 @@ function getNextDate(day, j) {
 //fetch the consultations object stored in lecturerConsultation.js
 function getConsultations() {
   return fetch('/class/api/studentConsultations')
-  .then(response => response.json())
-  .then(data => {
-    const consultations = data.map(item => ({title: item.lecturer, date: item.date,}))
-    return consultations
-  })
-  .catch(error => console.error(error))
+    .then(response => response.json())
+    .then(data => {
+      const consultations = data.map(item => ({ title: item.lecturer, date: item.date, }))
+      return consultations
+    })
+    .catch(error => console.error(error))
 }
 
 //call the api to get the consultation periods for a specific lecturer
 function searchConsultations(Id) {
-  const url = `/consultationPeriodsSearch?lecturerId=${Id}`
+  const url = `class/api/consultationPeriodsSearch?lecturerId=${Id}`
   // Make an AJAX request to the server to fetch consultation periods
   return fetch(url)
     .then(response => response.json())
@@ -180,7 +179,7 @@ function searchConsultations(Id) {
 
 // call the api to get the lecturer details from the database
 function getLecturerDetails() {
-  const url = '/lecturerDetails'
+  const url = 'class/api/lecturerDetails'
   return fetch(url)
     .then(response => response.json())
     .catch(error => console.error('Error fetching lecturer details:', error))

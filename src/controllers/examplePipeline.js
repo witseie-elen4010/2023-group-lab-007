@@ -1,5 +1,5 @@
-// Define the pipeline
-const pipeline = [
+// Pipeline that looks for stuff across multiple collections
+const examplePipeline = [
   {
     $lookup: {
       from: 'student_bookings',
@@ -38,4 +38,4 @@ const pipeline = [
   },
 ];
 
-module.export = pipeline;
+module.exports = examplePipeline;
