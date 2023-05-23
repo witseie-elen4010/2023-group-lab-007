@@ -3,7 +3,7 @@
 test('This is a dummy test', () => {
   // Do nothing
 })
-const { getS } = require('../src/studentConsultation.js')
+const { getS } = require('../../src/studentConsultation.js')
 
 test('get function returns the correct list of consultations', () => {
   const expected = [
@@ -29,7 +29,7 @@ test('get function returns the correct list of consultations', () => {
   expect(actual).toEqual(expected)
 })
 
-const { get } = require('../src/lecturerConsultation.js')
+const { get } = require('../../src/lecturerConsultation.js')
 
 test('get function returns the list of lecturer consultations stored in the source file', () => {
   const expected = [
