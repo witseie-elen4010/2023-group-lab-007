@@ -22,16 +22,16 @@ async function getBookingsByConsultationId(consultationId) {
   }
   
 
-// async function createStudentBooking(bookingDetails) {
-//     try {
-//       const newBooking = new studentBooking(bookingDetails);
-//       await newBooking.save();
-//       return newBooking;
-//     } catch (err) {
-//       console.log('Error in createStudentBooking:', err);
-//       throw err;
-//     }
-//   }
+async function createStudentBooking(bookingDetails) {
+    try {
+      const newBooking = new studentBooking(bookingDetails);
+      await newBooking.save();
+      return newBooking;
+    } catch (err) {
+      console.log('Error in createStudentBooking:', err);
+      throw err;
+    }
+  }
   
 module.exports = { getStudentByNumber, createStudentBooking, getBookingsByConsultationId };
   

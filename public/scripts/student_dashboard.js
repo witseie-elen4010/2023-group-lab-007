@@ -53,6 +53,7 @@ bookButton.addEventListener('click', () => {
       studentNumber: testStudent, //user.studentNumber
       role: "Member"
      }
+
      createBooking(bookingDetails)
   .then(data => {
     console.log('Booking created successfully:', data);
@@ -250,19 +251,25 @@ dropdownMenu.addEventListener('change', async (e) => {
 
     // Fetch existing consultations for selected lecturer
     const existingConsultations = await getExistingConsultations(selectedTeacher)
-    getBookings(existingConsultations.consultationId)
-  .then(data => {
-    console.log(data);
-    // Perform any additional actions after successful booking
-  })
-  .catch(error => {
-    console.error('Failed to fetch booking:', error);
-    // Handle the error appropriately
-  });
+    
     // Fill the existing consultations dropdown
+    let numberOfStudents=0;
     for (let i = 0; i < existingConsultations.length; i++) {
       const consultation = existingConsultations[i]
-
+      numberOfStudents = await getBookings(consultation.consultationId)
+      .then(data => {
+        console.log(data)
+        return data.length
+        // Perform any additional actions after successful booking
+      })
+      .catch(error => {
+        console.error('Failed to fetch booking:', error);
+        // Handle the error appropriately
+      });
+      console.log(numberOfStudents)
+      if(numberOfStudents>=consultation.maximumNumberOfStudents){
+        continue
+      }
       const option = document.createElement("option")
       option.text = `${consultation.date} at ${consultation.startTime}-${consultation.endTime}`
       option.value = consultation.consultationId
@@ -271,8 +278,8 @@ dropdownMenu.addEventListener('change', async (e) => {
   }
 })
 
-function getBookings(){
-  const url = 'class/api/bookingsByConsultationId'
+function getBookings(consultationId){
+  const url = `class/api/bookingsByConsultationId?consultationId=${consultationId}`
   return fetch(url)
   .then(response => response.json())
   .catch(error => console.error('Error fetching lecturer details:', error))
