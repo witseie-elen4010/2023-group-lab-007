@@ -64,7 +64,7 @@ router.delete('/api/removeConsultationPeriod', async (req, res) => {
   }
 });
 
-// Route for inserting new data into lecturerDetails collection
+// Route for inserting new data into consultation periods collection
 router.post('/api/consultationPeriods', async (req, res) => {
   const userEmail = req.oidc.user.email;
   try {
@@ -78,6 +78,21 @@ router.post('/api/consultationPeriods', async (req, res) => {
     res.sendStatus(500)
   }
 })
+
+// Define a route to handle incoming requests for getting consultation periods
+router.get('/api/existingConsultationPeriods/:lecturerID', async (req, res) => {
+  const userEmail = req.oidc.user.email;
+  try {
+    const selectedLecturer = req.params.lecturerID;
+    const consultationPeriodsData = await consultationPeriodService.getExistingConsultationPeriods(selectedLecturer);
+    logger.info('fetched existing consultation periods for lecturer [' + userEmail + ']');
+    res.json(consultationPeriodsData)
+  } catch (err) {
+    console.error(err)
+    res.sendStatus(500)
+  }
+})
+
 
 // Route for inserting new data into studentBooking collection
 router.post('/api/studentBooking', async (req, res) => {

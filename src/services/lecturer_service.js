@@ -11,6 +11,7 @@ async function getConsultationPeriods(selectedLecturer) {
   }
 }
 
+//function that gets the lecturer details
 async function getLecturerDetails() {
   try {
     const lecturerDetailsData = await lecturerDetails.find({});

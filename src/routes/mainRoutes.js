@@ -5,6 +5,7 @@ const router = express.Router()
 const moreDetailsService = require('../services/more_details_service')
 var inDatabase = false;
 
+//Home route
 router.get('/', async (req, res) => {
   const isAuthenticated = req.oidc.isAuthenticated()
 
@@ -13,7 +14,7 @@ router.get('/', async (req, res) => {
     if (userEmail.includes('@wits.ac.za')) {
       inDatabase = await moreDetailsService.inDatabaseLecturer(userEmail);
       if (inDatabase) {
-        res.render('lecturer_dashboard', {                                                                        //Change this to lecturer_dashboard after the nabar has been implimented
+        res.render('lecturer_dashboard', {                                                                       
           isAuthenticated: req.oidc.isAuthenticated(), user: req.oidc.user, roll: "lecturer",
         });
         logger.info('Navigated to landing page [' + userEmail + ']');
@@ -28,7 +29,7 @@ router.get('/', async (req, res) => {
     } else if (userEmail.includes('@students.wits.ac.za')) {
       inDatabase = await moreDetailsService.inDatabaseStudent(userEmail);
       if (inDatabase) {
-        res.render('student_dashboard', {                                                                       //Change this to student_dashboard after the nabar has been implimented
+        res.render('student_dashboard', {                                                                       
           isAuthenticated: req.oidc.isAuthenticated(), user: req.oidc.user, roll: "student",
         });
         logger.info('Navigated to landing page [' + userEmail + ']');
@@ -52,6 +53,7 @@ router.get('/', async (req, res) => {
   }
 })
 
+//Route for obtaining more personal details
 router.get('/moreDetails', async (req, res) => {
   try {
     res.render('moreDetails', {
@@ -63,6 +65,7 @@ router.get('/moreDetails', async (req, res) => {
   }
 })
 
+//Route for lecturer or student dashboard
 router.get('/dashboard', function (req, res) {
   const isAuthenticated = req.oidc.isAuthenticated()
 
@@ -124,6 +127,7 @@ router.get('/loginorlogout', function (req, res) {
   }
 })
 
+//Route for lecturer settings
 router.get('/settings', function (req, res) {
   const isAuthenticated = req.oidc.isAuthenticated()
   const userEmail = req.oidc.user.email;

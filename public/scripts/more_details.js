@@ -1,6 +1,8 @@
 const form1 = document.querySelector('#studentForm');
 const form2 = document.querySelector('#lecturerForm');
 
+
+//submission field for student details such as student number, firstname and lastname
 form1.addEventListener('submit', function (event) {
   event.preventDefault();
 
@@ -21,6 +23,7 @@ form1.addEventListener('submit', function (event) {
   window.location.href = "/";
 });
 
+//Submssion form for lecturer details such as firstname and lastname
 form2.addEventListener('submit', function (event) {
   event.preventDefault();
 
@@ -30,14 +33,14 @@ form2.addEventListener('submit', function (event) {
   const lastName = document.querySelector('input[name="lastName"]').value;
 
   const entry = {
-    lecturerId: email,                       
+    lecturerId: email,
     emailAddress: email,
     firstName: firstName,
     lastName: lastName,
   };
 
   insertLecturerDetails(entry);
-  window.location.href = "/";
+  
 });
 
 //Insert lecturer details into the database
@@ -57,6 +60,7 @@ async function insertLecturerDetails(entry) {
     } else {
       console.log('Error occurred while inserting data.');
     }
+    window.location.href = "/";
   } catch (error) {
     console.error(error);
   }
@@ -78,6 +82,8 @@ async function insertStudentDetails(entry) {
     } else {
       console.log('Error occurred while inserting data.');
     }
+
+    window.location.href = "/";
   } catch (error) {
     console.error(error);
   }

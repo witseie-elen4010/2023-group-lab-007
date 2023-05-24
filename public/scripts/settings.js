@@ -2,6 +2,12 @@ const form = document.querySelector('#consPeriod');
 const entryList = document.getElementById('entryList');
 let entries = [];
 
+function handleEmail(email) {
+  console.log(email);
+  getConsultationPeriods(email)
+}
+
+// Submission form for consultation settings
 form.addEventListener('submit', (event) => {
   event.preventDefault();
 
@@ -14,9 +20,8 @@ form.addEventListener('submit', (event) => {
   const duration = document.querySelector('select[name="maxDuration"]').value;
   const randomNumber = (Math.floor(Math.random() * 1000) + 1);
 
-  
   const entry = {
-    lecturerId: email,                           //string
+    lecturerId: email,
     dayOfWeek: dayOfWeek,
     startTime: startTime,
     endTime: endTime,
@@ -31,7 +36,7 @@ form.addEventListener('submit', (event) => {
   insertConsultationPeriods(entry);
 });
 
-//Insert lecturer details into the database
+//Insert consultation settings into the database
 async function insertConsultationPeriods(entry) {
   try {
 
@@ -53,10 +58,10 @@ async function insertConsultationPeriods(entry) {
   }
 }
 
-//Insert lecturer details into the database
+//Delete consultation settings from the database
 async function deleteConsultationPeriod(lecturerID, dayOfWeek) {
   try {
-    const details = {lecturerID: lecturerID, dayOfWeek: dayOfWeek}
+    const details = { lecturerID: lecturerID, dayOfWeek: dayOfWeek }
 
     const response = await fetch('/class/api/removeConsultationPeriod', {
       method: 'DELETE',
@@ -76,6 +81,47 @@ async function deleteConsultationPeriod(lecturerID, dayOfWeek) {
   }
 }
 
+//Insert consultation settings into the database
+async function getConsultationPeriods(lecturerID) {
+  console.log(lecturerID)
+  try {
+    const response = await fetch(`/class/api/existingConsultationPeriods/${lecturerID}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json' // Set the content type to JSON
+      }
+    }).then(response => response.json())
+      .catch(error => console.error('Error fetching consultation periods:', error))
+
+    for (let i = 0; i < Object.keys(response).length; i++) {
+      const period = response[i]
+
+      const entry = {
+        lecturerId: period.lecturerId,
+        dayOfWeek: period.dayOfWeek,
+        startTime: period.startTime,
+        endTime: period.endTime,
+        durationMinutes: period.durationMinutes,
+        maximumNumberOfConsultationsPerDay: period.maximumNumberOfConsultationsPerDay,
+        numberOfStudents: period.numberOfStudents,
+      };
+      entries.push(entry);
+    }
+
+    displayEntries();
+
+    if (response.status === 200) {
+      console.log('Data fetched successfully!');
+    } else {
+      console.log('Error occurred while inserting data.');
+    }
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+
+//Display existing consultation settings as a list
 function displayEntries() {
   entryList.innerHTML = '';
 
@@ -91,6 +137,7 @@ function displayEntries() {
     entryList.appendChild(listItem);
   }
 
+  //Delete button calls the delete consultation function for that consultation 
   const deleteButtons = document.querySelectorAll('.deleteEntry');
   deleteButtons.forEach(button => {
     button.addEventListener('click', (event) => {

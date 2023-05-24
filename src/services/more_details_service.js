@@ -16,7 +16,7 @@ async function inDatabaseStudent(emailAddress) {
   }
 }
 
-// Function to insert new data into the consultationPeriods collection
+// Function to check if lecturer is in the database
 async function inDatabaseLecturer(emailAddress) {
   try {
     const status = await lecturerDetails.find({ emailAddress: emailAddress });

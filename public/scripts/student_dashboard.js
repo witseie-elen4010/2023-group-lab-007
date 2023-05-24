@@ -108,6 +108,7 @@ if (hideConsultation) {
 }
 
 async function fillLecturerField() {
+
   const lecturerDetails = await getLecturerDetails();
   for (let i = 0; i < Object.keys(lecturerDetails).length; i++) {
     const teacher = lecturerDetails[i]
