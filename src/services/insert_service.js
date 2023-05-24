@@ -45,7 +45,7 @@ async function insertConsultationPeriods(newData) {
   try {
     const document = new consultationPeriods(newData)
     await document.save()
-    console.log('New data inserted into consultationPeriods collection.')
+    // console.log('New data inserted into consultationPeriods collection.')
   } catch (err) {
     console.error('Failed to insert new data into consultationPeriods collection.', err)
   }
