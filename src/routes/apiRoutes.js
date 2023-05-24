@@ -9,6 +9,7 @@ const studentConsultations = require('../studentConsultation.js').getS();
 const insertService = require('../services/insert_service');
 const lecturerService = require('../services/lecturer_service');
 const consultationService = require('../services/consultation_service');
+const studentConsulationService = require('../services/student_consulation_service');
 
 router.get('/api/studentConsultations', function (req, res) {
   res.json(studentConsultations) // Respond with JSON
@@ -139,6 +140,18 @@ router.get('/api/testPipeline', async (req, res) => {
     res.sendStatus(500)
   }
 })
+
+router.get('/api/studentConsultationDetails', async (req, res) => {
+  try {
+    let studentNumber = '2305164';
+    const studentConsultationDetails = await studentConsulationService.getStudentConsultationDetails(studentNumber);
+    res.json(studentConsultationDetails);
+  } catch (err) {
+    console.error(err);
+    res.sendStatus(500);
+  }
+})
+
 
 
 module.exports = router
