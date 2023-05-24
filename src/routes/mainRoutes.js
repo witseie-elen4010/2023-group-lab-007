@@ -10,7 +10,7 @@ router.get('/', async (req, res) => {
 
   if (isAuthenticated) {
     const userEmail = req.oidc.user.email;
-    if (userEmail.includes('@wits.co.za')) {
+    if (userEmail.includes('@wits.ac.za')) {
       inDatabase = await moreDetailsService.inDatabaseLecturer(userEmail);
       if (inDatabase) {
         res.render('lecturer_dashboard', {                                                                        //Change this to lecturer_dashboard after the nabar has been implimented
@@ -68,7 +68,7 @@ router.get('/dashboard', function (req, res) {
 
   if (isAuthenticated) {
     const userEmail = req.oidc.user.email;
-    if (userEmail.includes('@wits.co.za')) {
+    if (userEmail.includes('@wits.ac.za')) {
       res.render('lecturer_dashboard', {
         isAuthenticated: req.oidc.isAuthenticated(), user: req.oidc.user, roll: "lecturer",
       });
@@ -91,25 +91,25 @@ router.get('/dashboard', function (req, res) {
 
 //Replace [delete] these two dashboard with the one above at a later stage
 
-router.get('/lecturer_dashboard', function (req, res) {
-  const isAuthenticated = req.oidc.isAuthenticated()
-  const userEmail = req.oidc.user.email;
+// router.get('/lecturer_dashboard', function (req, res) {
+//   const isAuthenticated = req.oidc.isAuthenticated()
+//   const userEmail = req.oidc.user.email;
 
-  res.render('lecturer_dashboard', {
-    isAuthenticated: req.oidc.isAuthenticated(), user: req.oidc.user, roll: "lecturer",
-  });
-  logger.info('Navigated to lecturer dashboard page [' + userEmail + ']');
-})
+//   res.render('lecturer_dashboard', {
+//     isAuthenticated: req.oidc.isAuthenticated(), user: req.oidc.user, roll: "lecturer",
+//   });
+//   logger.info('Navigated to lecturer dashboard page [' + userEmail + ']');
+// })
 
-router.get('/student_dashboard', function (req, res) {
-  const isAuthenticated = req.oidc.isAuthenticated()
-  const userEmail = req.oidc.user.email;
+// router.get('/student_dashboard', function (req, res) {
+//   const isAuthenticated = req.oidc.isAuthenticated()
+//   const userEmail = req.oidc.user.email;
 
-  res.render('student_dashboard', {
-    isAuthenticated: req.oidc.isAuthenticated(), user: req.oidc.user, roll: "student",
-  });
-  logger.info('Navigated to student dashboard page [' + userEmail + ']');
-})
+//   res.render('student_dashboard', {
+//     isAuthenticated: req.oidc.isAuthenticated(), user: req.oidc.user, roll: "student",
+//   });
+//   logger.info('Navigated to student dashboard page [' + userEmail + ']');
+// })
 
 router.get('/loginorlogout', function (req, res) {
   const isAuthenticated = req.oidc.isAuthenticated()
@@ -129,32 +129,32 @@ router.get('/settings', function (req, res) {
   const userEmail = req.oidc.user.email;
 
   res.render('settings', {
-    isAuthenticated: req.oidc.isAuthenticated(), user: req.oidc.user,
+    isAuthenticated: req.oidc.isAuthenticated(), user: req.oidc.user, roll: "lecturer",
   });
   logger.info('Navigated to settings page [' + userEmail + ']');
 })
 
-router.get('/create_consultation', function (req, res) {
-  const isAuthenticated = req.oidc.isAuthenticated()
-  const userEmail = req.oidc.user.email;
+// router.get('/create_consultation', function (req, res) {
+//   const isAuthenticated = req.oidc.isAuthenticated()
+//   const userEmail = req.oidc.user.email;
 
-  //Replace with this on final version
-  // if (userEmail.includes('@students.wits.co.za')) {
-  //   res.render('create_consultation', {
-  //     isAuthenticated: req.oidc.isAuthenticated(), user: req.oidc.user, roll: "student",
-  //   });
-  //   logger.info('Navigated to lecturer dashboard page [' + userEmail + ']');
-  // } else {
-  //   res.render('notamember', {
-  //     isAuthenticated: req.oidc.isAuthenticated(), user: req.oidc.user, roll: "other",
-  //   });
-  //   logger.info('Navigated to notamember page [' + userEmail + ']');
-  // }
+//   //Replace with this on final version
+//   // if (userEmail.includes('@students.wits.co.za')) {
+//   //   res.render('create_consultation', {
+//   //     isAuthenticated: req.oidc.isAuthenticated(), user: req.oidc.user, roll: "student",
+//   //   });
+//   //   logger.info('Navigated to lecturer dashboard page [' + userEmail + ']');
+//   // } else {
+//   //   res.render('notamember', {
+//   //     isAuthenticated: req.oidc.isAuthenticated(), user: req.oidc.user, roll: "other",
+//   //   });
+//   //   logger.info('Navigated to notamember page [' + userEmail + ']');
+//   // }
 
-  res.render('create_consultation', {
-    isAuthenticated: req.oidc.isAuthenticated(), user: req.oidc.user, roll: "student",
-  });
-  logger.info('Navigated to create consultation page [' + userEmail + ']');
-})
+//   res.render('create_consultation', {
+//     isAuthenticated: req.oidc.isAuthenticated(), user: req.oidc.user, roll: "student",
+//   });
+//   logger.info('Navigated to create consultation page [' + userEmail + ']');
+// })
 
 module.exports = router

@@ -24,11 +24,10 @@
   </header>
   <h1>Lecturer dashboard</h1>
   <p>
-    Select the number of students allowed per consultation slot:
     <select id="options" onchange="storeOption()">
-    <option value="">-- No. of Students --</option>
-    </select> 
-    <ul id = 'numberList'></ul>  
+      <option value="">-- No. of Students --</option>
+    </select>
+  <ul id='numberList'></ul>
   </p>
   <button type="button" id="showConsultation">Show Consultations</button>
   <button type="button" id="cancelConsultation">Cancel Consultation</button>
@@ -36,7 +35,7 @@
   <script src="/cdn/scripts/lecturer_dashboard.js"></script>
   <select id="consultations">
     <option value="">-- Select Consultation --</option>
-  </select>  
+  </select>
   <footer>
     <%- include('./partials/footer'); %>
   </footer>

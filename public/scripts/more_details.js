@@ -15,20 +15,10 @@ form1.addEventListener('submit', function (event) {
     emailAddress: email,
     firstName: firstName,
     lastName: lastName,
-    password: 'dfkljfla;j;',
   };
 
-  // const entry = {
-  //   studentNumber: studentNumber,
-  //   emailAddress: email,
-  //   firstName: firstName,
-  //   lastName: lastName,
-  // };
-
   insertStudentDetails(entry);
-
-  console.log(entry);
-  // window.location.href = "/";
+  window.location.href = "/";
 });
 
 form2.addEventListener('submit', function (event) {
@@ -39,26 +29,15 @@ form2.addEventListener('submit', function (event) {
   const firstName = document.querySelector('input[name="firstName"]').value;
   const lastName = document.querySelector('input[name="lastName"]').value;
 
-  const randomNumber = int(Math.floor(Math.random() * 1000) + 1);
   const entry = {
-    lecturerId: randomNumber,
+    lecturerId: email,                       
     emailAddress: email,
     firstName: firstName,
     lastName: lastName,
-    password: 'daffgdasgageraer',
   };
 
-  // const entry = {
-  //   lecturerId: email,                       
-  //   emailAddress: email,
-  //   firstName: firstName,
-  //   lastName: lastName,
-  // };
-
   insertLecturerDetails(entry);
-
-  console.log(entry);
-  // window.location.href = "/";
+  window.location.href = "/";
 });
 
 //Insert lecturer details into the database

@@ -14,8 +14,9 @@ form.addEventListener('submit', (event) => {
   const duration = document.querySelector('select[name="maxDuration"]').value;
   const randomNumber = (Math.floor(Math.random() * 1000) + 1);
 
+  
   const entry = {
-    lecturerId: randomNumber,                           //string
+    lecturerId: email,                           //string
     dayOfWeek: dayOfWeek,
     startTime: startTime,
     endTime: endTime,
@@ -23,16 +24,6 @@ form.addEventListener('submit', (event) => {
     maximumNumberOfConsultationsPerDay: maxConsultations,
     numberOfStudents: maxStudents,
   };
-
-  // const entry = {
-  //   lecturerId: email,                           //string
-  //   dayOfWeek: dayOfWeek,
-  //   startTime: startTime,
-  //   endTime: endTime,
-  //   durationMinutes: duration,
-  //   maximumNumberOfConsultationsPerDay: maxConsultations,
-  //   numberOfStudents: maxStudents,
-  // };
 
   entries.push(entry);
   displayEntries();

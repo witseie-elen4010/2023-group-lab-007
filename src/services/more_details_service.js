@@ -4,7 +4,6 @@ const { lecturerDetails, studentDetails, consultationDetails, studentBooking, co
 async function inDatabaseStudent(emailAddress) {
   try {
     const status = await studentDetails.find({ emailAddress: emailAddress });
-    console.log(status);
     if (status.length === 0) {
       return false; // change this to false when you have the database
     }
@@ -21,7 +20,6 @@ async function inDatabaseStudent(emailAddress) {
 async function inDatabaseLecturer(emailAddress) {
   try {
     const status = await lecturerDetails.find({ emailAddress: emailAddress });
-    console.log(status);
     if (status.length === 0) {
       return false; // change this to false when you have the database
     }
