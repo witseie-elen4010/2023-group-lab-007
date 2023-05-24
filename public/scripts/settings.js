@@ -1,42 +1,89 @@
 const form = document.querySelector('#consPeriod');
-const maxStudentsForm = document.querySelector('#maximumStudents');
-const maxConsultationsForm = document.querySelector('#maximumConsultations');
-const maxDurationForm = document.querySelector('#maximumDuration');
 const entryList = document.getElementById('entryList');
 let entries = [];
 
 form.addEventListener('submit', (event) => {
   event.preventDefault();
 
+  var email = document.getElementById('email').value;
   const dayOfWeek = document.getElementById('dayOfWeek').value;
   const startTime = document.querySelector('input[name="start_time"]').value;
   const endTime = document.querySelector('input[name="end_time"]').value;
+  const maxStudents = document.querySelector('input[name="maxStudents"]').value;
+  const maxConsultations = document.querySelector('input[name="maxConsultations"]').value;
+  const duration = document.querySelector('select[name="maxDuration"]').value;
+  const randomNumber = (Math.floor(Math.random() * 1000) + 1);
 
   const entry = {
-    dayOfWeek,
-    startTime,
-    endTime
+    lecturerId: randomNumber,                           //string
+    dayOfWeek: dayOfWeek,
+    startTime: startTime,
+    endTime: endTime,
+    durationMinutes: duration,
+    maximumNumberOfConsultationsPerDay: maxConsultations,
+    numberOfStudents: maxStudents,
   };
 
+  // const entry = {
+  //   lecturerId: email,                           //string
+  //   dayOfWeek: dayOfWeek,
+  //   startTime: startTime,
+  //   endTime: endTime,
+  //   durationMinutes: duration,
+  //   maximumNumberOfConsultationsPerDay: maxConsultations,
+  //   numberOfStudents: maxStudents,
+  // };
+
   entries.push(entry);
-
   displayEntries();
+
+  insertConsultationPeriods(entry);
 });
 
-maxStudentsForm.addEventListener('submit', (event) => {
-  event.preventDefault();
-  const maxStudents = document.querySelector('input[name="maxStudents"]').value;
-});
+//Insert lecturer details into the database
+async function insertConsultationPeriods(entry) {
+  try {
 
-maxConsultationsForm.addEventListener('submit', (event) => {
-  event.preventDefault();
-  const maxConsultations = document.querySelector('input[name="maxConsultations"]').value;
-});
+    const response = await fetch('/class/api/consultationPeriods', {
+      method: 'POST',
+      body: JSON.stringify(entry),
+      headers: {
+        'Content-Type': 'application/json' // Set the content type to JSON
+      }
+    })
 
-maxDurationForm.addEventListener('submit', (event) => {
-  event.preventDefault();
-  const maxDuration = document.querySelector('select[name="maxDuration"]').value;
-});
+    if (response.status === 200) {
+      console.log('Data inserted successfully!');
+    } else {
+      console.log('Error occurred while inserting data.');
+    }
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+//Insert lecturer details into the database
+async function deleteConsultationPeriod(lecturerID, dayOfWeek) {
+  try {
+    const details = {lecturerID: lecturerID, dayOfWeek: dayOfWeek}
+
+    const response = await fetch('/class/api/removeConsultationPeriod', {
+      method: 'DELETE',
+      body: JSON.stringify(details),
+      headers: {
+        'Content-Type': 'application/json' // Set the content type to JSON
+      }
+    })
+
+    if (response.status === 200) {
+      console.log('Data deleted successfully!');
+    } else {
+      console.log('Error occurred while inserting data.');
+    }
+  } catch (error) {
+    console.error(error);
+  }
+}
 
 function displayEntries() {
   entryList.innerHTML = '';
@@ -46,8 +93,8 @@ function displayEntries() {
     const listItem = document.createElement('li');
     listItem.innerHTML = `
     <div style="padding: 10px">
-      ${i + 1}. ${entry.dayOfWeek} - ${entry.startTime} to ${entry.endTime}
-      <button class="btn btn-danger btn-sm float-right deleteEntry"  data-index="${i}">Delete</button>
+      ${i + 1}. ${entry.dayOfWeek} - ${entry.startTime} to ${entry.endTime} where ${entry.maximumNumberOfConsultationsPerDay} consultations of ${entry.durationMinutes} minutes can be booked with a max of ${entry.numberOfStudents} students per consultation.
+      <div><button class="btn btn-danger btn-sm deleteEntry"  data-index="${i}">Delete</button></div>
       </div>
     `;
     entryList.appendChild(listItem);
@@ -57,6 +104,7 @@ function displayEntries() {
   deleteButtons.forEach(button => {
     button.addEventListener('click', (event) => {
       const index = parseInt(event.target.getAttribute('data-index'));
+      deleteConsultationPeriod(entries[index].lecturerId, entries[index].dayOfWeek);
       entries.splice(index, 1);
       displayEntries();
     });
@@ -91,4 +139,6 @@ $(document).ready(function () {
     }
   });
 });
+
+
 

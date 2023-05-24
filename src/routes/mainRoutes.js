@@ -2,24 +2,45 @@ const path = require('path')
 const express = require('express')
 const logger = require("../../logger");
 const router = express.Router()
-const { lecturerDetails, consultationDetails, consultationPeriods, studentBooking, studentDetails } = require('../schemas/tablesSchemas')
-const insertData = require('../services/insert_service')
+const moreDetailsService = require('../services/more_details_service')
+var inDatabase = false;
 
-router.get('/', function (req, res) {
+router.get('/', async (req, res) => {
   const isAuthenticated = req.oidc.isAuthenticated()
 
   if (isAuthenticated) {
     const userEmail = req.oidc.user.email;
     if (userEmail.includes('@wits.co.za')) {
-      res.render('lecturer_dashboard', {                                                                        //Change this to lecturer_dashboard after the nabar has been implimented
-        isAuthenticated: req.oidc.isAuthenticated(), user: req.oidc.user, roll: "lecturer",
-      });
-      logger.info('Navigated to landing page [' + userEmail + ']');
+      inDatabase = await moreDetailsService.inDatabaseLecturer(userEmail);
+      if (inDatabase) {
+        res.render('lecturer_dashboard', {                                                                        //Change this to lecturer_dashboard after the nabar has been implimented
+          isAuthenticated: req.oidc.isAuthenticated(), user: req.oidc.user, roll: "lecturer",
+        });
+        logger.info('Navigated to landing page [' + userEmail + ']');
+      }
+      else {
+        res.render('moreDetails', {
+          isAuthenticated: req.oidc.isAuthenticated(), user: req.oidc.user, roll: "lecturer",
+        });
+        logger.info('Navigated to more details page [' + userEmail + ']');
+      }
+
     } else if (userEmail.includes('@students.wits.ac.za')) {
-      res.render('student_dashboard', {                                                                       //Change this to student_dashboard after the nabar has been implimented
-        isAuthenticated: req.oidc.isAuthenticated(), user: req.oidc.user, roll: "student",
-      });
-      logger.info('Navigated to landing page [' + userEmail + ']');
+      inDatabase = await moreDetailsService.inDatabaseStudent(userEmail);
+      if (inDatabase) {
+        res.render('student_dashboard', {                                                                       //Change this to student_dashboard after the nabar has been implimented
+          isAuthenticated: req.oidc.isAuthenticated(), user: req.oidc.user, roll: "student",
+        });
+        logger.info('Navigated to landing page [' + userEmail + ']');
+
+      }
+      else {
+        res.render('moreDetails', {
+          isAuthenticated: req.oidc.isAuthenticated(), user: req.oidc.user, roll: "student",
+        });
+        logger.info('Navigated to more details page [' + userEmail + ']');
+      }
+
     } else {
       res.render('notamember', {
         isAuthenticated: req.oidc.isAuthenticated(), user: req.oidc.user, roll: "other",
@@ -31,16 +52,11 @@ router.get('/', function (req, res) {
   }
 })
 
-router.get('/stuff', async (req, res) => {
+router.get('/moreDetails', async (req, res) => {
   try {
-    const lecturerDetailsData = await lecturerDetails.find({})
-    // const consultationDetailsData = await consultationDetails.find({})
-    const consultationPeriodsData = await consultationPeriods.find({})
-    const studentBookingData = await studentBooking.find({})
-    const studentDetailsData = await studentDetails.find({})
-    const consultationDetailsData = await consultationDetails.aggregate(pipeline)
-    console.log(consultationDetailsData[0].student_booking[0].student_details)
-    res.render('lecturer_dashboard');
+    res.render('moreDetails', {
+      isAuthenticated: req.oidc.isAuthenticated(), user: req.oidc.user, roll: "lecturer",
+    });
   } catch (err) {
     console.error(err)
     res.sendStatus(500)

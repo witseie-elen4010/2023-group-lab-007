@@ -13,6 +13,7 @@ async function insertLecturerDetails(newData) {
 // Function to insert new data into the studentDetails collection
 async function insertStudentDetails(newData) {
   try {
+    console.log(newData)
     const document = new studentDetails(newData)
     await document.save()
     console.log('New data inserted into studentDetails collection.')
@@ -46,6 +47,7 @@ async function insertStudentBooking(newData) {
 // Function to insert new data into the consultationPeriods collection
 async function insertConsultationPeriods(newData) {
   try {
+    console.log(newData)
     const document = new consultationPeriods(newData)
     await document.save()
     console.log('New data inserted into consultationPeriods collection.')

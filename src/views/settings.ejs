@@ -41,53 +41,40 @@
         <p></p>
         <input type="text" class="form-control" id="timepicker" name="end_time" placeholder="HH:MM AM/PM">
       </div>
-      <button type="submit" class="btn btn-primary">Submit</button>
-    </form>
-    <p></p>
-    <h4>Current periods:</h4>
-    <ul id="entryList"></ul>
-
-    <h2>Consultation settings</h2>
-    <form id="maximumStudents">
+      <h2>Consultation settings</h2>
       <div class="form-group">
         <label for="numberPicker">Specify the max number of students per consultation</label>
         <div class="input-group">
-          <input type="number" class="form-control" id="numberPicker" name="maxStudents" min="0" max="100" value="0">
-          <div class="input-group-append">
-            <button type="submit" class="btn btn-secondary">Update</button>
-          </div>
+          <input type="number" class="form-control" id="numberPicker" name="maxStudents" min="1" max="100" value="1">
         </div>
       </div>
-    </form>
-    <form id="maximumConsultations">
       <div class="form-group">
         <label for="numberPicker">Specify the max number of consulatations per period/day</label>
         <div class="input-group">
-          <input type="number" class="form-control" id="numberPicker" name="maxConsultations" min="0" max="100"
-            value="0">
-          <div class="input-group-append">
-            <button type="submit" class="btn btn-secondary">Update</button>
-          </div>
+          <input type="number" class="form-control" id="numberPicker" name="maxConsultations" min="1" max="100"
+            value="1">
         </div>
       </div>
-    </form>
-    <form id="maximumDuration">
       <div class="form-group">
-        <label for="durationPicker">Select max duration of a consultation (in minutes):</label>
+        <label for="durationPicker">Select duration of a consultation (in minutes):</label>
         <div class="input-group">
           <select class="form-control" id="durationPicker" name="maxDuration">
-            <% for (let i=0; i <=120; i +=15) { %>
+            <% for (let i=15; i <=60; i +=15) { %>
               <option value="<%= i %>">
                 <%= i %> minutes
               </option>
               <% } %>
           </select>
-          <div class="input-group-append">
-            <button type="submit" class="btn btn-secondary">Update</button>
-          </div>
         </div>
       </div>
+      <div class="form-group">
+        <input type="hidden" id="email" value="<%= user.email %>">
+      </div>
+      <button type="submit" class="btn btn-primary">Submit</button>
     </form>
+    <p></p>
+    <h4>Current periods:</h4>
+    <ul id="entryList"></ul>
   </div>
 
   <!-- Include the JavaScript files for jQuery and the timepicker plugin -->

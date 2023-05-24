@@ -9,6 +9,7 @@ const studentConsultations = require('../studentConsultation.js').getS();
 const insertService = require('../services/insert_service');
 const lecturerService = require('../services/lecturer_service');
 const consultationService = require('../services/consultation_service');
+const consultationPeriodService = require('../services/consultation_period_service');
 
 router.get('/api/studentConsultations', function (req, res) {
   res.json(studentConsultations) // Respond with JSON
@@ -20,10 +21,12 @@ router.get('/api/lecturerConsultations', function (req, res) {
 
 // Route for inserting new data into lecturerDetails collection
 router.post('/api/lecturerDetails', async (req, res) => {
+  const userEmail = req.oidc.user.email;
   try {
-    const newData = req.body // Assumes the request body contains the new data
+    const newData = req.body
     // Insert the new data into the lecturerDetails collection
     await insertService.insertLecturerDetails(newData)
+    logger.info('Inserted lecturer details [' + userEmail + ']');
     res.sendStatus(200)
   } catch (err) {
     console.error(err)
@@ -33,10 +36,42 @@ router.post('/api/lecturerDetails', async (req, res) => {
 
 // Route for inserting new data into studentDetails collection
 router.post('/api/studentDetails', async (req, res) => {
+  const userEmail = req.oidc.user.email;
   try {
     const newData = req.body // Assumes the request body contains the new data
     // Insert the new data into the studentDetails collection
     await insertService.insertStudentDetails(newData)
+    logger.info('Inserted student details [' + userEmail + ']');
+    res.sendStatus(200)
+  } catch (err) {
+    console.error(err)
+    res.sendStatus(500)
+  }
+})
+
+// Delete an existing consultation availability period for a lecturer
+router.delete('/api/removeConsultationPeriod', async (req, res) => {
+  const userEmail = req.oidc.user.email;
+  try {
+    const lecturerID = req.body.lecturerID;
+    const dayOfWeek = req.body.dayOfWeek;
+    await consultationPeriodService.deleteConsultationPeriod(lecturerID, dayOfWeek);
+    logger.info('Deleted a consultation availability period [' + userEmail + ']');
+    res.json({ message: 'Consultation period removed successfully' });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+// Route for inserting new data into lecturerDetails collection
+router.post('/api/consultationPeriods', async (req, res) => {
+  const userEmail = req.oidc.user.email;
+  try {
+    const newData = req.body
+    // Insert the new data into the lecturerDetails collection
+    await insertService.insertConsultationPeriods(newData)
+    logger.info('Inserted a new consultation availability period [' + userEmail + ']');
     res.sendStatus(200)
   } catch (err) {
     console.error(err)
