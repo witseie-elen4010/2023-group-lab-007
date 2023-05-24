@@ -184,3 +184,52 @@ function getLecturerDetails() {
     .then(response => response.json())
     .catch(error => console.error('Error fetching lecturer details:', error))
 }
+
+
+// Selecting the new dropdown menu
+const existingConsultationsMenu = document.querySelector('#existingConsultations')
+
+dropdownMenu.addEventListener('change', async (e) => {
+  const selectedTeacher = e.target.value
+
+  // Clear out the previous slots
+  while (slotDropdownMenu.options.length > 0) {
+    slotDropdownMenu.remove(0)
+  }
+
+  // Clear out the previous existing consultations
+  while (existingConsultationsMenu.options.length > 0) {
+    existingConsultationsMenu.remove(0)
+  }
+
+  if (selectedTeacher) {
+    // Fetch consultation periods for selected lecturer
+    const slots = await searchConsultations(selectedTeacher)
+
+    // Fetch existing consultations for selected lecturer
+    const existingConsultations = await getExistingConsultations(selectedTeacher)
+
+    // Fill the slots dropdown
+    // ... previous code ...
+
+    // Fill the existing consultations dropdown
+    for (let i = 0; i < existingConsultations.length; i++) {
+      const consultation = existingConsultations[i]
+      const option = document.createElement("option")
+      option.text = `${consultation.startTime} - ${consultation.endTime}`
+      option.value = consultation.consultationId
+      existingConsultationsMenu.add(option)
+    }
+  }
+})
+
+// Function to fetch existing consultations for a specific lecturer
+function getExistingConsultations(Id) {
+  const url = `class/api/consultationDetailsSearch?lecturerId=${Id}`
+  // Make an AJAX request to the server to fetch consultation details
+  return fetch(url)
+    .then(response => response.json())
+    .catch(error => {
+      console.error("Error fetching consultation details:", error)
+    });
+}

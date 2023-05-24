@@ -140,5 +140,20 @@ router.get('/api/testPipeline', async (req, res) => {
   }
 })
 
+const { getConsultationDetailsByLecturer } = require('../services/consultation_service.js')
+router.get('/api/consultationDetailsSearch', async (req, res, next) => {
+  const lecturerId = req.query.lecturerId;
+  if (!lecturerId) {
+      return res.status(400).json({ error: 'Missing lecturerId query parameter' })
+  }
+
+  try {
+      const consultationDetails = await getConsultationDetailsByLecturer(lecturerId)
+      return res.json(consultationDetails)
+  } catch (err) {
+      next(err)
+  }
+});
+
 
 module.exports = router
