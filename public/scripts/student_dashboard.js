@@ -75,26 +75,26 @@ slotDropdownMenu.addEventListener('change', (e) => {
 calendar.render()
 
 //if the user presses the "show consultation" button, display the default consulation.
-if (showConsultation) {
-  console.log('Clicked show consultation button')
-  showConsultation.addEventListener('click', () => {
-    getConsultations().then(consultations => {
-      console.log("[Unknown User] clicked show consultation button")
-      if (!calendar) {
-        calendar = new FullCalendar.Calendar(calendarDiv, {
-          initialView: 'dayGridMonth',
-        });
-        calendar.render()
-      }
-      // Remove all existing events from the calendar
-      calendar.getEvents().forEach((event) => event.remove())
-      // Add all the consultations to the calendar
-      consultations.forEach(event => {
-        calendar.addEvent(event)
+showConsultation.addEventListener('click', () => {
+  getConsultations().then(consultations => {
+    if (!calendar) {
+      calendar = new FullCalendar.Calendar(calendarDiv, {
+        initialView: 'dayGridMonth',
       })
+      calendar.render()
+    }
+    calendar.getEvents().forEach((event) => event.remove())
+    consultations.forEach(consultation => {
+      const { date, startTime, endTime, title} = consultation
+      const event = {
+        title: 'With \n ' + title,
+        start: `${date}T${startTime}`,
+        end: `${date}T${endTime}`
+      }
+      calendar.addEvent(event)
     })
   })
-}
+})
 
 //if the user presses the "hide consultation on calendar" button, hide the consultations displayed on the calendar
 if (hideConsultation) {
@@ -157,10 +157,15 @@ function getNextDate(day, j) {
 
 //fetch the consultations object stored in lecturerConsultation.js
 function getConsultations() {
-  return fetch('/class/api/studentConsultations')
+  return fetch('/class/api/studentConsultationDetails')
     .then(response => response.json())
     .then(data => {
-      const consultations = data.map(item => ({ title: item.lecturer, date: item.date, }))
+      const consultations = data.map(item => ({ 
+        title: item.lecturerId, // Update to the correct property name
+        date: item.date, // Update to the correct property name
+        startTime: item.startTime,
+        endTime: item.endTime
+      }))
       return consultations
     })
     .catch(error => console.error(error))
