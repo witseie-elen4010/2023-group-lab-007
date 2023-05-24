@@ -44,18 +44,18 @@ router.post('/api/studentDetails', async (req, res) => {
   }
 })
 
-// Route for inserting new data into studentBooking collection
-router.post('/api/studentBooking', async (req, res) => {
-  try {
-    const newData = req.body // Assumes the request body contains the new data
-    // Insert the new data into the studentBooking collection
-    await insertService.insertStudentBooking(newData)
-    res.sendStatus(200)
-  } catch (err) {
-    console.error(err)
-    res.sendStatus(500)
-  }
-})
+// // Route for inserting new data into studentBooking collection
+// router.post('/api/studentBooking', async (req, res) => {
+//   try {
+//     const newData = req.body // Assumes the request body contains the new data
+//     // Insert the new data into the studentBooking collection
+//     await insertService.insertStudentBooking(newData)
+//     res.sendStatus(200)
+//   } catch (err) {
+//     console.error(err)
+//     res.sendStatus(500)
+//   }
+// })
 
 // Route for inserting new data into consultationPeriods collection
 router.post('/api/consultationPeriods', async (req, res) => {
@@ -155,7 +155,7 @@ router.get('/api/consultationDetailsSearch', async (req, res, next) => {
   }
 });
 
-const { getStudentByNumber } = require('../services/student_service.js');
+const { getStudentByNumber, createStudentBooking, getBookingsByConsultationId } = require('../services/student_service.js');
 
 router.get('/api/student', async (req, res) => {
   try {
@@ -167,5 +167,30 @@ router.get('/api/student', async (req, res) => {
     res.sendStatus(500)
   }
 })
+
+router.get('/api/bookingsByConsultationId', async (req, res) => {
+  try {
+    const consultationId = req.query.consultationId;
+    const bookingData = await getBookingsByConsultationId(consultationId); // You will need to implement this function in your service
+    res.json(bookingData)
+  } catch (err) {
+    console.error(err);
+    res.sendStatus(500)
+  }
+})
+
+
+router.post('/api/studentBooking', async (req, res) => {
+  try {
+    const bookingDetails = req.body;
+    const newBooking = await insertService.insertStudentBooking(bookingDetails);
+    res.setHeader('Content-Type', 'application/json');
+    res.status(200).json({message: 'Booking created successfully'});
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({error: 'Failed to create booking'});
+  }
+});
+
 
 module.exports = router

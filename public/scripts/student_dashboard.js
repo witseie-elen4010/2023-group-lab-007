@@ -42,13 +42,27 @@ slotDropdownMenu.selectedIndex = 0; // Set the default option as selected
 
 bookButton.addEventListener('click', () => {
   const selectedLecturerId = dropdownMenu.value
+  let selectedSlot = ""
   if(!joinExisting){
-    const selectedSlot = slotDropdownMenu.value
+     selectedSlot = slotDropdownMenu.value
   }
   else{
-    const selectedSlot = existingConsultationsMenu.value
+     selectedSlot = existingConsultationsMenu.value
+     bookingDetails = {
+      consultationId: selectedSlot,
+      studentNumber: testStudent, //user.studentNumber
+      role: "Member"
+     }
+     createBooking(bookingDetails)
+  .then(data => {
+    console.log('Booking created successfully:', data);
+    // Perform any additional actions after successful booking
+  })
+  .catch(error => {
+    console.error('Failed to create booking:', error);
+    // Handle the error appropriately
+  });
   }
-  const selectedSlot = slotDropdownMenu.value
 
   getStudentDetails(testStudent)
       .then(student => {
@@ -66,7 +80,10 @@ dropdownMenu.addEventListener('change', async (e) => {
 
   // Clear out the previous slots
   while (slotDropdownMenu.options.length > 1) {
-    slotDropdownMenu.remove(0)
+    slotDropdownMenu.remove(1)
+  }
+  while (existingConsultationsMenu.options.length > 1) {
+    existingConsultationsMenu.remove(1)
   }
 
   if (selectedTeacher) {
@@ -84,6 +101,7 @@ dropdownMenu.addEventListener('change', async (e) => {
       }
     }
   }
+  checkButtonStatus()
 })
 // Initialize the calendar
 let calendar = new FullCalendar.Calendar(calendarDiv, {
@@ -163,8 +181,9 @@ function getDateString(date) {
 function checkButtonStatus() {
   const teacherSelected = dropdownMenu.value !== ""
   const slotSelected = slotDropdownMenu.value !== ""
+  const existingConsultationSelected = existingConsultationsMenu.value !== ""
 
-  if (teacherSelected && slotSelected) {
+  if (teacherSelected && (slotSelected||existingConsultationSelected)) {
     bookButton.removeAttribute('disabled')
   } else {
     bookButton.setAttribute('disabled', 'true')
@@ -218,10 +237,12 @@ function getLecturerDetails() {
 dropdownMenu.addEventListener('change', async (e) => {
   const selectedTeacher = e.target.value
 
-
+  slotDropdownMenu.removeAttribute('disabled');
+  bookButton.textContent = "Book";
+  joinExisting = false
   // Clear out the previous existing consultations
   while (existingConsultationsMenu.options.length > 1) {
-    existingConsultationsMenu.remove(0)
+    existingConsultationsMenu.remove(1)
   }
 
   if (selectedTeacher) {
@@ -229,10 +250,19 @@ dropdownMenu.addEventListener('change', async (e) => {
 
     // Fetch existing consultations for selected lecturer
     const existingConsultations = await getExistingConsultations(selectedTeacher)
-
+    getBookings(existingConsultations.consultationId)
+  .then(data => {
+    console.log(data);
+    // Perform any additional actions after successful booking
+  })
+  .catch(error => {
+    console.error('Failed to fetch booking:', error);
+    // Handle the error appropriately
+  });
     // Fill the existing consultations dropdown
     for (let i = 0; i < existingConsultations.length; i++) {
       const consultation = existingConsultations[i]
+
       const option = document.createElement("option")
       option.text = `${consultation.date} at ${consultation.startTime}-${consultation.endTime}`
       option.value = consultation.consultationId
@@ -240,6 +270,13 @@ dropdownMenu.addEventListener('change', async (e) => {
     }
   }
 })
+
+function getBookings(){
+  const url = 'class/api/bookingsByConsultationId'
+  return fetch(url)
+  .then(response => response.json())
+  .catch(error => console.error('Error fetching lecturer details:', error))
+}
 
 existingConsultationsMenu.addEventListener('change', function() {
   if (this.value !== "") {
@@ -252,6 +289,7 @@ existingConsultationsMenu.addEventListener('change', function() {
     bookButton.textContent = "Book";
     joinExisting = false
   }
+  checkButtonStatus()
 });
 
 
@@ -273,5 +311,28 @@ function getStudentDetails(studentNumber) {
     .catch(error => {
       console.error("Error fetching consultation details:", error)
     });
+  
+}
+
+function createBooking(bookingDetails) {
+  return fetch('class/api/studentBooking', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(bookingDetails),
+  })
+  .then(response => {
+        if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    // Check if the response is JSON before trying to parse it
+    const contentType = response.headers.get("content-type");
+    if(contentType && contentType.indexOf("application/json") !== -1) {
+      return response.json();
+    } else {
+      throw new Error('Response not JSON');
+    }
+  })
   
 }
