@@ -155,5 +155,17 @@ router.get('/api/consultationDetailsSearch', async (req, res, next) => {
   }
 });
 
+const { getStudentByNumber } = require('../services/student_service.js');
+
+router.get('/api/student', async (req, res) => {
+  try {
+    const studentNumber = req.query.studentNumber;
+    const studentData = await getStudentByNumber(studentNumber); // You will need to implement this function in your service
+    res.json(studentData)
+  } catch (err) {
+    console.error(err);
+    res.sendStatus(500)
+  }
+})
 
 module.exports = router

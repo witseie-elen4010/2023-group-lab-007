@@ -9,6 +9,7 @@ const daysOfWeek = {
   Friday: 5,
   Saturday: 6
 }
+const testStudent = "2305164"
 const dropdownMenu = document.querySelector('#teacherList')
 const slotDropdownMenu = document.querySelector('#slotList')
 const bookButton = document.querySelector('#bookButton')
@@ -18,26 +19,53 @@ const user = JSON.parse(userDataInput.value)
 const calendarBtn = document.querySelector('#calendarBtn')
 const calendarDiv = document.querySelector('#calendar')
 const lecturerDetails = fillLecturerField()
+let joinExisting = false; // Set a boolean variable to track the action
 
 defaultOption.text = "Select a teacher"
 defaultOption.value = ""
 dropdownMenu.appendChild(defaultOption)
 dropdownMenu.selectedIndex = 0; // Set the default option as selected
 
+const existingConsultationsMenu = document.querySelector('#existingConsultations')
+
+const defaultExistingConsultationsOption = document.createElement("option")
+defaultExistingConsultationsOption.text = "Select existing consultation"
+defaultExistingConsultationsOption.value = ""
+existingConsultationsMenu.appendChild(defaultExistingConsultationsOption)
+existingConsultationsMenu.selectedIndex = 0; // Set the default option as selected
+
+const defaultConsultationsOption = document.createElement("option")
+defaultConsultationsOption.text = "Select Consultation Slot"
+defaultConsultationsOption.value = ""
+slotDropdownMenu.appendChild(defaultConsultationsOption)
+slotDropdownMenu.selectedIndex = 0; // Set the default option as selected
+
 bookButton.addEventListener('click', () => {
   const selectedLecturerId = dropdownMenu.value
+  if(!joinExisting){
+    const selectedSlot = slotDropdownMenu.value
+  }
+  else{
+    const selectedSlot = existingConsultationsMenu.value
+  }
   const selectedSlot = slotDropdownMenu.value
+
+  getStudentDetails(testStudent)
+      .then(student => {
+        console.log(student);
+      });
+
   lecturerDetails.then(detailsArray => {
     const selectedLecturer = detailsArray.find(detail => detail.lecturerId === selectedLecturerId)
     console.log(`${user.given_name} has booked a consultation with ${selectedLecturer ? selectedLecturer.firstName + ' ' + selectedLecturer.lastName : 'none'} at ${selectedSlot}`)
   });
-});
+})
 dropdownMenu.addEventListener('change', async (e) => {
   const selectedTeacher = e.target.value
   //const selectedTeacher = lecturerDetails.find(teacher => teacher.email === teacherEmail);
 
   // Clear out the previous slots
-  while (slotDropdownMenu.options.length > 0) {
+  while (slotDropdownMenu.options.length > 1) {
     slotDropdownMenu.remove(0)
   }
 
@@ -50,8 +78,8 @@ dropdownMenu.addEventListener('change', async (e) => {
       const slot = slots[i]
       for (let j = 0; j < 4; j++) {
         const option = document.createElement("option")
-        option.text = getDateString(getNextDate(slot.dayOfWeek, j)) + ' ' + slot.startTime + '-' + slot.endTime
-        option.value = slot.dayOfWeek
+        option.text = getDateString(getNextDate(slot.dayOfWeek, j)) + ' at ' + slot.startTime + '-' + slot.endTime
+        option.value = getDateString(getNextDate(slot.dayOfWeek, j))
         slotDropdownMenu.add(option)
       }
     }
@@ -187,41 +215,45 @@ function getLecturerDetails() {
 
 
 // Selecting the new dropdown menu
-const existingConsultationsMenu = document.querySelector('#existingConsultations')
-
 dropdownMenu.addEventListener('change', async (e) => {
   const selectedTeacher = e.target.value
 
-  // Clear out the previous slots
-  while (slotDropdownMenu.options.length > 0) {
-    slotDropdownMenu.remove(0)
-  }
 
   // Clear out the previous existing consultations
-  while (existingConsultationsMenu.options.length > 0) {
+  while (existingConsultationsMenu.options.length > 1) {
     existingConsultationsMenu.remove(0)
   }
 
   if (selectedTeacher) {
     // Fetch consultation periods for selected lecturer
-    const slots = await searchConsultations(selectedTeacher)
 
     // Fetch existing consultations for selected lecturer
     const existingConsultations = await getExistingConsultations(selectedTeacher)
-
-    // Fill the slots dropdown
-    // ... previous code ...
 
     // Fill the existing consultations dropdown
     for (let i = 0; i < existingConsultations.length; i++) {
       const consultation = existingConsultations[i]
       const option = document.createElement("option")
-      option.text = `${consultation.startTime} - ${consultation.endTime}`
+      option.text = `${consultation.date} at ${consultation.startTime}-${consultation.endTime}`
       option.value = consultation.consultationId
       existingConsultationsMenu.add(option)
     }
   }
 })
+
+existingConsultationsMenu.addEventListener('change', function() {
+  if (this.value !== "") {
+    slotDropdownMenu.setAttribute('disabled', true);
+    slotDropdownMenu.selectedIndex = 0;
+    bookButton.textContent = "Join";
+    joinExisting = true
+  } else {
+    slotDropdownMenu.removeAttribute('disabled');
+    bookButton.textContent = "Book";
+    joinExisting = false
+  }
+});
+
 
 // Function to fetch existing consultations for a specific lecturer
 function getExistingConsultations(Id) {
@@ -232,4 +264,14 @@ function getExistingConsultations(Id) {
     .catch(error => {
       console.error("Error fetching consultation details:", error)
     });
+}
+
+function getStudentDetails(studentNumber) {
+  const url = `class/api/student?studentNumber=${studentNumber}`
+  return fetch(url)
+    .then(response => response.json())
+    .catch(error => {
+      console.error("Error fetching consultation details:", error)
+    });
+  
 }
