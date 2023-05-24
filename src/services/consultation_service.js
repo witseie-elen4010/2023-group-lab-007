@@ -31,6 +31,14 @@ async function getMoreDetails() {
   }
 }
 
+async function searchConsultationDetails(selectedLecturer) {
+  try {
+    const consultationPeriodsData = await consultationDetails.find({ lecturerId: selectedLecturer });
+    return consultationPeriodsData;
+  } catch (err) {
+    console.error(err);
+    throw err; // Throw the error to handle it in the calling function
+  }
+}
 
-
-module.exports = { getConsultationDetails, deleteConsultation, getMoreDetails};
+module.exports = { getConsultationDetails, deleteConsultation, getMoreDetails, searchConsultationDetails};
