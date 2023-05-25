@@ -1,5 +1,4 @@
 function formatModalBody(data) {
-  console.log(data)
   const consultationInfo = document.createElement("div")
   consultationInfo.innerHTML = `
     <strong>Date:</strong> ${data[0].date}<br><br>
@@ -120,7 +119,6 @@ function displayConsultations() {
   fetch(`/class/api/consultationDetailSearchByLecID/${id}`)
     .then((response) => response.json())
     .then((data) => {
-      console.log(data)
       // Add all the consultations to the calendar
       data.forEach((data) => {
         const start = new Date(`${data.date}T${data.startTime}`)

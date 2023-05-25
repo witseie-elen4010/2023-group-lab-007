@@ -86,6 +86,4 @@ async function getConsultationDetailsByLecturer(lecturerId) {
   }
 }
 
-
-module.exports = { getConsultationDetails, getConsultationDetailsByLecID, getConsultationDetailsByID, approveConsultation, cancelConsultation, getMoreDetails};
-module.exports = { getConsultationDetails, getConsultationDetailsByID, approveConsultation, cancelConsultation, getMoreDetails, searchConsultationDetails, getConsultationDetailsByLecturer};
+module.exports = { getConsultationDetails, getConsultationDetailsByLecID, getConsultationDetailsByID, approveConsultation, cancelConsultation, getMoreDetails, searchConsultationDetails, getConsultationDetailsByLecturer}
