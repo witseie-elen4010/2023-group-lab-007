@@ -519,6 +519,7 @@ function getSubPeriod(start, duration, index){ //change when the slots are not a
 // Function to create and add the subperiod dropdown to the DOM
 function createSubperiodDropdown(slotLength, startTime) {
   // Calculate the number of subperiods
+  removeSubperiodDropdown()
   const numberOfSubperiods = slotLength / 15
   
   // Create the subperiod dropdown
