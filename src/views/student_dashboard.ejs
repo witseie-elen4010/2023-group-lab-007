@@ -33,17 +33,14 @@
       <label for="existingConsultations">Existing Consultations</label>
       <select class="form-control" id="existingConsultations"></select>
     </div>    
+    <div id="consultation"></div>
+
     <div class="form-group" style="margin-bottom: 2rem;">
       <label for="slotList">Select Consultation Slot</label>
       <select class="form-control" id="slotList"></select>
     </div>
+
     <button id="bookButton" class="btn btn-primary" disabled>Book</button>
-    <h3>Consultations per Lecturer</h3>
-    <label for="lecturerInput">Enter Lecturer Name:</label>
-    <input type="text" id="lecturerInput" placeholder="Lecturer Name">
-    <button id="viewConsultationsBtn">View Consultations</button>
-    <button id="hideConsultationsBtn" style="display: none;">Hide Consultations</button>
-    <div id="consultations"></div>
     <div id="consultationSlots" style="padding-top: 3rem;"></div>
     <button type="button" id="showConsultation">Show Consultations on Calendar</button>
     <button type="button" id="hideConsultation">Clear Consultations on Calendar</button>
