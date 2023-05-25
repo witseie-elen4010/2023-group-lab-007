@@ -1,5 +1,5 @@
 
-
+//Checking the function getStudentConsultationDetails, we will mock the aggregate response from the datset to allow for testing
 const { getStudentConsultationDetails } = require('../../src/services/student_consulation_service');
 const { consultationDetails } = require('../../src/services/dbProvider');
 
@@ -39,7 +39,7 @@ describe('Student Consultation Service', () => {
   });
 });
 
-
+//Checking the studentConsultationPipeline is exporting as expected
 const studentConsultationPipeline = require('../../src/controllers/studentConsultationPipeline');
 
 describe('Student Consultation Pipeline', () => {
