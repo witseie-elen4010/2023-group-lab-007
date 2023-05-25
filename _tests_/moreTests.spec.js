@@ -1,27 +1,29 @@
 const { lecturerDetails, studentDetails, consultationDetails, studentBooking, consultationPeriods } = require('../src/services/dbProvider');
 const insertService = require('../src/services/insert_service');
-
-const {MongoClient} = require('mongodb');
+const mongoose = require('mongoose');
 
 describe('insert', () => {
-  let connection;
-  let db;
 
   beforeAll(async () => {
-    connection = await MongoClient.connect('mongodb+srv://2305164:VZ2jrn9qYUe048tx@cluster.8cexuwk.mongodb.net/StudentConsultationDB', {
-      useNewUrlParser: true,
+    await mongoose.connect('mongodb+srv://2305164:VZ2jrn9qYUe048tx@cluster.8cexuwk.mongodb.net/StudentConsultationDB', {
       useUnifiedTopology: true,
+      useNewUrlParser: true,
     });
-    db = await connection.db(
-      'StudentConsultationDB');
   });
 
   afterAll(async () => {
-    await connection.close();
+    await mongoose.connection.close();
   });
 
   it('should insert a doc into collection', async () => {
     // const users = db.collection('users');
+    await insertService.insertStudentDetails({
+      studentNumber: '232424',
+      emailAddress: 'thiss@gmail',
+      firstName: 'bruce',
+      lastName: 'david',
+      password: '1234',
+    })
 
     // const mockUser = {_id: 'some-user-id', name: 'John'};
     // await users.insertOne(mockUser);
@@ -31,4 +33,3 @@ describe('insert', () => {
     expect(true).toEqual(true);
   });
 });
-
