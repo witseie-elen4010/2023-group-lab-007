@@ -1,7 +1,7 @@
 const { lecturerDetails, studentDetails, consultationDetails, studentBooking, consultationPeriods } = require('./dbProvider')
 const examplePipeline = require('../controllers/examplePipeline')
 
-// Function to insert new data into the consultationPeriods collection
+// Function to get all consultations
 async function getConsultationDetails() {
   try {
     const consultationDetailsData = await consultationDetails.find({});
@@ -12,9 +12,34 @@ async function getConsultationDetails() {
   }
 }
 
-async function deleteConsultation(consultationID) {
+async function getConsultationDetailsByID(lecturer_id) {
   try {
-    await consultationDetails.deleteOne({ consultationId: consultationID });
+    const consultationDetailsData = await consultationDetails.find({ lecturerId: lecturer_id })
+    return consultationDetailsData;
+  } catch (err) {
+    console.error(err)
+    throw err; // Throw the error to handle it in the calling function
+  }
+}
+
+async function approveConsultation(consultationID) {
+  try {
+    await consultationDetails.updateOne(
+      { consultationId: consultationID },
+      { $set: { status: "approved" } }
+    );
+  } catch (err) {
+    console.error(err);
+    throw err; // Throw the error to handle it in the calling function
+  }
+}
+
+async function cancelConsultation(consultationID) {
+  try {
+    await consultationDetails.updateOne(
+      { consultationId: consultationID },
+      { $set: { status: "disapproved" } }
+    );
   } catch (err) {
     console.error(err);
     throw err; // Throw the error to handle it in the calling function
@@ -51,4 +76,4 @@ async function getConsultationDetailsByLecturer(lecturerId) {
   }
 }
 
-module.exports = { getConsultationDetails, deleteConsultation, getMoreDetails, searchConsultationDetails, getConsultationDetailsByLecturer};
+module.exports = { getConsultationDetails, getConsultationDetailsByID, approveConsultation, cancelConsultation, getMoreDetails, searchConsultationDetails, getConsultationDetailsByLecturer};

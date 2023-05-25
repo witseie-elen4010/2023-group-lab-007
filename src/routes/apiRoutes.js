@@ -120,16 +120,42 @@ router.get('/api/consultationDetailSearch', async (req, res) => {
   }
 })
 
-router.delete('/api/removeConsultation/:consultationID', async (req, res) => {
+router.get('/api/consultationDetailSearchByID/:lecturer_id', async (req, res) => {
   try {
-    const consultationID = parseInt(req.params.consultationID);
-    await consultationService.deleteConsultation(consultationID);
-    res.json({ message: 'Consultation removed successfully' });
+    const lecturer_id = req.params.lecturer_id
+    const consultationDetailsData = await consultationService.getConsultationDetailsByID(lecturer_id)
+    res.json(consultationDetailsData)
+    console.log(consultationDetailsData)
+  } catch (err) {
+    console.error(err)
+    res.sendStatus(500)
+  }
+})
+
+// Define a route to handle the consultation approval request
+router.put('/api/approveConsultation/:consultationID', async (req, res) => {
+  try {
+    const consultationID = parseInt(req.params.consultationID)
+    await consultationService.approveConsultation(consultationID)
+    res.json({ message: 'Consultation approved successfully' })
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: 'Internal Server Error' });
+    res.status(500).json({ error: 'Internal Server Error' })
   }
-});
+})
+
+
+router.delete('/api/cancelConsultation/:consultationID', async (req, res) => {
+  try {
+    const consultationID = parseInt(req.params.consultationID)
+    await consultationService.cancelConsultation(consultationID)
+    res.json({ message: 'Consultation removed successfully' })
+  } catch (err) {
+    console.error(err)
+    res.status(500).json({ error: 'Internal Server Error' })
+  }
+})
+
 
 router.get('/api/testPipeline', async (req, res) => {
   try {
