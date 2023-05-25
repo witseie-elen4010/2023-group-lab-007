@@ -2,7 +2,6 @@ const form = document.querySelector('#consPeriod');
 const entryList = document.getElementById('entryList');
 
 let entries = [];
-const { checkForOverlap, convertToMinutes } = require('./services/settings_service')
 
 function handleEmail(email) {
   entries = [];
@@ -14,7 +13,6 @@ form.addEventListener('submit', async (event) => {
   event.preventDefault();
 
   var email = document.getElementById('email').value;
-  await handleEmail(email);
   const dayOfWeek = document.getElementById('dayOfWeek').value;
   const startTime = document.querySelector('input[name="start_time"]').value;
   const endTime = document.querySelector('input[name="end_time"]').value;

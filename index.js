@@ -5,6 +5,7 @@ const dotenv = require('dotenv').config();
 const ejs = require('ejs');
 const path = require('path');
 const logger = require("./logger");
+const mongoose = require('mongoose');
 
 // Authzero configuration file
 const config = {
@@ -60,11 +61,28 @@ app.use(function (req, res, next) {
   next();
 });
 
-require('./src/services/dbProvider').connect().then(() => {
-  console.log('Connected to MongoDB!')
-}).catch((error) => {
-  console.error('Failed to connect to MongoDB:', error)
-})
+new Promise((resolve, reject) => {
+  mongoose.connect('mongodb+srv://2305164:VZ2jrn9qYUe048tx@cluster.8cexuwk.mongodb.net/StudentConsultationDB', {
+    useUnifiedTopology: true,
+    useNewUrlParser: true,
+  });
+
+  mongoose.connection.on('connected', () => {
+    console.log('Connected to MongoDB!');
+    resolve(); // Resolve the promise when connected to MongoDB
+  });
+
+  mongoose.connection.on('error', (error) => {
+    console.error('Failed to connect to MongoDB:', error);
+    reject(error); // Reject the promise if there's an error connecting to MongoDB
+  });
+});
+
+// require('./src/services/dbProvider').connect().then(() => {
+//   console.log('Connected to MongoDB!')
+// }).catch((error) => {
+//   console.error('Failed to connect to MongoDB:', error)
+// })
 
 app.listen(port)
 console.log('Express server running on port 3000')

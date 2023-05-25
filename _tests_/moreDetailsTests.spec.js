@@ -1,0 +1,2 @@
+const { lecturerDetails, studentDetails, consultationDetails, studentBooking, consultationPeriods } = require('../src/services/dbProvider');
+const insertService = require('../services/insert_service');
