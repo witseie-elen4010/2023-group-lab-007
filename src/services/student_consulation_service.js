@@ -11,4 +11,4 @@ async function getStudentConsultationDetails(studentNumber) {
     }
   }
 
-module.exports = { getStudentConsultationDetails };
+module.exports = {getStudentConsultationDetails};

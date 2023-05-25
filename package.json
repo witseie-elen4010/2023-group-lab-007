@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "test:jest": "jest _tests_/jest-tests/tests.spec.js",
-    "all": "npm run test && npm run start"
+    "test:jest": "jest _tests_/jest-tests",
+    "all": "npm run test:jest && npm run start"
   },
   "jest": {
     "collectCoverage": true,

@@ -143,7 +143,7 @@ router.get('/api/testPipeline', async (req, res) => {
 
 router.get('/api/studentConsultationDetails', async (req, res) => {
   try {
-    let studentNumber = '2305164';
+    let studentNumber = 'aaaa';
     const studentConsultationDetails = await studentConsulationService.getStudentConsultationDetails(studentNumber);
     res.json(studentConsultationDetails);
   } catch (err) {
