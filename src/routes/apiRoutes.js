@@ -44,18 +44,18 @@ router.post('/api/studentDetails', async (req, res) => {
   }
 })
 
-// Route for inserting new data into studentBooking collection
-router.post('/api/studentBooking', async (req, res) => {
-  try {
-    const newData = req.body // Assumes the request body contains the new data
-    // Insert the new data into the studentBooking collection
-    await insertService.insertStudentBooking(newData)
-    res.sendStatus(200)
-  } catch (err) {
-    console.error(err)
-    res.sendStatus(500)
-  }
-})
+// // Route for inserting new data into studentBooking collection
+// router.post('/api/studentBooking', async (req, res) => {
+//   try {
+//     const newData = req.body // Assumes the request body contains the new data
+//     // Insert the new data into the studentBooking collection
+//     await insertService.insertStudentBooking(newData)
+//     res.sendStatus(200)
+//   } catch (err) {
+//     console.error(err)
+//     res.sendStatus(500)
+//   }
+// })
 
 // Route for inserting new data into consultationPeriods collection
 router.post('/api/consultationPeriods', async (req, res) => {
@@ -150,5 +150,60 @@ router.get('/api/consultationPerLecturerSearch', async (req, res) => {
     res.sendStatus(500)
   }
 })
+// get all the consultations for a specific lecturer.
+router.get('/api/consultationDetailsSearch', async (req, res, next) => {
+  const lecturerId = req.query.lecturerId;
+  if (!lecturerId) {
+      return res.status(400).json({ error: 'Missing lecturerId query parameter' })
+  }
+
+  try {
+      const consultationDetails = await consultationService.getConsultationDetailsByLecturer(lecturerId)
+      return res.json(consultationDetails)
+  } catch (err) {
+      next(err)
+  }
+});
+
+//retrieve the database functions from the student services file.
+const { getStudentByNumber, getBookingsByConsultationId } = require('../services/student_service.js');
+
+//get a students details based on their student number.
+router.get('/api/student', async (req, res) => {
+  try {
+    const studentNumber = req.query.studentNumber
+    const studentData = await getStudentByNumber(studentNumber)
+    res.json(studentData)
+  } catch (err) {
+    console.error(err)
+    res.sendStatus(500)
+  }
+})
+
+// search for all student bookings for a specific consultation.
+router.get('/api/bookingsByConsultationId', async (req, res) => {
+  try {
+    const consultationId = req.query.consultationId
+    const bookingData = await getBookingsByConsultationId(consultationId) 
+    res.json(bookingData)
+  } catch (err) {
+    console.error(err)
+    res.sendStatus(500)
+  }
+})
+
+// create a student booking record when a student joins a consultation.
+router.post('/api/studentBooking', async (req, res) => {
+  try {
+    const bookingDetails = req.body
+    const newBooking = await insertService.insertStudentBooking(bookingDetails)
+    res.setHeader('Content-Type', 'application/json')
+    res.status(200).json({message: 'Booking created successfully'})
+  } catch (err) {
+    console.error(err)
+    res.status(500).json({error: 'Failed to create booking'})
+  }
+});
+
 
 module.exports = router

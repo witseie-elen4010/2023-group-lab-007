@@ -40,5 +40,15 @@ async function searchConsultationDetails(selectedLecturer) {
     throw err; // Throw the error to handle it in the calling function
   }
 }
+// Function to get consultation details for a specific lecturer
+async function getConsultationDetailsByLecturer(lecturerId) {
+  try {
+    const consultationDetailsData = await consultationDetails.find({ lecturerId: lecturerId });
+    return consultationDetailsData;
+  } catch (err) {
+    console.error(err);
+    throw err; // Throw the error to handle it in the calling function
+  }
+}
 
-module.exports = { getConsultationDetails, deleteConsultation, getMoreDetails, searchConsultationDetails};
+module.exports = { getConsultationDetails, deleteConsultation, getMoreDetails, searchConsultationDetails, getConsultationDetailsByLecturer};
