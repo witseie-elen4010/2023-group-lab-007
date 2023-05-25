@@ -1,17 +1,15 @@
 function formatModalBody(data) {
-  const formattedData = JSON.parse(data)
+  console.log(data)
   const consultationInfo = document.createElement("div")
   consultationInfo.innerHTML = `
-    <strong>Consultation ID:</strong> ${formattedData[0].consultationId}<br><br>
-    <strong>Lecturer ID:</strong> ${formattedData[0].lecturerId}<br><br>
-    <strong>Date:</strong> ${formattedData[0].date}<br><br>
-    <strong>Time (Minutes):</strong> ${formattedData[0].timeMinutes}<br><br>
-    <strong>Maximum Number of Students:</strong> ${formattedData[0].maximumNumberOfStudents}<br><br>
-    <strong>Status:</strong> ${formattedData[0].status}<br><br>
-    <strong>Start Time:</strong> ${formattedData[0].startTime}<br><br>
-    <strong>End Time:</strong> ${formattedData[0].endTime}<br><br>
+    <strong>Date:</strong> ${data[0].date}<br><br>
+    <strong>Start Time:</strong> ${data[0].startTime}<br><br>
+    <strong>End Time:</strong> ${data[0].endTime}<br><br>
+    <strong>Time (Minutes):</strong> ${data[0].timeMinutes}<br><br>
+    <strong>Maximum Number of Students:</strong> ${data[0].maximumNumberOfStudents}<br><br>
+    <strong>Status:</strong> ${data[0].status}<br><br>
   `
-  return consultationInfo
+  return consultationInfo.innerHTML
 }
 
 // Helper function to create the consultation details modal
@@ -45,22 +43,9 @@ function createConsultationDetailsModal(selectedTitle, selectedConsultationID, d
   const modalBody = document.createElement("div")
   modalBody.classList.add("modal-body")
   const consultationInfo = document.createElement("p")
-  consultationInfo.innerHTML = `<strong>Consultation ID:</strong> ${selectedConsultationID}<br><br><strong>Consultation Details:</strong><br><pre>${JSON.stringify(
-    data,
-    null,
-    2
-  )}</pre>`
+  consultationInfo.innerHTML = formatModalBody(data)
   modalBody.appendChild(consultationInfo)
   modalContent.appendChild(modalBody)
-  const modalFooter = document.createElement("div")
-  modalFooter.classList.add("modal-footer")
-  const closeButtonFooter = document.createElement("button")
-  closeButtonFooter.type = "button";
-  closeButtonFooter.classList.add("btn", "btn-secondary")
-  closeButtonFooter.setAttribute("data-bs-dismiss", "modal")
-  closeButtonFooter.textContent = "Close"
-  modalFooter.appendChild(closeButtonFooter)
-  modalContent.appendChild(modalFooter)
   return consultationDetails
 }
 
@@ -85,14 +70,14 @@ function handleEventClick(info) {
         if (!response.ok) {
           throw new Error("Consultation details not found")
         }
-        return response.json();
+        return response.json()
       })
       .then((data) => {
         // Create the consultation details modal
         const consultationDetails = createConsultationDetailsModal(selectedTitle, selectedConsultationID, data);
 
         // Display the modal
-        document.body.appendChild(consultationDetails);
+        document.body.appendChild(consultationDetails)
         const bootstrapModal = new bootstrap.Modal(consultationDetails)
         bootstrapModal.show();
       })
