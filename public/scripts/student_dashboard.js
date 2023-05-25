@@ -80,21 +80,27 @@ showConsultation.addEventListener('click', () => {
     if (!calendar) {
       calendar = new FullCalendar.Calendar(calendarDiv, {
         initialView: 'dayGridMonth',
-      })
-      calendar.render()
+      });
+      calendar.render();
     }
-    calendar.getEvents().forEach((event) => event.remove())
+    
+    calendar.getEvents().forEach((event) => event.remove());
     consultations.forEach(consultation => {
-      const { date, startTime, endTime, title} = consultation
+      const { date, startTime, endTime, lecturer, consultationId, studentCount } = consultation;
       const event = {
-        title: 'With \n ' + title,
+        title: lecturer + `\n Students: ${studentCount}`,
         start: `${date}T${startTime}`,
-        end: `${date}T${endTime}`
-      }
-      calendar.addEvent(event)
-    })
-  })
-})
+        end: `${date}T${endTime}`,
+        description: `Students: ${studentCount}`, // Add the description
+      };
+      console.log(consultations)
+      console.log('Event'+event)
+      calendar.addEvent(event);
+    });
+
+  });
+});
+
 
 //if the user presses the "hide consultation on calendar" button, hide the consultations displayed on the calendar
 if (hideConsultation) {
@@ -160,12 +166,17 @@ function getConsultations() {
   return fetch('/class/api/studentConsultationDetails')
     .then(response => response.json())
     .then(data => {
-      const consultations = data.map(item => ({ 
-        title: item.lecturerId, // Update to the correct property name
-        date: item.date, // Update to the correct property name
-        startTime: item.startTime,
-        endTime: item.endTime
-      }))
+      const consultations = data.map(item => {
+        const studentCountTemp = item.student_booking.length;
+        return {
+          lecturer: item.lecturerId,
+          consultationId: item.consultationId,
+          date: item.date,
+          startTime: item.startTime,
+          endTime: item.endTime,
+          studentCount: studentCountTemp
+        }
+      })
       return consultations
     })
     .catch(error => console.error(error))
