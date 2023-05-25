@@ -5,40 +5,44 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-
+  <title>Lecturer Dashboard</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js"></script>
   <!-- FullCalendar Main CSS -->
   <link href='https://unpkg.com/fullcalendar@5/main.min.css' rel='stylesheet' />
-
   <!-- FullCalendar Main JS -->
   <script src='https://unpkg.com/fullcalendar@5/main.min.js'></script>
   <link rel="stylesheet" type="text/css" href="/cdn/css/lecturer_dashboard.css">
+  <style>
+    #consultations {
+      text-align: center;
+      width: auto;
+      margin-right: 10px;
+    }
+  </style>
 </head>
 
 <body>
   <header>
     <%- include('./partials/navbar'); %>
   </header>
-  <h1>Lecturer dashboard</h1>
-  <p>
-    <select id="options" onchange="storeOption()">
-      <option value="">-- No. of Students --</option>
-    </select>
-  <ul id='numberList'></ul>
-  </p>
-  <button type="button" id="showConsultation">Show Consultations</button>
-  <button type="button" id="cancelConsultation">Cancel Consultation</button>
-  <div id="calendar"></div>
-  <script src="/cdn/scripts/lecturer_dashboard.js"></script>
-  <select id="consultations">
-    <option value="">-- Select Consultation --</option>
-  </select>
+  <div class="container mt-5">
+    <h1>Lecturer dashboard</h1>
+    <div class="input-group mb-3">
+      <input id="consultations" type="text" readonly value="Select Consultation" style="width: auto;">
+      <div class="input-group-append">
+        <button type="button" id="approveConsultation" class="btn btn-primary">Approve Consultation</button>
+        <button type="button" id="cancelConsultation" class="btn btn-danger">Cancel Consultation</button>
+      </div>
+    </div>
+    <div id="calendar"></div>  
+  </div>
   <footer>
-    <%- include('./partials/footer'); %>
+    <% include('./partials/footer'); %>
   </footer>
+
+  <script src="/cdn/scripts/lecturer_dashboard.js"></script>
 </body>
 
 </html>

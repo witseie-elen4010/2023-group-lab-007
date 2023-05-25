@@ -161,16 +161,42 @@ router.get('/api/consultationDetailSearch', async (req, res) => {
   }
 })
 
-router.delete('/api/removeConsultation/:consultationID', async (req, res) => {
+router.get('/api/consultationDetailSearchByID/:lecturer_id', async (req, res) => {
   try {
-    const consultationID = parseInt(req.params.consultationID);
-    await consultationService.deleteConsultation(consultationID);
-    res.json({ message: 'Consultation removed successfully' });
+    const lecturer_id = req.params.lecturer_id
+    const consultationDetailsData = await consultationService.getConsultationDetailsByID(lecturer_id)
+    res.json(consultationDetailsData)
+    console.log(consultationDetailsData)
+  } catch (err) {
+    console.error(err)
+    res.sendStatus(500)
+  }
+})
+
+// Define a route to handle the consultation approval request
+router.put('/api/approveConsultation/:consultationID', async (req, res) => {
+  try {
+    const consultationID = parseInt(req.params.consultationID)
+    await consultationService.approveConsultation(consultationID)
+    res.json({ message: 'Consultation approved successfully' })
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: 'Internal Server Error' });
+    res.status(500).json({ error: 'Internal Server Error' })
   }
-});
+})
+
+
+router.delete('/api/cancelConsultation/:consultationID', async (req, res) => {
+  try {
+    const consultationID = parseInt(req.params.consultationID)
+    await consultationService.cancelConsultation(consultationID)
+    res.json({ message: 'Consultation removed successfully' })
+  } catch (err) {
+    console.error(err)
+    res.status(500).json({ error: 'Internal Server Error' })
+  }
+})
+
 
 router.get('/api/testPipeline', async (req, res) => {
   try {
@@ -181,6 +207,71 @@ router.get('/api/testPipeline', async (req, res) => {
     res.sendStatus(500)
   }
 })
+
+router.get('/api/consultationPerLecturerSearch', async (req, res) => {
+  try {
+    const selectedLecturer = req.query.lecturerId
+    const consultationPerLecturerData = await consultationService.searchConsultationDetails(selectedLecturer);
+    res.json(consultationPerLecturerData)
+  } catch (err) {
+    console.error(err)
+    res.sendStatus(500)
+  }
+})
+// get all the consultations for a specific lecturer.
+router.get('/api/consultationDetailsSearch', async (req, res, next) => {
+  const lecturerId = req.query.lecturerId;
+  if (!lecturerId) {
+      return res.status(400).json({ error: 'Missing lecturerId query parameter' })
+  }
+
+  try {
+      const consultationDetails = await consultationService.getConsultationDetailsByLecturer(lecturerId)
+      return res.json(consultationDetails)
+  } catch (err) {
+      next(err)
+  }
+});
+
+//retrieve the database functions from the student services file.
+const { getStudentByNumber, getBookingsByConsultationId } = require('../services/student_service.js');
+
+//get a students details based on their student number.
+router.get('/api/student', async (req, res) => {
+  try {
+    const studentNumber = req.query.studentNumber
+    const studentData = await getStudentByNumber(studentNumber)
+    res.json(studentData)
+  } catch (err) {
+    console.error(err)
+    res.sendStatus(500)
+  }
+})
+
+// search for all student bookings for a specific consultation.
+router.get('/api/bookingsByConsultationId', async (req, res) => {
+  try {
+    const consultationId = req.query.consultationId
+    const bookingData = await getBookingsByConsultationId(consultationId) 
+    res.json(bookingData)
+  } catch (err) {
+    console.error(err)
+    res.sendStatus(500)
+  }
+})
+
+// create a student booking record when a student joins a consultation.
+router.post('/api/studentBooking', async (req, res) => {
+  try {
+    const bookingDetails = req.body
+    const newBooking = await insertService.insertStudentBooking(bookingDetails)
+    res.setHeader('Content-Type', 'application/json')
+    res.status(200).json({message: 'Booking created successfully'})
+  } catch (err) {
+    console.error(err)
+    res.status(500).json({error: 'Failed to create booking'})
+  }
+});
 
 
 module.exports = router
