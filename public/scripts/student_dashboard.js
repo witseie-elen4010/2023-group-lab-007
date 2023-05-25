@@ -192,160 +192,162 @@ function searchConsultationsPerLecturer(Id) {
     .then(response => response.json())
     .catch(error => {
       console.error("Error fetching consultation periods:", error)
-    });
+    })
 }
 
 function generateConsultationsHTML(lecturer, consultations) {
-  let html = `<h5>${lecturer}</h5>`;
-  if (consultations.length === 0) {
-    html += '<p>No consultations scheduled</p>';
+  let html = `<h5>${lecturer}</h5>`
+  const approvedConsultations = consultations.filter(consultation => consultation.status === "approved")
+  if (approvedConsultations.length === 0) {
+    html += '<p>No approved consultations scheduled</p>'
   } else {
-    html += '<ul>';
-    consultations.forEach(consultation => {
-      html += '<li>';
-      html += `Date: ${consultation.date}<br>`;
-      html += `Time: ${consultation.startTime} - ${consultation.endTime}<br>`;
-      html += `Maximum number of students: ${consultation.maximumNumberOfStudents}<br>`;
-      html += `Status: ${consultation.status}<br>`;
-      html += '<button class="joinButton">Join</button>';
-      html += '</li>';
-    });
-    html += '</ul>';
+    html += '<ul>'
+    approvedConsultations.forEach(consultation => {
+      html += '<li>'
+      html += `Date: ${consultation.date}<br>`
+      html += `Time: ${consultation.startTime} - ${consultation.endTime}<br>`
+      html += `Maximum number of students: ${consultation.maximumNumberOfStudents}<br>`
+      html += `Status: ${consultation.status}<br>`
+      html += '<button class="joinButton">Join</button>'
+      html += '</li>'
+    })
+    html += '</ul>'
   }
-  return html;
+  return html
 }
 
+
 function handleConsultationsToggle() {
-  const lecturerInput = document.getElementById('lecturerInput');
-  const lecturerName = lecturerInput.value.trim().toLowerCase();
+  const lecturerInput = document.getElementById('lecturerInput')
+  const lecturerName = lecturerInput.value.trim().toLowerCase()
 
   if (lecturerName === '') {
-    displayErrorMessage('Please enter a lecturer name');
+    displayErrorMessage('Please enter a lecturer name')
   } else {
-    displayLoadingIndicator();
+    displayLoadingIndicator()
 
     getLecturerDetails()
       .then(lecturerInfo => {
-        const matchingLecturers = findMatchingLecturers(lecturerInfo, lecturerName);
+        const matchingLecturers = findMatchingLecturers(lecturerInfo, lecturerName)
 
         if (matchingLecturers.length > 0) {
-          const lecturerId = matchingLecturers[0].lecturerId;
+          const lecturerId = matchingLecturers[0].lecturerId
 
           searchConsultationsPerLecturer(lecturerId)
             .then(consultations => {
               if (consultations.length > 0) {
-                const lecturerFullName = `${matchingLecturers[0].firstName} ${matchingLecturers[0].lastName}`;
-                const consultationsHTML = generateConsultationsHTML(lecturerFullName, consultations);
-                displayConsultations(consultationsHTML);
-                updateButton('Refresh', handleHideConsultations);
+                const lecturerFullName = `${matchingLecturers[0].firstName} ${matchingLecturers[0].lastName}`
+                const consultationsHTML = generateConsultationsHTML(lecturerFullName, consultations)
+                displayConsultations(consultationsHTML)
+                updateButton('Refresh', handleHideConsultations)
               } else {
-                displayErrorMessage('No consultations found for the specified lecturer');
+                displayErrorMessage('No consultations found for the specified lecturer')
               }
             })
-            .catch(error => displayErrorMessage('Error searching consultations'));
+            .catch(error => displayErrorMessage('Error searching consultations'))
         } else {
-          displayErrorMessage('No lecturer found with the specified name');
+          displayErrorMessage('No lecturer found with the specified name')
         }
       })
-      .catch(error => displayErrorMessage('Error fetching lecturer details'));
+      .catch(error => displayErrorMessage('Error fetching lecturer details'))
   }
 }
 
 function handleHideConsultations() {
-  clearConsultationsContainer();
-  updateButton('View Consultations', handleConsultationsToggle);
+  clearConsultationsContainer()
+  updateButton('View Consultations', handleConsultationsToggle)
 }
 
 function handleLecturerInput() {
-  const lecturerInput = document.getElementById('lecturerInput');
-  const isInputEmpty = lecturerInput.value.trim() === '';
+  const lecturerInput = document.getElementById('lecturerInput')
+  const isInputEmpty = lecturerInput.value.trim() === ''
 
   if (isInputEmpty && isButtonHidden()) {
-    updateButton('View Consultations', handleConsultationsToggle);
+    updateButton('View Consultations', handleConsultationsToggle)
   } else if (isButtonHidden()) {
-    updateButton('View Consultations');
-    updateButtonEvent(handleViewConsultationsClick, handleHideConsultations);
+    updateButton('View Consultations')
+    updateButtonEvent(handleViewConsultationsClick, handleHideConsultations)
   }
 }
 
 function handleViewConsultationsClick() {
-  const lecturerInput = document.getElementById('lecturerInput');
-  const lecturerName = lecturerInput.value.trim().toLowerCase();
+  const lecturerInput = document.getElementById('lecturerInput')
+  const lecturerName = lecturerInput.value.trim().toLowerCase()
 
   if (lecturerName === '') {
-    displayErrorMessage('Please enter a lecturer name');
+    displayErrorMessage('Please enter a lecturer name')
   } else {
-    displayLoadingIndicator();
+    displayLoadingIndicator()
 
     getLecturerDetails()
       .then(lecturerInfo => {
-        const matchingLecturers = findMatchingLecturers(lecturerInfo, lecturerName);
+        const matchingLecturers = findMatchingLecturers(lecturerInfo, lecturerName)
 
         if (matchingLecturers.length > 0) {
-          const lecturerId = matchingLecturers[0].lecturerId;
+          const lecturerId = matchingLecturers[0].lecturerId
 
           searchConsultationsPerLecturer(lecturerId)
             .then(consultations => {
               if (consultations.length > 0) {
-                const lecturerFullName = `${matchingLecturers[0].firstName} ${matchingLecturers[0].lastName}`;
-                const consultationsHTML = generateConsultationsHTML(lecturerFullName, consultations);
-                displayConsultations(consultationsHTML);
-                updateButton('Refresh', handleHideConsultations);
+                const lecturerFullName = `${matchingLecturers[0].firstName} ${matchingLecturers[0].lastName}`
+                const consultationsHTML = generateConsultationsHTML(lecturerFullName, consultations)
+                displayConsultations(consultationsHTML)
+                updateButton('Refresh', handleHideConsultations)
               } else {
-                displayErrorMessage('No consultations found for the specified lecturer');
+                displayErrorMessage('No consultations found for the specified lecturer')
               }
             })
-            .catch(error => displayErrorMessage('Error searching consultations'));
+            .catch(error => displayErrorMessage('Error searching consultations'))
         } else {
-          displayErrorMessage('No lecturer found with the specified name');
+          displayErrorMessage('No lecturer found with the specified name')
         }
       })
-      .catch(error => displayErrorMessage('Error fetching lecturer details'));
+      .catch(error => displayErrorMessage('Error fetching lecturer details'))
   }
 }
 
 function findMatchingLecturers(lecturerInfo, lecturerName) {
   return lecturerInfo.filter(lecturer => {
-    const fullName = `${lecturer.firstName.toLowerCase()} ${lecturer.lastName.toLowerCase()}`;
-    return fullName.includes(lecturerName);
-  });
+    const fullName = `${lecturer.firstName.toLowerCase()} ${lecturer.lastName.toLowerCase()}`
+    return fullName.includes(lecturerName)
+  })
 }
 
 function displayLoadingIndicator() {
-  consultationsContainer.innerHTML = '<p>Loading...</p>';
+  consultationsContainer.innerHTML = '<p>Loading...</p>'
 }
 
 function displayErrorMessage(message) {
-  consultationsContainer.innerHTML = `<p>${message}</p>`;
+  consultationsContainer.innerHTML = `<p>${message}</p>`
 }
 
 function displayConsultations(consultationsHTML) {
-  consultationsContainer.innerHTML = consultationsHTML;
+  consultationsContainer.innerHTML = consultationsHTML
 }
 
 function clearConsultationsContainer() {
-  consultationsContainer.innerHTML = '';
+  consultationsContainer.innerHTML = ''
 }
 
 function updateButton(text, clickHandler) {
-  viewConsultationsBtn.innerText = text;
-  updateButtonEvent(clickHandler);
+  viewConsultationsBtn.innerText = text
+  updateButtonEvent(clickHandler)
 }
 
 function updateButtonEvent(clickHandler, removeHandler) {
-  viewConsultationsBtn.removeEventListener('click', removeHandler);
-  viewConsultationsBtn.addEventListener('click', clickHandler);
+  viewConsultationsBtn.removeEventListener('click', removeHandler)
+  viewConsultationsBtn.addEventListener('click', clickHandler)
 }
 
 function isButtonHidden() {
-  return viewConsultationsBtn.innerText === 'Refresh';
+  return viewConsultationsBtn.innerText === 'Refresh'
 }
 
-const consultationsContainer = document.getElementById('consultations');
-const viewConsultationsBtn = document.getElementById('viewConsultationsBtn');
-const initialBtnText = viewConsultationsBtn.innerText;
+const consultationsContainer = document.getElementById('consultations')
+const viewConsultationsBtn = document.getElementById('viewConsultationsBtn')
+const initialBtnText = viewConsultationsBtn.innerText
 
-const lecturerInput = document.getElementById('lecturerInput');
-lecturerInput.addEventListener('input', handleLecturerInput);
+const lecturerInput = document.getElementById('lecturerInput')
+lecturerInput.addEventListener('input', handleLecturerInput)
 
-viewConsultationsBtn.addEventListener('click', handleViewConsultationsClick);
+viewConsultationsBtn.addEventListener('click', handleViewConsultationsClick)
