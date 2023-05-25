@@ -16,8 +16,8 @@ test('search for consultation based on the lecturer name', async () => {
   await page.selectOption('#teacherList', 'Michael Brown')
 
   // Check that the teacher is selected
-  const selectedTeacher = await page.$eval('#teacherList', el => el.value);
-  expect(selectedTeacher).toBe('Michael.Brown@wits.ac.za');
+  const selectedTeacher = await page.$eval('#teacherList', el => el.value)
+  expect(selectedTeacher).toBe('Michael.Brown@wits.ac.za')
 
   // await page.click('#existingConsultations');
   // await page.selectOption('#existingConsultations', '2023-05-04')
@@ -26,12 +26,12 @@ test('search for consultation based on the lecturer name', async () => {
   // const selectedConsultation = await page.$eval('#existingConsultations', el => el.value);
   // expect(selectedConsultation).toBe('2023-05-04');
 
-  await page.click('#slotList');
+  await page.click('#slotList')
   await page.selectOption('#slotList', '2023-05-25 at 15:00-16:00')
 
   // Check that the teacher is selected
-  const selectedSlot = await page.$eval('#slotList', el => el.value);
-  expect(selectedSlot).toBe('2023-05-25');
+  const selectedSlot = await page.$eval('#slotList', el => el.value)
+  expect(selectedSlot).toBe('2023-05-25')
   // await page.getByLabel('Lecturer Name').click()
   // await page.getByLabel('Lecturer Name').fill('Smith')
   // await page.getByRole('button', {name: 'View Consultations', exact: true}).click()

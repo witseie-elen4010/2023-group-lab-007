@@ -247,20 +247,20 @@ function generateConsultationsHTML(consultation) {
 
 function displayLoadingIndicator() {
   // Display a loading indicator inside the consultations container
-  consultationsContainer.innerHTML = '<p>Loading...</p>';
+  consultationsContainer.innerHTML = '<p>Loading...</p>'
 }
 
 function displayConsultations(consultationsHTML) {
   // Display the generated consultations HTML inside the consultations container
-  consultationContainer.innerHTML = consultationsHTML;
+  consultationContainer.innerHTML = consultationsHTML
 }
 
 function clearConsultationsContainer() {
   // Clear the consultations container by emptying its content
-  consultationContainer.innerHTML = '';
+  consultationContainer.innerHTML = ''
 }
 
-const consultationContainer = document.getElementById('consultation');
+const consultationContainer = document.getElementById('consultation')
 
 // Selecting the new dropdown menu
 dropdownMenu.addEventListener('change', async (e) => {
@@ -280,7 +280,7 @@ dropdownMenu.addEventListener('change', async (e) => {
 
     // Fetch existing consultations for selected lecturer
     const consultations = await getExistingConsultations(selectedTeacher)
-    const existingConsultations = consultations.filter(consultation => consultation.status === "approved");
+    const existingConsultations = consultations.filter(consultation => consultation.status === "approved")
 
     // Fill the existing consultations dropdown
     let numberOfStudents=0
@@ -295,7 +295,7 @@ dropdownMenu.addEventListener('change', async (e) => {
       .catch(error => {
         console.error('Failed to fetch booking:', error)
         // Handle the error appropriately
-      });
+      })
       console.log(numberOfStudents)
       if(numberOfStudents>=consultation.maximumNumberOfStudents){
         continue
@@ -327,8 +327,8 @@ existingConsultationsMenu.addEventListener('change', function() {
       endTime : this.options[this.selectedIndex].dataset.endTime,
       maximumNumberOfStudents : existingConsultationsMenu[existingConsultationsMenu.selectedIndex].dataset.numberOfStudents,
     }
-    const consultationsHTML = generateConsultationsHTML(details);
-    displayConsultations(consultationsHTML);
+    const consultationsHTML = generateConsultationsHTML(details)
+    displayConsultations(consultationsHTML)
     slotDropdownMenu.setAttribute('disabled', true)
     slotDropdownMenu.selectedIndex = 0
     bookButton.textContent = "Join"
