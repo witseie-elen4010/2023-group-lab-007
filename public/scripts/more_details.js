@@ -1,7 +1,6 @@
 const form1 = document.querySelector('#studentForm');
 const form2 = document.querySelector('#lecturerForm');
 
-
 //submission field for student details such as student number, firstname and lastname
 form1.addEventListener('submit', function (event) {
   event.preventDefault();
@@ -46,7 +45,6 @@ form2.addEventListener('submit', function (event) {
 //Insert lecturer details into the database
 async function insertLecturerDetails(entry) {
   try {
-
     const response = await fetch('/class/api/lecturerDetails', {
       method: 'POST',
       body: JSON.stringify(entry),

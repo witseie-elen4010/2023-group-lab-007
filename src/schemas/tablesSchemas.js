@@ -1,17 +1,17 @@
 // Define the schemas for different collections
 const consultationDetailsScheme = {
   consultationId: Number,               
-  lecturerId: String,                   //String
+  lecturerId: String,                 
   date: String,
-  timeMinutes: String,
-  maximumNumberOfStudents: String,
+  timeMinutes: String,                //Number
+  maximumNumberOfStudents: String,   //Number
   status: String,
   startTime: String,
   endTime: String,
 };
 
 const consultationPeriodsScheme = {
-  lecturerId: String,                           //string
+  lecturerId: String,                           
   dayOfWeek: String,
   startTime: String,
   endTime: String,
@@ -21,11 +21,11 @@ const consultationPeriodsScheme = {
 };
 
 const lecturerDetailsScheme = {
-  lecturerId: String,                         //string
+  lecturerId: String,                         
   emailAddress: String,
   firstName: String,
   lastName: String,
-  password: String,                         //remove
+  password: String,                         
 };
 
 const studentDetailsScheme = {
@@ -33,7 +33,7 @@ const studentDetailsScheme = {
   emailAddress: String,
   firstName: String,
   lastName: String,
-  password: String,                       //remove
+  password: String,                       
 };
 
 const studentBookingScheme = {

@@ -24,7 +24,6 @@ router.post('/api/lecturerDetails', async (req, res) => {
   const userEmail = req.oidc.user.email;
   try {
     const newData = req.body
-    // Insert the new data into the lecturerDetails collection
     await insertService.insertLecturerDetails(newData)
     logger.info('Inserted lecturer details [' + userEmail + ']');
     res.sendStatus(200)
@@ -39,7 +38,6 @@ router.post('/api/studentDetails', async (req, res) => {
   const userEmail = req.oidc.user.email;
   try {
     const newData = req.body // Assumes the request body contains the new data
-    // Insert the new data into the studentDetails collection
     await insertService.insertStudentDetails(newData)
     logger.info('Inserted student details [' + userEmail + ']');
     res.sendStatus(200)
@@ -69,7 +67,6 @@ router.post('/api/consultationPeriods', async (req, res) => {
   const userEmail = req.oidc.user.email;
   try {
     const newData = req.body
-    // Insert the new data into the lecturerDetails collection
     await insertService.insertConsultationPeriods(newData)
     logger.info('Inserted a new consultation availability period [' + userEmail + ']');
     res.sendStatus(200)
@@ -93,12 +90,10 @@ router.get('/api/existingConsultationPeriods/:lecturerID', async (req, res) => {
   }
 })
 
-
 // Route for inserting new data into studentBooking collection
 router.post('/api/studentBooking', async (req, res) => {
   try {
     const newData = req.body // Assumes the request body contains the new data
-    // Insert the new data into the studentBooking collection
     await insertService.insertStudentBooking(newData)
     res.sendStatus(200)
   } catch (err) {
@@ -111,7 +106,6 @@ router.post('/api/studentBooking', async (req, res) => {
 router.post('/api/consultationPeriods', async (req, res) => {
   try {
     const newData = req.body // Assumes the request body contains the new data
-    // Insert the new data into the consultationPeriods collection
     await insertService.insertConsultationPeriods(newData)
     res.sendStatus(200)
   } catch (err) {
@@ -120,12 +114,10 @@ router.post('/api/consultationPeriods', async (req, res) => {
   }
 })
 
-
 // Route for inserting new data into consultationDetails collection
 router.post('/api/consultationDetails', async (req, res) => {
   try {
     const newData = req.body // Assumes the request body contains the new data
-    // Insert the new data into the consultationDetails collection
     await insertService.insertConsultationDetails(newData)
     res.sendStatus(200)
   } catch (err) {

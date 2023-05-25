@@ -1,24 +1,26 @@
 const form = document.querySelector('#consPeriod');
 const entryList = document.getElementById('entryList');
+
 let entries = [];
+const { checkForOverlap, convertToMinutes } = require('./services/settings_service')
 
 function handleEmail(email) {
-  console.log(email);
+  entries = [];
   getConsultationPeriods(email)
 }
 
 // Submission form for consultation settings
-form.addEventListener('submit', (event) => {
+form.addEventListener('submit', async (event) => {
   event.preventDefault();
 
   var email = document.getElementById('email').value;
+  await handleEmail(email);
   const dayOfWeek = document.getElementById('dayOfWeek').value;
   const startTime = document.querySelector('input[name="start_time"]').value;
   const endTime = document.querySelector('input[name="end_time"]').value;
   const maxStudents = document.querySelector('input[name="maxStudents"]').value;
   const maxConsultations = document.querySelector('input[name="maxConsultations"]').value;
   const duration = document.querySelector('select[name="maxDuration"]').value;
-  const randomNumber = (Math.floor(Math.random() * 1000) + 1);
 
   const entry = {
     lecturerId: email,
@@ -30,7 +32,7 @@ form.addEventListener('submit', (event) => {
     numberOfStudents: maxStudents,
   };
 
-  const status = checkForOverlap(dayOfWeek, convertToMinutes(startTime), convertToMinutes(endTime));
+  const status = checkForOverlap(dayOfWeek, convertToMinutes(startTime), convertToMinutes(endTime), entries);
 
   if (!status) {
     entries.push(entry);
@@ -38,48 +40,6 @@ form.addEventListener('submit', (event) => {
     insertConsultationPeriods(entry);
   }
 });
-
-//Display existing consultation settings as a list
-function checkForOverlap(dayOfWeek, startTime, endTime) {
-  console.log(startTime)
-  if (startTime >= endTime) {
-    return true;
-  }
-
-  for (let i = 0; i < entries.length; i++) {
-    const entry = entries[i];
-    if (entry.dayOfWeek === dayOfWeek) {
-      if (startTime < convertToMinutes(entry.endTime)) {
-        if (endTime > convertToMinutes(entry.startTime)) {
-          return true;
-        }
-      }
-      else {
-      }
-    }
-    else {
-    }
-  }
-  return false;
-}
-
-
-//convert to minutes for easy comparison
-function convertToMinutes(timeString) {
-  const [time, period] = timeString.split(' ');
-  const [hourString, minuteString] = time.split(':');
-  let hour = parseInt(hourString, 10);
-  const minutes = parseInt(minuteString, 10);
-
-  // Convert the hour to 24-hour format if necessary
-  if (period === 'PM' && hour < 12) {
-    hour += 12;
-  } else if (period === 'AM' && hour === 12) {
-    hour = 0;
-  }
-
-  return (minutes + hour * 60)
-}
 
 //Insert consultation settings into the database
 async function insertConsultationPeriods(entry) {

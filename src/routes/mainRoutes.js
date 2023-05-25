@@ -2,7 +2,8 @@ const path = require('path')
 const express = require('express')
 const logger = require("../../logger");
 const router = express.Router()
-const moreDetailsService = require('../services/more_details_service')
+const moreDetailsService = require('../services/more_details_service');
+const { isStudent, isLecturer } = require('../services/login_service');
 var inDatabase = false;
 
 //Home route
@@ -11,10 +12,10 @@ router.get('/', async (req, res) => {
 
   if (isAuthenticated) {
     const userEmail = req.oidc.user.email;
-    if (userEmail.includes('@wits.ac.za')) {
+    if (isLecturer(userEmail)) {
       inDatabase = await moreDetailsService.inDatabaseLecturer(userEmail);
       if (inDatabase) {
-        res.render('lecturer_dashboard', {                                                                       
+        res.render('lecturer_dashboard', {
           isAuthenticated: req.oidc.isAuthenticated(), user: req.oidc.user, roll: "lecturer",
         });
         logger.info('Navigated to landing page [' + userEmail + ']');
@@ -26,10 +27,10 @@ router.get('/', async (req, res) => {
         logger.info('Navigated to more details page [' + userEmail + ']');
       }
 
-    } else if (userEmail.includes('@students.wits.ac.za')) {
+    } else if (isStudent(userEmail)) {
       inDatabase = await moreDetailsService.inDatabaseStudent(userEmail);
       if (inDatabase) {
-        res.render('student_dashboard', {                                                                       
+        res.render('student_dashboard', {
           isAuthenticated: req.oidc.isAuthenticated(), user: req.oidc.user, roll: "student",
         });
         logger.info('Navigated to landing page [' + userEmail + ']');
@@ -71,12 +72,12 @@ router.get('/dashboard', function (req, res) {
 
   if (isAuthenticated) {
     const userEmail = req.oidc.user.email;
-    if (userEmail.includes('@wits.ac.za')) {
+    if (isLecturer(userEmail)) {
       res.render('lecturer_dashboard', {
         isAuthenticated: req.oidc.isAuthenticated(), user: req.oidc.user, roll: "lecturer",
       });
       logger.info('Navigated to lecturer dashboard page [' + userEmail + ']');
-    } else if (userEmail.includes('@students.wits.ac.za')) {
+    } else if (isStudent(userEmail)) {
       res.render('student_dashboard', {
         isAuthenticated: req.oidc.isAuthenticated(), user: req.oidc.user, roll: "student",
       });
