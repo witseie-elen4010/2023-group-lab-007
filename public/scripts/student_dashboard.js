@@ -9,7 +9,7 @@ const daysOfWeek = {
   Friday: 5,
   Saturday: 6
 }
-const testStudent = "2305164"
+const testStudent = "2305164" // Change this and instead always use user (line 18). 
 const dropdownMenu = document.querySelector('#teacherList')
 const slotDropdownMenu = document.querySelector('#slotList')
 const bookButton = document.querySelector('#bookButton')
