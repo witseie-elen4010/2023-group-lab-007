@@ -14,8 +14,8 @@ form.addEventListener('submit', async (event) => {
 
   var email = document.getElementById('email').value;
   const dayOfWeek = document.getElementById('dayOfWeek').value;
-  const startTime = document.querySelector('input[name="start_time"]').value;
-  const endTime = document.querySelector('input[name="end_time"]').value;
+  const startTime = convertTo24(document.querySelector('input[name="start_time"]').value);
+  const endTime = convertTo24(document.querySelector('input[name="end_time"]').value);
   const maxStudents = document.querySelector('input[name="maxStudents"]').value;
   const maxConsultations = document.querySelector('input[name="maxConsultations"]').value;
   const duration = document.querySelector('select[name="maxDuration"]').value;

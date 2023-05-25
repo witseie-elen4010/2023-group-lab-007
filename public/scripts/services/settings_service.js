@@ -28,14 +28,28 @@ function convertToMinutes(timeString) {
   let hour = parseInt(hourString, 10);
   const minutes = parseInt(minuteString, 10);
 
+  return (minutes + hour * 60)
+}
+
+//convert to minutes for easy comparison
+function convertTo24(timeString) {
+  const [time, period] = timeString.split(' ');
+  const [hourString, minuteString] = time.split(':');
+  let hour = parseInt(hourString, 10);
+  const minutes = minuteString;
+
   // Convert the hour to 24-hour format if necessary
   if (period === 'PM' && hour < 12) {
     hour += 12;
   } else if (period === 'AM' && hour === 12) {
     hour = 0;
   }
-  return (minutes + hour * 60)
+
+  const sHour = hour.toString();
+  const combined = (sHour + ":" + minutes)
+
+  return (combined)
 }
 
-module.exports = { checkForOverlap, convertToMinutes}
+module.exports = { checkForOverlap, convertToMinutes, convertTo24}
 
