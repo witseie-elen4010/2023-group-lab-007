@@ -1,5 +1,7 @@
 //const { lecturerDetails } = require("../../database");
 
+//const { get } = require("mongoose")
+
 const daysOfWeek = {
   Sunday: 0,
   Monday: 1,
@@ -40,7 +42,10 @@ defaultConsultationsOption.value = ""
 slotDropdownMenu.appendChild(defaultConsultationsOption)
 slotDropdownMenu.selectedIndex = 0 // Set the default option as selected
 
-bookButton.addEventListener('click', () => {
+bookButton.addEventListener('click', async() => {
+  const userStudentNumber = await getUserStudentNumber();
+  console.log('studentNumber: ', userStudentNumber )
+  console.log('Type of userStudentNumber:', typeof userStudentNumber);
   const selectedLecturerId = dropdownMenu.value
   let selectedSlot = ""
   if(!joinExisting){
@@ -72,6 +77,7 @@ bookButton.addEventListener('click', () => {
    createConsultation(details)
    .then(data => {
     console.log('Booking created successfully:', data)
+    console.log('Booking for Student: ', userStudentNumber)
     // Perform any additional actions after successful booking
     //Make a function for this whole thing and call it both times.
      bookingDetails = { //create the entry for the student booking. 
@@ -101,7 +107,7 @@ bookButton.addEventListener('click', () => {
      selectedSlot = existingConsultationsMenu.value //get the consultationId.
      bookingDetails = { //create the entry for the student booking. 
       consultationId: selectedSlot,
-      studentNumber: testStudent, //user.studentNumber
+      studentNumber: userStudentNumber, //user.studentNumber
       role: "Member"
      }
 
@@ -116,7 +122,7 @@ bookButton.addEventListener('click', () => {
   })
   }
 
-  getStudentDetails(testStudent)
+  getStudentDetails(userStudentNumber)
       .then(student => {
         console.log(student)
       })
@@ -263,7 +269,6 @@ function getNextDate(day, j) {
 
 //fetch the consultations object stored in lecturerConsultation.js
 function getConsultations() {
-  console.log('user'+user.studentNumber)
   return fetch('/class/api/studentConsultationDetails')
     .then(response => response.json())
     .then(data => {
@@ -281,6 +286,39 @@ function getConsultations() {
       return consultations
     })
     .catch(error => console.error(error))
+}
+
+//
+//fetch the consultations object stored in lecturerConsultation.js
+function getStudentNumber() {
+
+  return fetch('/class/api/studentDetails')
+    .then(response => response.json())
+    .then(data => {
+      const studentDetails = data.map(item => {
+        return {
+          studentNumber: item.studentNumber,
+          }
+      })
+      return studentDetails
+    })
+    .catch(error => console.error(error))
+}
+
+async function getUserStudentNumber() {
+  try {
+    const response = await fetch('/class/api/userStudentNumber');
+    if (!response.ok) {
+      throw new Error('Request failed with status code ' + response.status);
+    }
+    const data = await response.json();
+    const studentNumber = data.toString(); // Assuming the response is a single string value
+    return studentNumber;
+  } catch (error) {
+    console.error('Error:', error);
+    // You can handle the error accordingly (e.g., return a default value or re-throw the error)
+    throw error;
+  }
 }
 
 //call the api to get the consultation periods for a specific lecturer
@@ -301,6 +339,14 @@ function getLecturerDetails() {
     .then(response => response.json())
     .catch(error => console.error('Error fetching lecturer details:', error))
 }
+
+// // call the api to get the student number from the user 
+// function getStudentNumber() {
+//   const url = 'class/api/userStudentNumber'
+//   return fetch(url)
+//     .then(response => response.json())
+//     .catch(error => console.error('Error fetching student details:', error))
+// }
 
 // call the api to get the consultation details of a lecturer from the database
 function searchConsultationsPerLecturer(Id) {

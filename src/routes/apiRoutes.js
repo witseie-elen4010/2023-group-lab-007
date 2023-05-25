@@ -292,6 +292,7 @@ router.post('/api/studentBooking', async (req, res) => {
   }
 });
 
+// get all the bookings for a specific student.
 router.get('/api/studentConsultationDetails', async (req, res) => {
   try {
     const userEmail = req.oidc.user.email
@@ -308,6 +309,17 @@ router.get('/api/studentDetails', async (req, res) => {
     const userEmail = req.oidc.user.email
     const studentDetails = await studentConsulationService.getStudentDetails(userEmail);
     res.json(studentDetails)
+  } catch (err) {
+    console.error(err)
+    res.sendStatus(500)
+  }
+})
+
+router.get('/api/userStudentNumber', async (req, res) => {
+  try {
+    const userEmail = req.oidc.user.email
+    const studentDetails = await studentConsulationService.getStudentDetails(userEmail);
+    res.json(studentDetails[0].studentNumber)
   } catch (err) {
     console.error(err)
     res.sendStatus(500)

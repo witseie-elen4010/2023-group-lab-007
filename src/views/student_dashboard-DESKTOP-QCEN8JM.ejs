@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Dashboard</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- FullCalendar Main CSS -->
+  <link href='https://unpkg.com/fullcalendar@5/main.min.css' rel='stylesheet' />
+
+  <!-- FullCalendar Main JS -->
+  <script src='https://unpkg.com/fullcalendar@5/main.min.js'></script>
+  <link rel="stylesheet" type="text/css" href="/cdn/css/lecturer_dashboard.css">
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Bootstrap JavaScript -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="/cdn/css/calendar.css">
+</head>
+
+<body>
+  <header>
+    <%- include('./partials/navbar'); %>
+  </header>
+  <input type="hidden" id="user-data" value='<%- JSON.stringify(user) %>'>
+  <div class="container mt-5">
+    <h1>Student dashboard</h1>
+    <!-- Other parts of your code -->
+    <div class="form-group" style="margin-bottom: 2rem;">
+      <label for="teacherList">Select Teacher</label>
+      <select class="form-control" id="teacherList"></select>
+    </div>
+    <div class="form-group" style="margin-bottom: 2rem;">
+      <label for="slotList">Select Consultation Slot</label>
+      <select class="form-control" id="slotList"></select>
+    </div>
+    <button id="bookButton" class="btn btn-primary" disabled>Book</button>
+    <div id="consultationSlots" style="padding-top: 3rem;"></div>
+    <button type="button" id="showConsultation">Show Consultations on Calendar</button>
+    <button type="button" id="hideConsultation">Clear Consultations on Calendar</button>
+    <div id="calendar"></div>
+    <footer>
+      <%- include('./partials/footer'); %>
+    </footer>
+
+    <script src="/cdn/scripts/student_dashboard.js"></script>
+    <style>
+      .popover-body {
+        white-space: pre-line;
+      }
+    </style>
+</body>
+
+</html>

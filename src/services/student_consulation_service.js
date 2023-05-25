@@ -5,7 +5,6 @@ async function getStudentConsultationDetails(email) {
     try {
       const studentDetailsData = await studentDetails.aggregate(studentDetailsPipeline(email))
       const studentNumber = studentDetailsData[0].studentNumber
-      console.log("student number " + studentNumber)
       const consultationDetailsStudentData = await consultationDetails.aggregate(studentConsultationPipeline(studentNumber))
       return consultationDetailsStudentData
     } catch (err) {
@@ -17,9 +16,7 @@ async function getStudentConsultationDetails(email) {
 //function to return the details of student
 async function getStudentDetails(email) {
     try {
-      console.log("details2 " + studentDetails)
       const studentDetailsData = await studentDetails.aggregate(studentDetailsPipeline(email))
-      console.log("details" + studentDetailsData)
       return studentDetailsData
     } catch (err) {
       console.error(err);
