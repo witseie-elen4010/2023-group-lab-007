@@ -22,6 +22,7 @@ const consultationPeriodsScheme = {
 
 const lecturerDetailsScheme = {
   lecturerId: String,
+  emailAddress: String,
   firstName: String,
   lastName: String,
 };
