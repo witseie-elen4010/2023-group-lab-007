@@ -328,7 +328,7 @@ dropdownMenu.addEventListener('change', async (e) => {
       .catch(error => {
         console.error('Failed to fetch booking:', error)
         // Handle the error appropriately
-      });
+      })
       console.log(numberOfStudents)
       if(numberOfStudents>=consultation.maximumNumberOfStudents){
         continue
@@ -390,7 +390,7 @@ function getAllConsultations() {
     .then(response => response.json())
     .catch(error => {
       console.error("Error fetching consultations:", error);
-    });
+    })
 }
 // function to create a booking for the student. 
 function createBooking(bookingDetails) {
@@ -449,7 +449,7 @@ function getSubPeriod(start, duration, index){ //change when the slots are not a
     const [hours, minutes] = start.split(':')
 
     // Set the hours and minutes of the Date object
-    date.setHours(hours, minutes, 0, 0); // Set seconds and milliseconds to 0
+    date.setHours(hours, minutes, 0, 0) // Set seconds and milliseconds to 0
 
     // Add the duration to the Date object
     date.setMinutes(date.getMinutes() + duration*index)
@@ -481,7 +481,7 @@ function createSubperiodDropdown(slotLength, startTime) {
   const subperiodDropdown = document.createElement('select')
   subperiodDropdown.id = 'subperiodDropdown'
   const defaultOption = document.createElement('option')
-  defaultOption.text = 'Select a 15-minute subperiod'
+  defaultOption.text = 'Select a consultation slot'
   defaultOption.value = ''
   subperiodDropdown.add(defaultOption)
 
