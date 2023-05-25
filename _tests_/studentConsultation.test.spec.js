@@ -1,7 +1,7 @@
 
 //Checking the function getStudentConsultationDetails, we will mock the aggregate response from the datset to allow for testing
-const { getStudentConsultationDetails } = require('../../src/services/student_consulation_service');
-const { consultationDetails } = require('../../src/services/dbProvider');
+const { getStudentConsultationDetails } = require('../src/services/student_consulation_service');
+const { consultationDetails } = require('../src/services/dbProvider');
 
 describe('Student Consultation Service', () => {
   test('should return consultation details for a known Student Number', async () => {
@@ -23,8 +23,6 @@ describe('Student Consultation Service', () => {
     const studentNumber = '2305164'
     // Call the function to be tested
     const result = await getStudentConsultationDetails(studentNumber)
-     // Log the result
-    console.log(result);
     expect(typeof result).toEqual('object');
     expect(result[0].student_booking[0].studentNumber).toEqual(studentNumber);
   })
@@ -34,13 +32,12 @@ describe('Student Consultation Service', () => {
     const studentNumberNotInDataset = 'aaaaa';
     const result = await getStudentConsultationDetails(studentNumberNotInDataset);
     // Check that the result is an empty array
-    console.log(result);
     expect(result).toEqual([]);
   });
 });
 
 //Checking the studentConsultationPipeline is exporting as expected
-const studentConsultationPipeline = require('../../src/controllers/studentConsultationPipeline');
+const studentConsultationPipeline = require('../src/controllers/studentConsultationPipeline');
 
 describe('Student Consultation Pipeline', () => {
   test('should generate pipeline for a known Student Number', () => {

@@ -294,12 +294,23 @@ router.post('/api/studentBooking', async (req, res) => {
 
 router.get('/api/studentConsultationDetails', async (req, res) => {
   try {
-    let studentNumber = '2305164';
-    const studentConsultationDetails = await studentConsulationService.getStudentConsultationDetails(studentNumber);
-    res.json(studentConsultationDetails);
+    const userEmail = req.oidc.user.email
+    const studentConsultationDetails = await studentConsulationService.getStudentConsultationDetails(userEmail)
+    res.json(studentConsultationDetails)
   } catch (err) {
-    console.error(err);
-    res.sendStatus(500);
+    console.error(err)
+    res.sendStatus(500)
+  }
+})
+
+router.get('/api/studentDetails', async (req, res) => {
+  try {
+    const userEmail = req.oidc.user.email
+    const studentDetails = await studentConsulationService.getStudentDetails(userEmail);
+    res.json(studentDetails)
+  } catch (err) {
+    console.error(err)
+    res.sendStatus(500)
   }
 })
 

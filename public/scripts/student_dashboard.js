@@ -263,6 +263,7 @@ function getNextDate(day, j) {
 
 //fetch the consultations object stored in lecturerConsultation.js
 function getConsultations() {
+  console.log('user'+user.studentNumber)
   return fetch('/class/api/studentConsultationDetails')
     .then(response => response.json())
     .then(data => {
