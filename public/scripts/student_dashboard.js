@@ -45,7 +45,57 @@ bookButton.addEventListener('click', () => {
   let selectedSlot = ""
   if(!joinExisting){
      selectedSlot = slotDropdownMenu.value
-     
+     selectedPeriod = document.getElementById("subperiodDropdown")
+     const maxStudents = slotDropdownMenu.options[slotDropdownMenu.selectedIndex].dataset.maxCapacity
+     if(!selectedPeriod){
+      return
+     }
+     const slotStart = selectedPeriod.options[selectedPeriod.selectedIndex].dataset.start
+     const slotEnd = selectedPeriod.options[selectedPeriod.selectedIndex].dataset.end
+     const duration = selectedPeriod.value
+     getAllConsultations()
+  .then(detailsArray => {
+    const consultationIds = detailsArray.map(detail => detail.consultationId)
+    const maxConsultationId = Math.max(...consultationIds)
+    const consultationId = maxConsultationId+1
+    details = {
+      consultationId: parseInt(consultationId),
+      lecturerId: String(selectedLecturerId),
+      date: String(selectedSlot),
+      timeMinutes: parseInt(duration),
+      maximumNumberOfStudents: parseInt(maxStudents),
+      status: String("disapproved"), //set default of disapproved, requires lecturer to accept consultation. 
+      startTime: String(slotStart),
+      endTime: String(slotEnd),
+   }
+   console.log(details)
+   createConsultation(details)
+   .then(data => {
+    console.log('Booking created successfully:', data)
+    // Perform any additional actions after successful booking
+    //Make a function for this whole thing and call it both times.
+     bookingDetails = { //create the entry for the student booking. 
+      consultationId: consultationId,
+      studentNumber: testStudent, //user.studentNumber
+      role: "Organizer" //s?
+     }
+     createBooking(bookingDetails) // create a booking entry for the student for the consultation selected.
+  .then(data => {
+    console.log('Booking created successfully:', data)
+    // Perform any additional actions after successful booking
+  })
+  .catch(error => {
+    console.error('Failed to create booking:', error)
+    // Handle the error appropriately
+  })
+  })
+  .catch(error => {
+    console.error('Failed to create booking:', error)
+    // Handle the error appropriately
+  })
+  })
+  .catch(err => console.error(err)) 
+
   }
   else{ // if the student has selected an existing consultation, then add them to that consultation.
      selectedSlot = existingConsultationsMenu.value //get the consultationId.
@@ -101,6 +151,7 @@ dropdownMenu.addEventListener('change', async (e) => {
         option.value = getDateString(getNextDate(slot.dayOfWeek, j))
         option.dataset.length = slot.durationMinutes
         option.dataset.start = slot.startTime
+        option.dataset.maxCapacity = slot.numberOfStudents
         slotDropdownMenu.add(option)
       }
     }
@@ -180,6 +231,7 @@ async function fillLecturerField() {
   }
   return lecturerDetails
 }
+
 //get correct string format from date object
 function getDateString(date) {
   const year = date.getFullYear()
@@ -326,9 +378,19 @@ function getStudentDetails(studentNumber) {
   return fetch(url)
     .then(response => response.json())
     .catch(error => {
-      console.error("Error fetching consultation details:", error)
+      console.error("Error fetching student details:", error)
     })
   
+}
+
+//function to get a list of all consultations
+function getAllConsultations() {
+  const url = `class/api/consultationDetailSearch`;
+  return fetch(url)
+    .then(response => response.json())
+    .catch(error => {
+      console.error("Error fetching consultations:", error);
+    });
 }
 // function to create a booking for the student. 
 function createBooking(bookingDetails) {
@@ -354,34 +416,56 @@ function createBooking(bookingDetails) {
   
 }
 
+function createConsultation(bookingDetails) {
+  return fetch('class/api/consultationDetails', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(bookingDetails),
+  })
+  .then(response => {
+        if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`)
+    }
+    // Check if the response is JSON before trying to parse it
+    const contentType = response.headers.get("content-type")
+    if(contentType && contentType.indexOf("application/json") !== -1) {
+      return response.json()
+    } else {
+      throw new Error('Response not JSON')
+    }
+  }) 
+}
+
 // Container where the subperiod dropdown will go
 const dropdownContainer = document.querySelector('#dropdownContainer')
 
 function getSubPeriod(start, duration, index){ //change when the slots are not a defined length.
     // Create a new Date object
-    const date = new Date();
+    const date = new Date()
 
     // Get the hours and minutes from the startTime
-    const [hours, minutes] = start.split(':');
+    const [hours, minutes] = start.split(':')
 
     // Set the hours and minutes of the Date object
     date.setHours(hours, minutes, 0, 0); // Set seconds and milliseconds to 0
 
     // Add the duration to the Date object
-    date.setMinutes(date.getMinutes() + 15*index);
+    date.setMinutes(date.getMinutes() + duration*index)
 
     // Extract the hours and minutes from the updated Date object
-    let startHours = date.getHours();
-    let startMinutes = date.getMinutes();
-    startHours = startHours.toString().padStart(2, '0');
-    startMinutes = startMinutes.toString().padStart(2, '0');
+    let startHours = date.getHours()
+    let startMinutes = date.getMinutes()
+    startHours = startHours.toString().padStart(2, '0')
+    startMinutes = startMinutes.toString().padStart(2, '0')
     // Pad the hours and minutes with leading zeros if necessary
-    date.setMinutes(date.getMinutes() + 15);
+    date.setMinutes(date.getMinutes() + duration)
     // Extract the hours and minutes from the updated Date object
-    let endHours = date.getHours();
-    let endMinutes = date.getMinutes();
-    endHours = endHours.toString().padStart(2, '0');
-    endMinutes = endMinutes.toString().padStart(2, '0');
+    let endHours = date.getHours()
+    let endMinutes = date.getMinutes()
+    endHours = endHours.toString().padStart(2, '0')
+    endMinutes = endMinutes.toString().padStart(2, '0')
 
     // Combine the hours and minutes into a string and return it
     const startTime = `${startHours}:${startMinutes}`
@@ -404,9 +488,11 @@ function createSubperiodDropdown(slotLength, startTime) {
   // Populate the dropdown with the subperiods
   for (let i = 0; i < numberOfSubperiods; i++) {
     const option = document.createElement('option')
-    let times = getSubPeriod(startTime, slotLength, i)
+    let times = getSubPeriod(startTime, 15, i)
     option.text = `${times[0]} - ${times[1]}`
-    option.value = i
+    option.value = 15//change in future.
+    option.dataset.start = times[0]
+    option.dataset.end = times[1]
     subperiodDropdown.add(option)
   }
 

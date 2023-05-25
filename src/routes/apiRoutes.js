@@ -77,10 +77,11 @@ router.post('/api/consultationDetails', async (req, res) => {
     const newData = req.body // Assumes the request body contains the new data
     // Insert the new data into the consultationDetails collection
     await insertService.insertConsultationDetails(newData)
-    res.sendStatus(200)
+    res.setHeader('Content-Type', 'application/json')
+    res.status(200).json({message: 'Booking created successfully'})
   } catch (err) {
     console.error(err)
-    res.sendStatus(500)
+    res.status(500).json({error: 'Failed to create booking'})
   }
 })
 
