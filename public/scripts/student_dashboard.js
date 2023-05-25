@@ -82,7 +82,7 @@ bookButton.addEventListener('click', async() => {
     //Make a function for this whole thing and call it both times.
      bookingDetails = { //create the entry for the student booking. 
       consultationId: consultationId,
-      studentNumber: testStudent, //user.studentNumber
+      studentNumber: userStudentNumber, //user.studentNumber
       role: "Organizer" //s?
      }
      createBooking(bookingDetails) // create a booking entry for the student for the consultation selected.
