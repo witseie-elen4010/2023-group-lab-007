@@ -3,8 +3,8 @@ const consultationDetailsScheme = {
   consultationId: Number,
   lecturerId: String,
   date: String,
-  timeMinutes: String,
-  maximumNumberOfStudents: String,
+  timeMinutes: Number,                //Number
+  maximumNumberOfStudents: Number,   //Number
   status: String,
   startTime: String,
   endTime: String,
