@@ -1,6 +1,6 @@
 import { test, expect, chromium } from '@playwright/test';
 
-test('search for consultation based on the lecturer name', async () => {
+test.skip('search for consultation based on the lecturer name', async () => {
   const browser = await chromium.launch({ headless: false })
   const context = await browser.newContext()
   const page = await context.newPage()

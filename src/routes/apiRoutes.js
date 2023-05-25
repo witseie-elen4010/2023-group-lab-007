@@ -10,6 +10,7 @@ const insertService = require('../services/insert_service');
 const lecturerService = require('../services/lecturer_service');
 const consultationService = require('../services/consultation_service');
 const consultationPeriodService = require('../services/consultation_period_service');
+const studentConsulationService = require('../services/student_consulation_service');
 
 router.get('/api/studentConsultations', function (req, res) {
   res.json(studentConsultations) // Respond with JSON
@@ -290,6 +291,40 @@ router.post('/api/studentBooking', async (req, res) => {
     res.status(500).json({error: 'Failed to create booking'})
   }
 });
+
+// get all the bookings for a specific student.
+router.get('/api/studentConsultationDetails', async (req, res) => {
+  try {
+    const userEmail = req.oidc.user.email
+    const studentConsultationDetails = await studentConsulationService.getStudentConsultationDetails(userEmail)
+    res.json(studentConsultationDetails)
+  } catch (err) {
+    console.error(err)
+    res.sendStatus(500)
+  }
+})
+
+router.get('/api/studentDetails', async (req, res) => {
+  try {
+    const userEmail = req.oidc.user.email
+    const studentDetails = await studentConsulationService.getStudentDetails(userEmail);
+    res.json(studentDetails)
+  } catch (err) {
+    console.error(err)
+    res.sendStatus(500)
+  }
+})
+
+router.get('/api/userStudentNumber', async (req, res) => {
+  try {
+    const userEmail = req.oidc.user.email
+    const studentDetails = await studentConsulationService.getStudentDetails(userEmail);
+    res.json(studentDetails[0].studentNumber)
+  } catch (err) {
+    console.error(err)
+    res.sendStatus(500)
+  }
+})
 
 
 module.exports = router

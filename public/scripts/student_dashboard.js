@@ -1,5 +1,7 @@
 //const { lecturerDetails } = require("../../database");
 
+//const { get } = require("mongoose")
+
 const daysOfWeek = {
   Sunday: 0,
   Monday: 1,
@@ -40,7 +42,10 @@ defaultConsultationsOption.value = ""
 slotDropdownMenu.appendChild(defaultConsultationsOption)
 slotDropdownMenu.selectedIndex = 0 // Set the default option as selected
 
-bookButton.addEventListener('click', () => {
+bookButton.addEventListener('click', async() => {
+  const userStudentNumber = await getUserStudentNumber()
+  console.log('studentNumber: ', userStudentNumber )
+  console.log('Type of userStudentNumber:', typeof userStudentNumber)
   const selectedLecturerId = dropdownMenu.value
   let selectedSlot = ""
   if(!joinExisting){
@@ -72,11 +77,12 @@ bookButton.addEventListener('click', () => {
    createConsultation(details)
    .then(data => {
     console.log('Booking created successfully:', data)
+    console.log('Booking for Student: ', userStudentNumber)
     // Perform any additional actions after successful booking
     //Make a function for this whole thing and call it both times.
      bookingDetails = { //create the entry for the student booking. 
       consultationId: consultationId,
-      studentNumber: testStudent, //user.studentNumber
+      studentNumber: userStudentNumber, //user.studentNumber
       role: "Organizer" //s?
      }
      createBooking(bookingDetails) // create a booking entry for the student for the consultation selected.
@@ -101,7 +107,7 @@ bookButton.addEventListener('click', () => {
      selectedSlot = existingConsultationsMenu.value //get the consultationId.
      bookingDetails = { //create the entry for the student booking. 
       consultationId: selectedSlot,
-      studentNumber: testStudent, //user.studentNumber
+      studentNumber: userStudentNumber, //user.studentNumber
       role: "Member"
      }
 
@@ -116,7 +122,7 @@ bookButton.addEventListener('click', () => {
   })
   }
 
-  getStudentDetails(testStudent)
+  getStudentDetails(userStudentNumber)
       .then(student => {
         console.log(student)
       })
@@ -185,26 +191,32 @@ slotDropdownMenu.addEventListener('change', (e) => {
 calendar.render()
 
 //if the user presses the "show consultation" button, display the default consulation.
-if (showConsultation) {
-  console.log('Clicked show consultation button')
-  showConsultation.addEventListener('click', () => {
-    getConsultations().then(consultations => {
-      console.log("[Unknown User] clicked show consultation button")
-      if (!calendar) {
-        calendar = new FullCalendar.Calendar(calendarDiv, {
-          initialView: 'dayGridMonth',
-        })
-        calendar.render()
-      }
-      // Remove all existing events from the calendar
-      calendar.getEvents().forEach((event) => event.remove())
-      // Add all the consultations to the calendar
-      consultations.forEach(event => {
-        calendar.addEvent(event)
+showConsultation.addEventListener('click', () => {
+  getConsultations().then(consultations => {
+    if (!calendar) {
+      calendar = new FullCalendar.Calendar(calendarDiv, {
+        initialView: 'dayGridMonth',
       })
+      calendar.render()
+    }
+    
+    calendar.getEvents().forEach((event) => event.remove())
+    consultations.forEach(consultation => {
+      const { date, startTime, endTime, lecturer, consultationId, studentCount } = consultation
+      const event = {
+        title: lecturer + `\n Students: ${studentCount}`,
+        start: `${date}T${startTime}`,
+        end: `${date}T${endTime}`,
+        description: `Students: ${studentCount}`, // Add the description
+      }
+      console.log(consultations)
+      console.log('Event'+event)
+      calendar.addEvent(event)
     })
+
   })
-}
+})
+
 
 async function fillLecturerField() {
   const lecturerDetails = await getLecturerDetails()
@@ -257,13 +269,56 @@ function getNextDate(day, j) {
 
 //fetch the consultations object stored in lecturerConsultation.js
 function getConsultations() {
-  return fetch('/class/api/studentConsultations')
+  return fetch('/class/api/studentConsultationDetails')
     .then(response => response.json())
     .then(data => {
-      const consultations = data.map(item => ({ title: item.lecturer, date: item.date, }))
+      const consultations = data.map(item => {
+        const studentCountTemp = item.student_booking.length;
+        return {
+          lecturer: item.lecturerId,
+          consultationId: item.consultationId,
+          date: item.date,
+          startTime: item.startTime,
+          endTime: item.endTime,
+          studentCount: studentCountTemp
+        }
+      })
       return consultations
     })
     .catch(error => console.error(error))
+}
+
+//
+//fetch the consultations object stored in lecturerConsultation.js
+function getStudentNumber() {
+
+  return fetch('/class/api/studentDetails')
+    .then(response => response.json())
+    .then(data => {
+      const studentDetails = data.map(item => {
+        return {
+          studentNumber: item.studentNumber,
+          }
+      })
+      return studentDetails
+    })
+    .catch(error => console.error(error))
+}
+
+//get userStudentNumber and return it as a string
+async function getUserStudentNumber() {
+  try {
+    const response = await fetch('/class/api/userStudentNumber')
+    if (!response.ok) {
+      throw new Error('Request failed with status code ' + response.status)
+    }
+    const data = await response.json()
+    const studentNumber = data.toString() // Assuming the response is a single string value
+    return studentNumber
+  } catch (error) {
+    console.error('Error:', error)
+    throw error
+  }
 }
 
 //call the api to get the consultation periods for a specific lecturer
@@ -284,6 +339,14 @@ function getLecturerDetails() {
     .then(response => response.json())
     .catch(error => console.error('Error fetching lecturer details:', error))
 }
+
+// // call the api to get the student number from the user 
+// function getStudentNumber() {
+//   const url = 'class/api/userStudentNumber'
+//   return fetch(url)
+//     .then(response => response.json())
+//     .catch(error => console.error('Error fetching student details:', error))
+// }
 
 // call the api to get the consultation details of a lecturer from the database
 function searchConsultationsPerLecturer(Id) {

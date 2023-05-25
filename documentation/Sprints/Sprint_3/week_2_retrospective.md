@@ -1,4 +1,4 @@
-﻿# Sprint Retrospective for Week 2
+# Sprint Retrospective for Week 2
 
 
 | What the team did well | What went wrong | What the team could have done better |

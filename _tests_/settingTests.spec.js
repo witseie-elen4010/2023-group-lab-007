@@ -60,3 +60,25 @@ describe('periodEvaluation', () => {
     });
   });
 });
+
+describe('convert to 24 hours', () => {
+  test('converts "09:30 AM" to "09:30"', () => {
+    const result = convertTo24('09:30 AM');
+    expect(result).toBe('9:30');
+  });
+
+  test('converts "10:22 PM" to "22:22"', () => {
+    const result = convertTo24('10:22 PM');
+    expect(result).toBe('22:22');
+  });
+
+  test('converts "12:00 AM" to "00:00"', () => {
+    const result = convertTo24('12:00 AM');
+    expect(result).toBe('0:00');
+  });
+
+  test('converts "12:00 PM" to "12:00"', () => {
+    const result = convertTo24('12:00 PM');
+    expect(result).toBe('12:00');
+  });
+});
