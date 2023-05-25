@@ -12,10 +12,20 @@ async function getConsultationDetails() {
   }
 }
 
-async function getConsultationDetailsByID(lecturer_id) {
+async function getConsultationDetailsByLecID(lecturer_id) {
   try {
     const consultationDetailsData = await consultationDetails.find({ lecturerId: lecturer_id })
     return consultationDetailsData;
+  } catch (err) {
+    console.error(err)
+    throw err; // Throw the error to handle it in the calling function
+  }
+}
+
+async function getConsultationDetailsByID(id) {
+  try {
+    const consultationDetailsData = await consultationDetails.find({ consultationId: id })
+    return consultationDetailsData
   } catch (err) {
     console.error(err)
     throw err; // Throw the error to handle it in the calling function
@@ -58,4 +68,4 @@ async function getMoreDetails() {
 
 
 
-module.exports = { getConsultationDetails, getConsultationDetailsByID, approveConsultation, cancelConsultation, getMoreDetails};
+module.exports = { getConsultationDetails, getConsultationDetailsByLecID, getConsultationDetailsByID, approveConsultation, cancelConsultation, getMoreDetails};
