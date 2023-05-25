@@ -31,7 +31,6 @@ const studentDetailsScheme = {
   emailAddress: String,
   firstName: String,
   lastName: String,
-  password: String,
 };
 
 const studentBookingScheme = {

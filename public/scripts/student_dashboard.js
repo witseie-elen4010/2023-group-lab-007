@@ -178,7 +178,7 @@ slotDropdownMenu.addEventListener('change', (e) => {
     existingConsultationsMenu.removeAttribute('disabled') // enable existing consultations
     bookButton.textContent = "Join"
     joinExisting = true
-  }
+  }  clearConsultationsContainer()
   // Enable the book button when a slot is selected
   checkButtonStatus()
 })
@@ -203,17 +203,6 @@ if (showConsultation) {
         calendar.addEvent(event)
       })
     })
-  })
-}
-
-//if the user presses the "hide consultation on calendar" button, hide the consultations displayed on the calendar
-if (hideConsultation) {
-  console.log('Clicked hide consultation button') //log to the web console
-  hideConsultation.addEventListener('click', () => {
-
-    // Remove all existing events from the calendar
-    calendar.getEvents().forEach((event) => event.remove())
-
   })
 }
 
@@ -296,6 +285,46 @@ function getLecturerDetails() {
     .catch(error => console.error('Error fetching lecturer details:', error))
 }
 
+// call the api to get the consultation details of a lecturer from the database
+function searchConsultationsPerLecturer(Id) {
+  const url = `class/api/consultationPerLecturerSearch?lecturerId=${Id}`
+  // Make an AJAX request to the server to fetch consultation periods
+  return fetch(url)
+    .then(response => response.json())
+    .catch(error => {
+      console.error("Error fetching consultation periods:", error)
+    })
+}
+
+function generateConsultationsHTML(consultation) {
+  let html=''
+    html += '<ul>'
+      html += '<li>'
+      html += `Date: ${consultation.date}<br>` // Display the consultation date
+      html += `Time: ${consultation.startTime} - ${consultation.endTime}<br>` // Display the consultation time range
+      html += `Maximum number of students: ${consultation.maximumNumberOfStudents}<br>` // Display the maximum number of students
+      html += '</li>'
+    html += '</ul>'
+  
+  return html
+}
+
+function displayLoadingIndicator() {
+  // Display a loading indicator inside the consultations container
+  consultationsContainer.innerHTML = '<p>Loading...</p>'
+}
+
+function displayConsultations(consultationsHTML) {
+  // Display the generated consultations HTML inside the consultations container
+  consultationContainer.innerHTML = consultationsHTML
+}
+
+function clearConsultationsContainer() {
+  // Clear the consultations container by emptying its content
+  consultationContainer.innerHTML = ''
+}
+
+const consultationContainer = document.getElementById('consultation')
 
 // Selecting the new dropdown menu
 dropdownMenu.addEventListener('change', async (e) => {
@@ -308,13 +337,15 @@ dropdownMenu.addEventListener('change', async (e) => {
   while (existingConsultationsMenu.options.length > 1) {
     existingConsultationsMenu.remove(1)
   }
+  clearConsultationsContainer()
 
   if (selectedTeacher) {
     // Fetch consultation periods for selected lecturer
 
     // Fetch existing consultations for selected lecturer
-    const existingConsultations = await getExistingConsultations(selectedTeacher)
-    
+    const consultations = await getExistingConsultations(selectedTeacher)
+    const existingConsultations = consultations.filter(consultation => consultation.status === "approved")
+
     // Fill the existing consultations dropdown
     let numberOfStudents=0
     for (let i = 0; i < existingConsultations.length; i++) {
@@ -334,8 +365,12 @@ dropdownMenu.addEventListener('change', async (e) => {
         continue
       }
       const option = document.createElement("option")
-      option.text = `${consultation.date} at ${consultation.startTime}-${consultation.endTime}`
+      option.text = `${consultation.date} `//at ${consultation.startTime}-${consultation.endTime}`
       option.value = consultation.consultationId
+      console.log(consultation)
+      option.dataset.startTime = consultation.startTime
+      option.dataset.endTime = consultation.endTime
+      option.dataset.numberOfStudents = consultation.maximumNumberOfStudents
       existingConsultationsMenu.add(option)
     }
   }
@@ -350,11 +385,20 @@ function getBookings(consultationId){ // get all the bookings for a consultation
 
 existingConsultationsMenu.addEventListener('change', function() {
   if (this.value !== "") { //if the user has  selected an existing consultation, change the button from "Book" to "Join"
+    details={
+      date: existingConsultationsMenu[existingConsultationsMenu.selectedIndex].text,
+      startTime : this.options[this.selectedIndex].dataset.startTime,
+      endTime : this.options[this.selectedIndex].dataset.endTime,
+      maximumNumberOfStudents : existingConsultationsMenu[existingConsultationsMenu.selectedIndex].dataset.numberOfStudents,
+    }
+    const consultationsHTML = generateConsultationsHTML(details)
+    displayConsultations(consultationsHTML)
     slotDropdownMenu.setAttribute('disabled', true)
     slotDropdownMenu.selectedIndex = 0
     bookButton.textContent = "Join"
     joinExisting = true
   } else { //change the button from "Join" to "Book".
+    clearConsultationsContainer()
     slotDropdownMenu.removeAttribute('disabled')
     bookButton.textContent = "Book"
     joinExisting = false
