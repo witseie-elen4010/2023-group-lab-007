@@ -2,7 +2,7 @@ const form1 = document.querySelector('#studentForm');
 const form2 = document.querySelector('#lecturerForm');
 
 //submission field for student details such as student number, firstname and lastname
-form1.addEventListener('submit', function (event) {
+form1.addEventListener('submit', async function (event) {
   event.preventDefault();
 
   // Retrieve the email value from the hidden input field
@@ -18,12 +18,12 @@ form1.addEventListener('submit', function (event) {
     lastName: lastName,
   };
 
-  insertStudentDetails(entry);
+  await insertStudentDetails(entry);
   window.location.href = "/";
 });
 
 //Submssion form for lecturer details such as firstname and lastname
-form2.addEventListener('submit', function (event) {
+form2.addEventListener('submit', async function (event) {
   event.preventDefault();
 
   // Retrieve the email value from the hidden input field
@@ -38,8 +38,8 @@ form2.addEventListener('submit', function (event) {
     lastName: lastName,
   };
 
-  insertLecturerDetails(entry);
-  
+  await insertLecturerDetails(entry);
+  window.location.href = "/";
 });
 
 //Insert lecturer details into the database
@@ -58,7 +58,6 @@ async function insertLecturerDetails(entry) {
     } else {
       console.log('Error occurred while inserting data.');
     }
-    window.location.href = "/";
   } catch (error) {
     console.error(error);
   }
@@ -81,7 +80,6 @@ async function insertStudentDetails(entry) {
       console.log('Error occurred while inserting data.');
     }
 
-    window.location.href = "/";
   } catch (error) {
     console.error(error);
   }
