@@ -43,9 +43,9 @@ slotDropdownMenu.appendChild(defaultConsultationsOption)
 slotDropdownMenu.selectedIndex = 0 // Set the default option as selected
 
 bookButton.addEventListener('click', async() => {
-  const userStudentNumber = await getUserStudentNumber();
+  const userStudentNumber = await getUserStudentNumber()
   console.log('studentNumber: ', userStudentNumber )
-  console.log('Type of userStudentNumber:', typeof userStudentNumber);
+  console.log('Type of userStudentNumber:', typeof userStudentNumber)
   const selectedLecturerId = dropdownMenu.value
   let selectedSlot = ""
   if(!joinExisting){
@@ -196,26 +196,26 @@ showConsultation.addEventListener('click', () => {
     if (!calendar) {
       calendar = new FullCalendar.Calendar(calendarDiv, {
         initialView: 'dayGridMonth',
-      });
-      calendar.render();
+      })
+      calendar.render()
     }
     
-    calendar.getEvents().forEach((event) => event.remove());
+    calendar.getEvents().forEach((event) => event.remove())
     consultations.forEach(consultation => {
-      const { date, startTime, endTime, lecturer, consultationId, studentCount } = consultation;
+      const { date, startTime, endTime, lecturer, consultationId, studentCount } = consultation
       const event = {
         title: lecturer + `\n Students: ${studentCount}`,
         start: `${date}T${startTime}`,
         end: `${date}T${endTime}`,
         description: `Students: ${studentCount}`, // Add the description
-      };
+      }
       console.log(consultations)
       console.log('Event'+event)
-      calendar.addEvent(event);
-    });
+      calendar.addEvent(event)
+    })
 
-  });
-});
+  })
+})
 
 
 async function fillLecturerField() {
@@ -305,19 +305,19 @@ function getStudentNumber() {
     .catch(error => console.error(error))
 }
 
+//get userStudentNumber and return it as a string
 async function getUserStudentNumber() {
   try {
-    const response = await fetch('/class/api/userStudentNumber');
+    const response = await fetch('/class/api/userStudentNumber')
     if (!response.ok) {
-      throw new Error('Request failed with status code ' + response.status);
+      throw new Error('Request failed with status code ' + response.status)
     }
-    const data = await response.json();
-    const studentNumber = data.toString(); // Assuming the response is a single string value
-    return studentNumber;
+    const data = await response.json()
+    const studentNumber = data.toString() // Assuming the response is a single string value
+    return studentNumber
   } catch (error) {
-    console.error('Error:', error);
-    // You can handle the error accordingly (e.g., return a default value or re-throw the error)
-    throw error;
+    console.error('Error:', error)
+    throw error
   }
 }
 
