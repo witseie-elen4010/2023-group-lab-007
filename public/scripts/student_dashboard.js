@@ -9,7 +9,7 @@ const daysOfWeek = {
   Friday: 5,
   Saturday: 6
 }
-const testStudent = "2305164"
+const testStudent = "2305164" // Change this and instead always use user (line 18). 
 const dropdownMenu = document.querySelector('#teacherList')
 const slotDropdownMenu = document.querySelector('#slotList')
 const bookButton = document.querySelector('#bookButton')
@@ -45,6 +45,57 @@ bookButton.addEventListener('click', () => {
   let selectedSlot = ""
   if(!joinExisting){
      selectedSlot = slotDropdownMenu.value
+     selectedPeriod = document.getElementById("subperiodDropdown")
+     const maxStudents = slotDropdownMenu.options[slotDropdownMenu.selectedIndex].dataset.maxCapacity
+     if(!selectedPeriod){
+      return
+     }
+     const slotStart = selectedPeriod.options[selectedPeriod.selectedIndex].dataset.start
+     const slotEnd = selectedPeriod.options[selectedPeriod.selectedIndex].dataset.end
+     const duration = selectedPeriod.value
+     getAllConsultations()
+  .then(detailsArray => {
+    const consultationIds = detailsArray.map(detail => detail.consultationId)
+    const maxConsultationId = Math.max(...consultationIds)
+    const consultationId = maxConsultationId+1
+    details = {
+      consultationId: parseInt(consultationId),
+      lecturerId: String(selectedLecturerId),
+      date: String(selectedSlot),
+      timeMinutes: parseInt(duration),
+      maximumNumberOfStudents: parseInt(maxStudents),
+      status: String("disapproved"), //set default of disapproved, requires lecturer to accept consultation. 
+      startTime: String(slotStart),
+      endTime: String(slotEnd),
+   }
+   console.log(details)
+   createConsultation(details)
+   .then(data => {
+    console.log('Booking created successfully:', data)
+    // Perform any additional actions after successful booking
+    //Make a function for this whole thing and call it both times.
+     bookingDetails = { //create the entry for the student booking. 
+      consultationId: consultationId,
+      studentNumber: testStudent, //user.studentNumber
+      role: "Organizer" //s?
+     }
+     createBooking(bookingDetails) // create a booking entry for the student for the consultation selected.
+  .then(data => {
+    console.log('Booking created successfully:', data)
+    // Perform any additional actions after successful booking
+  })
+  .catch(error => {
+    console.error('Failed to create booking:', error)
+    // Handle the error appropriately
+  })
+  })
+  .catch(error => {
+    console.error('Failed to create booking:', error)
+    // Handle the error appropriately
+  })
+  })
+  .catch(err => console.error(err)) 
+
   }
   else{ // if the student has selected an existing consultation, then add them to that consultation.
      selectedSlot = existingConsultationsMenu.value //get the consultationId.
@@ -98,6 +149,9 @@ dropdownMenu.addEventListener('change', async (e) => {
         const option = document.createElement("option")
         option.text = getDateString(getNextDate(slot.dayOfWeek, j)) + ' at ' + slot.startTime + '-' + slot.endTime
         option.value = getDateString(getNextDate(slot.dayOfWeek, j))
+        option.dataset.length = slot.durationMinutes
+        option.dataset.start = slot.startTime
+        option.dataset.maxCapacity = slot.numberOfStudents
         slotDropdownMenu.add(option)
       }
     }
@@ -115,7 +169,16 @@ let calendar = new FullCalendar.Calendar(calendarDiv, {
 slotDropdownMenu.addEventListener('change', (e) => {
   const slotIndex = e.target.value
   console.log(`Selected slot: ${slotIndex}`)
-  clearConsultationsContainer()
+  if (this.value !== "") { //if a slot is selected
+    existingConsultationsMenu.setAttribute('disabled', true) // disable existing consultations
+    existingConsultationsMenu.selectedIndex = 0 //reset selection to default
+    bookButton.textContent = "Book"
+    joinExisting = false
+  } else { 
+    existingConsultationsMenu.removeAttribute('disabled') // enable existing consultations
+    bookButton.textContent = "Join"
+    joinExisting = true
+  }  clearConsultationsContainer()
   // Enable the book button when a slot is selected
   checkButtonStatus()
 })
@@ -157,6 +220,7 @@ async function fillLecturerField() {
   }
   return lecturerDetails
 }
+
 //get correct string format from date object
 function getDateString(date) {
   const year = date.getFullYear()
@@ -358,9 +422,19 @@ function getStudentDetails(studentNumber) {
   return fetch(url)
     .then(response => response.json())
     .catch(error => {
-      console.error("Error fetching consultation details:", error)
+      console.error("Error fetching student details:", error)
     })
   
+}
+
+//function to get a list of all consultations
+function getAllConsultations() {
+  const url = `class/api/consultationDetailSearch`;
+  return fetch(url)
+    .then(response => response.json())
+    .catch(error => {
+      console.error("Error fetching consultations:", error);
+    })
 }
 // function to create a booking for the student. 
 function createBooking(bookingDetails) {
@@ -385,3 +459,121 @@ function createBooking(bookingDetails) {
   })
   
 }
+
+function createConsultation(bookingDetails) {
+  return fetch('class/api/consultationDetails', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(bookingDetails),
+  })
+  .then(response => {
+        if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`)
+    }
+    // Check if the response is JSON before trying to parse it
+    const contentType = response.headers.get("content-type")
+    if(contentType && contentType.indexOf("application/json") !== -1) {
+      return response.json()
+    } else {
+      throw new Error('Response not JSON')
+    }
+  }) 
+}
+
+// Container where the subperiod dropdown will go
+const dropdownContainer = document.querySelector('#dropdownContainer')
+
+function getSubPeriod(start, duration, index){ //change when the slots are not a defined length.
+    // Create a new Date object
+    const date = new Date()
+
+    // Get the hours and minutes from the startTime
+    const [hours, minutes] = start.split(':')
+
+    // Set the hours and minutes of the Date object
+    date.setHours(hours, minutes, 0, 0) // Set seconds and milliseconds to 0
+
+    // Add the duration to the Date object
+    date.setMinutes(date.getMinutes() + duration*index)
+
+    // Extract the hours and minutes from the updated Date object
+    let startHours = date.getHours()
+    let startMinutes = date.getMinutes()
+    startHours = startHours.toString().padStart(2, '0')
+    startMinutes = startMinutes.toString().padStart(2, '0')
+    // Pad the hours and minutes with leading zeros if necessary
+    date.setMinutes(date.getMinutes() + duration)
+    // Extract the hours and minutes from the updated Date object
+    let endHours = date.getHours()
+    let endMinutes = date.getMinutes()
+    endHours = endHours.toString().padStart(2, '0')
+    endMinutes = endMinutes.toString().padStart(2, '0')
+
+    // Combine the hours and minutes into a string and return it
+    const startTime = `${startHours}:${startMinutes}`
+    const endTime = `${endHours}:${endMinutes}`
+    return [startTime, endTime]
+}
+// Function to create and add the subperiod dropdown to the DOM
+function createSubperiodDropdown(slotLength, startTime) {
+  // Calculate the number of subperiods
+  removeSubperiodDropdown()
+  const numberOfSubperiods = slotLength / 15
+  
+  // Create the subperiod dropdown
+  const subperiodDropdown = document.createElement('select')
+  subperiodDropdown.id = 'subperiodDropdown'
+  const defaultOption = document.createElement('option')
+  defaultOption.text = 'Select a consultation slot'
+  defaultOption.value = ''
+  subperiodDropdown.add(defaultOption)
+
+  // Populate the dropdown with the subperiods
+  for (let i = 0; i < numberOfSubperiods; i++) {
+    const option = document.createElement('option')
+    let times = getSubPeriod(startTime, 15, i)
+    option.text = `${times[0]} - ${times[1]}`
+    option.value = 15//change in future.
+    option.dataset.start = times[0]
+    option.dataset.end = times[1]
+    subperiodDropdown.add(option)
+  }
+
+  // Add the dropdown to the DOM
+  dropdownContainer.appendChild(subperiodDropdown)
+}
+
+// Function to remove the subperiod dropdown from the DOM
+function removeSubperiodDropdown() {
+  const subperiodDropdown = document.querySelector('#subperiodDropdown')
+  if (subperiodDropdown) {
+    dropdownContainer.removeChild(subperiodDropdown)
+  }
+}
+
+// Event listener for when a slot is selected
+slotDropdownMenu.addEventListener('change', function() {
+  if (this.value !== "") { //if a slot is selected
+    existingConsultationsMenu.setAttribute('disabled', true) // disable existing consultations
+    existingConsultationsMenu.selectedIndex = 0 //reset selection to default
+    bookButton.textContent = "Book"
+    joinExisting = false
+
+    // Create the subperiod dropdown
+    // Create the subperiod dropdown
+  const slotLength = this.options[this.selectedIndex].dataset.length
+  const startTime = this.options[this.selectedIndex].dataset.start
+  createSubperiodDropdown(slotLength, startTime)
+
+  } else { 
+    existingConsultationsMenu.removeAttribute('disabled') // enable existing consultations
+    bookButton.textContent = "Join"
+    joinExisting = true
+
+    // Remove the subperiod dropdown
+    removeSubperiodDropdown()
+  }
+  checkButtonStatus()
+})

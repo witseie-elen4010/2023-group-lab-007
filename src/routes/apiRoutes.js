@@ -90,17 +90,17 @@ router.get('/api/existingConsultationPeriods/:lecturerID', async (req, res) => {
   }
 })
 
-// Route for inserting new data into studentBooking collection
-router.post('/api/studentBooking', async (req, res) => {
-  try {
-    const newData = req.body // Assumes the request body contains the new data
-    await insertService.insertStudentBooking(newData)
-    res.sendStatus(200)
-  } catch (err) {
-    console.error(err)
-    res.sendStatus(500)
-  }
-})
+// // Route for inserting new data into studentBooking collection
+// router.post('/api/studentBooking', async (req, res) => {
+//   try {
+//     const newData = req.body // Assumes the request body contains the new data
+//     await insertService.insertStudentBooking(newData)
+//     res.sendStatus(200)
+//   } catch (err) {
+//     console.error(err)
+//     res.sendStatus(500)
+//   }
+// })
 
 // Route for inserting new data into consultationPeriods collection
 router.post('/api/consultationPeriods', async (req, res) => {
@@ -119,10 +119,11 @@ router.post('/api/consultationDetails', async (req, res) => {
   try {
     const newData = req.body // Assumes the request body contains the new data
     await insertService.insertConsultationDetails(newData)
-    res.sendStatus(200)
+    res.setHeader('Content-Type', 'application/json')
+    res.status(200).json({message: 'Booking created successfully'})
   } catch (err) {
     console.error(err)
-    res.sendStatus(500)
+    res.status(500).json({error: 'Failed to create booking'})
   }
 })
 
