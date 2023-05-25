@@ -1,173 +1,214 @@
-const options = []
-
-// Populate the options array with numbers between 1 and 10
-for (let i = 1; i <= 10; i++){
-  options.push(i)
+function formatModalBody(data) {
+  const consultationInfo = document.createElement("div")
+  consultationInfo.innerHTML = `
+    <strong>Date:</strong> ${data[0].date}<br><br>
+    <strong>Start Time:</strong> ${data[0].startTime}<br><br>
+    <strong>End Time:</strong> ${data[0].endTime}<br><br>
+    <strong>Time (Minutes):</strong> ${data[0].timeMinutes}<br><br>
+    <strong>Maximum Number of Students:</strong> ${data[0].maximumNumberOfStudents}<br><br>
+    <strong>Status:</strong> ${data[0].status}<br><br>
+  `
+  return consultationInfo.innerHTML
 }
 
-// Get a reference to the select element
-const select = document.getElementById('options')
-
-// Loop through the options array and create an option element for each one
-options.forEach((option) => {
-  const optionElem = document.createElement('option')
-  optionElem.value = option
-  optionElem.textContent = option
-  select.appendChild(optionElem)
-})
-
-// Create an empty array to store the selected options
-const selectedOptions = []
-
-// Define a function to store the selected option in the array when an option is selected
-function storeOption() {
-  const selectedOption = parseInt(select.value)
-  console.log(`Selected option: ${selectedOption}`)
-  selectedOptions.push(selectedOption)
-  updateList()
+// Helper function to create the consultation details modal
+function createConsultationDetailsModal(selectedTitle, selectedConsultationID, data) {
+  const consultationDetails = document.createElement("div")
+  consultationDetails.classList.add("modal", "fade")
+  consultationDetails.id = "consultationDetailsModal"
+  consultationDetails.setAttribute("tabindex", "-1")
+  consultationDetails.setAttribute("aria-labelledby", "consultationDetailsModalLabel")
+  consultationDetails.setAttribute("aria-hidden", "true")
+  const modalDialog = document.createElement("div")
+  modalDialog.classList.add("modal-dialog")
+  consultationDetails.appendChild(modalDialog)
+  const modalContent = document.createElement("div")
+  modalContent.classList.add("modal-content")
+  modalDialog.appendChild(modalContent)
+  const modalHeader = document.createElement("div")
+  modalHeader.classList.add("modal-header")
+  modalContent.appendChild(modalHeader)
+  const consultationTitle = document.createElement("h5")
+  consultationTitle.classList.add("modal-title")
+  consultationTitle.id = "consultationDetailsModalLabel"
+  consultationTitle.textContent = selectedTitle.trim()
+  modalHeader.appendChild(consultationTitle)
+  const closeButton = document.createElement("button")
+  closeButton.type = "button"
+  closeButton.classList.add("btn-close")
+  closeButton.setAttribute("data-bs-dismiss", "modal")
+  closeButton.setAttribute("aria-label", "Close")
+  modalHeader.appendChild(closeButton)
+  const modalBody = document.createElement("div")
+  modalBody.classList.add("modal-body")
+  const consultationInfo = document.createElement("p")
+  consultationInfo.innerHTML = formatModalBody(data)
+  modalBody.appendChild(consultationInfo)
+  modalContent.appendChild(modalBody)
+  return consultationDetails
 }
-
-// Define a function to update the list of selected options
-function updateList() {
-  const list = document.getElementById('numberList')
-  list.innerHTML = ''
-  selectedOptions.forEach((option) => {
-    const listItem = document.createElement('li')
-    // Set the text content of the list item element to the current selected option
-    listItem.textContent = option
-    list.appendChild(listItem)
-  })
-}
-
-const calendarDiv = document.querySelector('#calendar')
 
 // Event click callback function
 function handleEventClick(info) {
-  const selectedTitle = info.event.title
+  const selectedTitle = info.event.title;
   const selectedConsultationID = parseInt(selectedTitle.split(" ")[1])
   console.log("Selected consultation title:", selectedTitle)
   console.log("Selected consultation ID:", selectedConsultationID)
-  const consultationsDropdown = document.getElementById("consultations")
-  // Remove previous options from the dropdown
-  while (consultationsDropdown.firstChild) {
-    consultationsDropdown.removeChild(consultationsDropdown.firstChild)
+
+  const consultationsTextField = document.getElementById("consultations")
+  const currentConsultationID = parseInt(consultationsTextField.dataset.consultationID)
+  console.log("Current consultation ID:", currentConsultationID)
+
+  if (selectedConsultationID === currentConsultationID) {
+    // The same consultation is clicked again, show the modal
+    const modal = document.getElementById("consultationDetailsModal")
+
+    // Retrieve the consultation details for the selected consultation
+    fetch(`/class/api/consultationDetailSearchByID/${selectedConsultationID}`)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Consultation details not found")
+        }
+        return response.json()
+      })
+      .then((data) => {
+        // Create the consultation details modal
+        const consultationDetails = createConsultationDetailsModal(selectedTitle, selectedConsultationID, data);
+
+        // Display the modal
+        document.body.appendChild(consultationDetails)
+        const bootstrapModal = new bootstrap.Modal(consultationDetails)
+        bootstrapModal.show();
+      })
+      .catch((error) => {
+        console.error("Error fetching consultation details:", error)
+        alert("Failed to fetch consultation details")
+      });
+  } else {
+    consultationsTextField.value = selectedTitle.trim()
+    consultationsTextField.dataset.consultationID = selectedConsultationID
+    consultationsTextField.style.textAlign = "center"
+
+    // Remove existing modal if present
+    const modal = document.getElementById("consultationDetailsModal")
+    if (modal) {
+      modal.remove();
+    }
   }
-  // Add the selected event title as the only option in the dropdown
-  const optionElem = document.createElement('option')
-  optionElem.value = selectedTitle
-  optionElem.textContent = selectedTitle
-  optionElem.dataset.consultationID = selectedConsultationID
-  consultationsDropdown.appendChild(optionElem)
 }
 
-// Initialize the calendar with eventClick callback
-let calendar = new FullCalendar.Calendar(calendarDiv, {
-  initialView: 'dayGridMonth',
-  height: 'auto',
-  eventClick: handleEventClick
-})
-calendar.render()
+let calendar // Declare the calendar variable
 
-function getConsultations() {
-  const url = '/class/api/consultationDetailSearch'
-  return fetch(url)
+function displayConsultations() {
+  const calendarDiv = document.querySelector('#calendar')
+  // Clear the calendar if it has already been generated
+  if (calendar) {
+    calendar.removeAllEvents()
+    calendar.destroy()
+  }
+  calendar = new FullCalendar.Calendar(calendarDiv, {
+    initialView: "dayGridMonth",
+    height: 'auto',
+    eventClick: handleEventClick // Add eventClick callback
+  })
+  calendar.render()
+
+  // Retrieve the lecturer ID (email address with auth0)
+  //const id = req.oidc.user.email
+  const id = "Robert.Taylor@wits.ac.za"
+  fetch(`/class/api/consultationDetailSearchByLecID/${id}`)
     .then((response) => response.json())
     .then((data) => {
-      const result = data.map(item => ({
-        title:'With' + item.consultationId, // Update to the correct property name
-        date: item.date, // Update to the correct property name
-        startTime: item.startTime,
-        endTime: item.endTime
-      }))
-      console.log(result)
-      return result
+      // Add all the consultations to the calendar
+      data.forEach((data) => {
+        const start = new Date(`${data.date}T${data.startTime}`)
+        const end = new Date(`${data.date}T${data.endTime}`)
+        const event = {
+          title: "\tConsultation " + data.consultationId,
+          start: start,
+          end: end,
+          date: start,
+          color: data.status === "approved" ? "green" : "red", // Change event color based on status
+          textColor: data.status === "approved" ? "white" : "black", // Change text color based on status
+        }
+        calendar.addEvent(event)
+      })
     })
     .catch((error) => {
       console.error("Error fetching consultations:", error)
     })
 }
 
-function displayConsultations(consultations) {
-  console.log("[Unknown User] clicked show consultation button")
-  if (!calendar) {
-    calendar = new FullCalendar.Calendar(calendarDiv, {
-      initialView: "dayGridMonth",
-      eventClick: handleEventClick // Add eventClick callback
-    })
-    calendar.render()
-  }
-  // Remove all existing events from the calendar
-  calendar.getEvents().forEach((event) => event.remove())
-  // Add all the consultations to the calendar
-  consultations.forEach((consultation) => {
-    const start = new Date(`${consultation.date}T${consultation.startTime}`)
-    const end = new Date(`${consultation.date}T${consultation.endTime}`)
-    const event = {
-      title: "\tConsultation " + consultation.title,
-      start: start,
-      end: end,
-      date: start,
-    }
-    calendar.addEvent(event)
-  })
-}
+// Call displayConsultations when the webpage is loaded
+window.onload = displayConsultations
 
-const showConsultation = document.getElementById("showConsultation")
-if (showConsultation) {
-  showConsultation.addEventListener("click", () => {
-    console.log("Show Consultation button clicked")  // Check if this message is logged when the button is clicked
-    getConsultations()
-      .then((data) => {
-        console.log(data)
-        displayConsultations(data)
-      })
-      .catch((error) => {
-        console.error("Error fetching consultations:", error)
-      })
-  })
-}
-
-async function removeConsultation() {
-  const selectedOption = document.getElementById("consultations").options[0] 
-  console.log(selectedOption) 
-  if (!selectedOption) {
-    console.log("No event selected from the calendar") 
+async function executeApproval() {
+  const selectedTextField = document.getElementById("consultations")
+  const consultationID = parseInt(selectedTextField.dataset.consultationID)
+  if (!consultationID) {
+    alert("Invalid consultation ID. PLease select from the calendar.")
     return
   }
-
-  const consultationID = parseInt(selectedOption.dataset.consultationID) 
-  if (!consultationID) {
-    console.error("Invalid consultation ID") 
-    return 
-  }
-  console.log("Selected consultation ID:", consultationID) 
-
+  console.log("Selected consultation ID:", consultationID)
   try {
-    const confirmation = confirm("Are you sure you want to cancel the consultation?") 
-    if (!confirmation) {
-      console.log("Consultation cancellation canceled by user") 
-      return 
-    }
-    const response = await fetch(`/class/api/removeConsultation/${consultationID}`, {
-      method: "DELETE",
-    }) 
-    const data = await response.json() 
-    console.log("Consultation removed from the database:", data) 
-
-    // Refresh the consultations on the calendar
-    const consultations = await getConsultations() 
-    displayConsultations(consultations) 
+    const response = await fetch(`/class/api/approveConsultation/${consultationID}`, {
+      method: "PUT",
+    })
+    const data = await response.json()
+    console.log("Consultation approved in the database:", data)
   } catch (error) {
-    console.error("Error removing consultation:", error) 
+    console.error("Error approving consultation:", error)
   }
 }
 
-const cancelConsultation = document.getElementById("cancelConsultation") 
+async function executeCancel() {
+  const selectedTextField = document.getElementById("consultations")
+  const consultationID = parseInt(selectedTextField.dataset.consultationID)
+  if (!consultationID) {
+    alert("Invalid consultation ID. PLease select from the calendar.")
+    return
+  }
+  console.log("Selected consultation ID:", consultationID)
+  try {
+    const confirmation = confirm("Are you sure you want to cancel the consultation?")
+    if (!confirmation) {
+      console.log("Consultation cancellation canceled by user")
+      return 
+    }
+    const response = await fetch(`/class/api/cancelConsultation/${consultationID}`, {
+      method: "DELETE",
+    })
+    const data = await response.json()
+    console.log("Consultation cancelled in the database:", data)
+  } catch (error) {
+    console.error("Error cancelling consultation:", error)
+  }
+}
+
+const approveConsultation = document.getElementById("approveConsultation") 
+if (approveConsultation) {
+  approveConsultation.addEventListener("click", () => {
+    console.log("Cancel Consultation button clicked")
+    executeApproval()
+      .then(() => {
+        displayConsultations()  // Call the function to refresh the calendar
+      })
+      .catch((error) => {
+        console.error("Error removing consultation:", error) 
+      })
+  })
+}
+
+const cancelConsultation = document.getElementById("cancelConsultation")
 if (cancelConsultation) {
   cancelConsultation.addEventListener("click", () => {
-    console.log("Cancel Consultation button clicked") 
-    removeConsultation().catch((error) => {
-      console.error("Error removing consultation:", error) 
-    }) 
-  }) 
+    console.log("Cancel Consultation button clicked")
+    executeCancel()
+      .then(() => {
+        displayConsultations()  // Call the function to refresh the calendar
+      })
+      .catch((error) => {
+        console.error("Error removing consultation:", error)
+      })
+  })
 }
