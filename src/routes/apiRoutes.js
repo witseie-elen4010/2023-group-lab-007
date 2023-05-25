@@ -162,12 +162,29 @@ router.get('/api/consultationDetailSearch', async (req, res) => {
   }
 })
 
-router.get('/api/consultationDetailSearchByID/:lecturer_id', async (req, res) => {
+router.get('/api/consultationDetailSearchByLecID/:lecturer_id', async (req, res) => {
   try {
     const lecturer_id = req.params.lecturer_id
-    const consultationDetailsData = await consultationService.getConsultationDetailsByID(lecturer_id)
+    const consultationDetailsData = await consultationService.getConsultationDetailsByLecID(lecturer_id)
     res.json(consultationDetailsData)
     console.log(consultationDetailsData)
+  } catch (err) {
+    console.error(err)
+    res.sendStatus(500)
+  }
+})
+
+router.get('/api/consultationDetailSearchByID/:id', async (req, res) => {
+  try {
+    const id = parseInt(req.params.id)
+    const consultationDetailsData = await consultationService.getConsultationDetailsByID(id)
+    if (!consultationDetailsData) {
+      // Return a 404 Not Found response if the consultation details are not found
+      res.sendStatus(404)
+    } else {
+      res.json(consultationDetailsData)
+      console.log(consultationDetailsData)
+    }
   } catch (err) {
     console.error(err)
     res.sendStatus(500)
