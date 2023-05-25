@@ -108,10 +108,21 @@ router.get('/api/lecturerDetails', async (req, res) => {
   }
 })
 
-router.get('/api/consultationDetailSearch/:lecturer_id', async (req, res) => {
+// Define a route to handle the consultation details request
+router.get('/api/consultationDetailSearch', async (req, res) => {
+  try {
+    const consultationDetailsData = await consultationService.getConsultationDetails()
+    res.json(consultationDetailsData)
+  } catch (err) {
+    console.error(err)
+    res.sendStatus(500)
+  }
+})
+
+router.get('/api/consultationDetailSearchByID/:lecturer_id', async (req, res) => {
   try {
     const lecturer_id = req.params.lecturer_id
-    const consultationDetailsData = await consultationService.getConsultationDetails(lecturer_id)
+    const consultationDetailsData = await consultationService.getConsultationDetailsByID(lecturer_id)
     res.json(consultationDetailsData)
     console.log(consultationDetailsData)
   } catch (err) {

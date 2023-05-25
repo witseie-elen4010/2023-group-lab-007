@@ -30,7 +30,7 @@ function displayConsultations() {
   // Retrieve the lecturer ID (email address with auth0)
   //const id = req.oidc.user.email
   const id = "Robert.Taylor@wits.ac.za"
-  fetch(`/class/api/consultationDetailSearch/${id}`)
+  fetch(`/class/api/consultationDetailSearchByID/${id}`)
     .then((response) => response.json())
     .then((data) => {
       console.log(data)
@@ -45,13 +45,13 @@ function displayConsultations() {
           date: start,
           color: data.status === "approved" ? "green" : "red", // Change event color based on status
           textColor: data.status === "approved" ? "white" : "black", // Change text color based on status
-        };
+        }
         calendar.addEvent(event)
-      });
+      })
     })
     .catch((error) => {
       console.error("Error fetching consultations:", error)
-    });
+    })
 }
 
 // Call displayConsultations when the webpage is loaded
