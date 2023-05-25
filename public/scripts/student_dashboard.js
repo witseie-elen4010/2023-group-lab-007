@@ -184,3 +184,206 @@ function getLecturerDetails() {
     .then(response => response.json())
     .catch(error => console.error('Error fetching lecturer details:', error))
 }
+
+// call the api to get the consultation details of a lecturer from the database
+function searchConsultationsPerLecturer(Id) {
+  const url = `class/api/consultationPerLecturerSearch?lecturerId=${Id}`
+  // Make an AJAX request to the server to fetch consultation periods
+  return fetch(url)
+    .then(response => response.json())
+    .catch(error => {
+      console.error("Error fetching consultation periods:", error)
+    })
+}
+
+
+function generateConsultationsHTML(lecturer, consultations) {
+  let html = `<h5>${lecturer}</h5>`;
+  const approvedConsultations = consultations.filter(consultation => consultation.status === "approved");
+  if (approvedConsultations.length === 0) {
+    html += '<p>No approved consultations scheduled</p>';
+  } else {
+    html += '<ul>';
+    approvedConsultations.forEach(consultation => {
+      html += '<li>';
+      html += `Date: ${consultation.date}<br>`; // Display the consultation date
+      html += `Time: ${consultation.startTime} - ${consultation.endTime}<br>`; // Display the consultation time range
+      html += `Maximum number of students: ${consultation.maximumNumberOfStudents}<br>`; // Display the maximum number of students
+      html += `Status: ${consultation.status}<br>`; // Display the consultation status
+      html += '<button class="joinButton">Join</button>'; // Add a button to join the consultation
+      html += '</li>';
+    });
+    html += '</ul>';
+  }
+  return html;
+}
+
+
+function handleConsultationsToggle() {
+  const lecturerInput = document.getElementById('lecturerInput');
+  const lecturerName = lecturerInput.value.trim().toLowerCase();
+
+  if (lecturerName === '') {
+    // Display an error message if no lecturer name is entered
+    displayErrorMessage('Please enter a lecturer name');
+  } else {
+    // Display a loading indicator while fetching data
+    displayLoadingIndicator();
+
+    // Fetch lecturer details
+    getLecturerDetails()
+      .then(lecturerInfo => {
+        // Find matching lecturers based on the entered name
+        const matchingLecturers = findMatchingLecturers(lecturerInfo, lecturerName);
+
+        if (matchingLecturers.length > 0) {
+          const lecturerId = matchingLecturers[0].lecturerId;
+
+          // Search consultations for the specified lecturer
+          searchConsultationsPerLecturer(lecturerId)
+            .then(consultations => {
+              if (consultations.length > 0) {
+                // Generate HTML for the consultations
+                const lecturerFullName = `${matchingLecturers[0].firstName} ${matchingLecturers[0].lastName}`;
+                const consultationsHTML = generateConsultationsHTML(lecturerFullName, consultations);
+                // Display the consultations HTML
+                displayConsultations(consultationsHTML);
+                // Update the button text and event handler for hiding consultations
+                updateButton('Refresh', handleHideConsultations);
+              } else {
+                // Display an error message if no consultations found for the lecturer
+                displayErrorMessage('No consultations found for the specified lecturer');
+              }
+            })
+            .catch(error => displayErrorMessage('Error searching consultations'));
+        } else {
+          // Display an error message if no lecturer found with the specified name
+          displayErrorMessage('No lecturer found with the specified name');
+        }
+      })
+      .catch(error => displayErrorMessage('Error fetching lecturer details'));
+  }
+}
+
+function handleHideConsultations() {
+  // Clear the consultations container
+  clearConsultationsContainer();
+  // Update the button text to 'View Consultations' and set the event handler to handleConsultationsToggle
+  updateButton('View Consultations', handleConsultationsToggle);
+}
+
+function handleLecturerInput() {
+  const lecturerInput = document.getElementById('lecturerInput');
+  const isInputEmpty = lecturerInput.value.trim() === '';
+
+  if (isInputEmpty && isButtonHidden()) {
+    // If the input is empty and the button is hidden, update the button text to 'View Consultations' and set the event handler to handleConsultationsToggle
+    updateButton('View Consultations', handleConsultationsToggle);
+  } else if (isButtonHidden()) {
+    // If the button is hidden, update the button text to 'View Consultations' and set the event handlers to handleViewConsultationsClick and handleHideConsultations
+    updateButton('View Consultations');
+    updateButtonEvent(handleViewConsultationsClick, handleHideConsultations);
+  }
+}
+
+
+function handleViewConsultationsClick() {
+  const lecturerInput = document.getElementById('lecturerInput');
+  const lecturerName = lecturerInput.value.trim().toLowerCase();
+
+  if (lecturerName === '') {
+    // Display an error message if no lecturer name is entered
+    displayErrorMessage('Please enter a lecturer name');
+  } else {
+    // Display a loading indicator while fetching data
+    displayLoadingIndicator();
+
+    // Fetch lecturer details
+    getLecturerDetails()
+      .then(lecturerInfo => {
+        // Find matching lecturers based on the entered name
+        const matchingLecturers = findMatchingLecturers(lecturerInfo, lecturerName);
+
+        if (matchingLecturers.length > 0) {
+          const lecturerId = matchingLecturers[0].lecturerId;
+
+          // Search consultations for the specified lecturer
+          searchConsultationsPerLecturer(lecturerId)
+            .then(consultations => {
+              if (consultations.length > 0) {
+                // Generate HTML for the consultations
+                const lecturerFullName = `${matchingLecturers[0].firstName} ${matchingLecturers[0].lastName}`;
+                const consultationsHTML = generateConsultationsHTML(lecturerFullName, consultations);
+                // Display the consultations HTML
+                displayConsultations(consultationsHTML);
+                // Update the button text and event handler for hiding consultations
+                updateButton('Refresh', handleHideConsultations);
+              } else {
+                // Display an error message if no consultations found for the lecturer
+                displayErrorMessage('No consultations found for the specified lecturer');
+              }
+            })
+            .catch(error => displayErrorMessage('Error searching consultations'));
+        } else {
+          // Display an error message if no lecturer found with the specified name
+          displayErrorMessage('No lecturer found with the specified name');
+        }
+      })
+      .catch(error => displayErrorMessage('Error fetching lecturer details'));
+  }
+}
+
+
+function findMatchingLecturers(lecturerInfo, lecturerName) {
+  // Filter the lecturerInfo array to find matching lecturers based on the entered name
+  return lecturerInfo.filter(lecturer => {
+    const fullName = `${lecturer.firstName.toLowerCase()} ${lecturer.lastName.toLowerCase()}`;
+    return fullName.includes(lecturerName);
+  });
+}
+
+function displayLoadingIndicator() {
+  // Display a loading indicator inside the consultations container
+  consultationsContainer.innerHTML = '<p>Loading...</p>';
+}
+
+function displayErrorMessage(message) {
+  // Display an error message inside the consultations container
+  consultationsContainer.innerHTML = `<p>${message}</p>`;
+}
+
+function displayConsultations(consultationsHTML) {
+  // Display the generated consultations HTML inside the consultations container
+  consultationsContainer.innerHTML = consultationsHTML;
+}
+
+function clearConsultationsContainer() {
+  // Clear the consultations container by emptying its content
+  consultationsContainer.innerHTML = '';
+}
+
+function updateButton(text, clickHandler) {
+  // Update the text and event handler of the viewConsultationsBtn
+  viewConsultationsBtn.innerText = text;
+  updateButtonEvent(clickHandler);
+}
+
+function updateButtonEvent(clickHandler, removeHandler) {
+  // Update the event handler of the viewConsultationsBtn, removing the previous handler if provided
+  viewConsultationsBtn.removeEventListener('click', removeHandler);
+  viewConsultationsBtn.addEventListener('click', clickHandler);
+}
+
+function isButtonHidden() {
+  // Check if the viewConsultationsBtn is in a hidden state (text is 'Refresh')
+  return viewConsultationsBtn.innerText === 'Refresh';
+}
+
+const consultationsContainer = document.getElementById('consultations');
+const viewConsultationsBtn = document.getElementById('viewConsultationsBtn');
+const initialBtnText = viewConsultationsBtn.innerText;
+
+const lecturerInput = document.getElementById('lecturerInput');
+lecturerInput.addEventListener('input', handleLecturerInput);
+
+viewConsultationsBtn.addEventListener('click', handleViewConsultationsClick);

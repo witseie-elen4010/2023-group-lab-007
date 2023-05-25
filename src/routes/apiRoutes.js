@@ -140,5 +140,15 @@ router.get('/api/testPipeline', async (req, res) => {
   }
 })
 
+router.get('/api/consultationPerLecturerSearch', async (req, res) => {
+  try {
+    const selectedLecturer = req.query.lecturerId
+    const consultationPerLecturerData = await consultationService.searchConsultationDetails(selectedLecturer);
+    res.json(consultationPerLecturerData)
+  } catch (err) {
+    console.error(err)
+    res.sendStatus(500)
+  }
+})
 
 module.exports = router
