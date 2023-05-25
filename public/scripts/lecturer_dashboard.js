@@ -4,17 +4,11 @@ function handleEventClick(info) {
   const selectedConsultationID = parseInt(selectedTitle.split(" ")[1])
   console.log("Selected consultation title:", selectedTitle)
   console.log("Selected consultation ID:", selectedConsultationID)
-  const consultationsDropdown = document.getElementById("consultations")
-  // Remove previous options from the dropdown
-  while (consultationsDropdown.firstChild) {
-    consultationsDropdown.removeChild(consultationsDropdown.firstChild)
-  }
-  // Add the selected event title as the only option in the dropdown
-  const optionElem = document.createElement('option')
-  optionElem.value = selectedTitle
-  optionElem.textContent = selectedTitle
-  optionElem.dataset.consultationID = selectedConsultationID
-  consultationsDropdown.appendChild(optionElem)
+
+  const consultationsTextField = document.getElementById("consultations")
+  consultationsTextField.value = selectedTitle.trim()
+  consultationsTextField.dataset.consultationID = selectedConsultationID
+  consultationsTextField.style.textAlign = "center"
 }
 
 let calendar // Declare the calendar variable
@@ -64,15 +58,10 @@ function displayConsultations() {
 window.onload = displayConsultations
 
 async function executeApproval() {
-  const selectedOption = document.getElementById("consultations").options[0]
-  console.log(selectedOption)
-  if (!selectedOption) {
-    console.log("No event selected from the calendar")
-    return
-  }
-  const consultationID = parseInt(selectedOption.dataset.consultationID)
+  const selectedTextField = document.getElementById("consultations")
+  const consultationID = parseInt(selectedTextField.dataset.consultationID)
   if (!consultationID) {
-    console.error("Invalid consultation ID")
+    alert("Invalid consultation ID. PLease select from the calendar.")
     return
   }
   console.log("Selected consultation ID:", consultationID)
@@ -88,15 +77,10 @@ async function executeApproval() {
 }
 
 async function executeCancel() {
-  const selectedOption = document.getElementById("consultations").options[0]
-  console.log(selectedOption)
-  if (!selectedOption) {
-    console.log("No event selected from the calendar")
-    return
-  }
-  const consultationID = parseInt(selectedOption.dataset.consultationID)
+  const selectedTextField = document.getElementById("consultations")
+  const consultationID = parseInt(selectedTextField.dataset.consultationID)
   if (!consultationID) {
-    console.error("Invalid consultation ID")
+    alert("Invalid consultation ID. PLease select from the calendar.")
     return
   }
   console.log("Selected consultation ID:", consultationID)
