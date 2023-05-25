@@ -45,6 +45,7 @@ bookButton.addEventListener('click', () => {
   let selectedSlot = ""
   if(!joinExisting){
      selectedSlot = slotDropdownMenu.value
+     
   }
   else{ // if the student has selected an existing consultation, then add them to that consultation.
      selectedSlot = existingConsultationsMenu.value //get the consultationId.
@@ -98,6 +99,8 @@ dropdownMenu.addEventListener('change', async (e) => {
         const option = document.createElement("option")
         option.text = getDateString(getNextDate(slot.dayOfWeek, j)) + ' at ' + slot.startTime + '-' + slot.endTime
         option.value = getDateString(getNextDate(slot.dayOfWeek, j))
+        option.dataset.length = slot.durationMinutes
+        option.dataset.start = slot.startTime
         slotDropdownMenu.add(option)
       }
     }
@@ -115,7 +118,16 @@ let calendar = new FullCalendar.Calendar(calendarDiv, {
 slotDropdownMenu.addEventListener('change', (e) => {
   const slotIndex = e.target.value
   console.log(`Selected slot: ${slotIndex}`)
-
+  if (this.value !== "") { //if a slot is selected
+    existingConsultationsMenu.setAttribute('disabled', true) // disable existing consultations
+    existingConsultationsMenu.selectedIndex = 0 //reset selection to default
+    bookButton.textContent = "Book"
+    joinExisting = false
+  } else { 
+    existingConsultationsMenu.removeAttribute('disabled') // enable existing consultations
+    bookButton.textContent = "Join"
+    joinExisting = true
+  }
   // Enable the book button when a slot is selected
   checkButtonStatus()
 })
@@ -341,3 +353,96 @@ function createBooking(bookingDetails) {
   })
   
 }
+
+// Container where the subperiod dropdown will go
+const dropdownContainer = document.querySelector('#dropdownContainer')
+
+function getSubPeriod(start, duration, index){ //change when the slots are not a defined length.
+    // Create a new Date object
+    const date = new Date();
+
+    // Get the hours and minutes from the startTime
+    const [hours, minutes] = start.split(':');
+
+    // Set the hours and minutes of the Date object
+    date.setHours(hours, minutes, 0, 0); // Set seconds and milliseconds to 0
+
+    // Add the duration to the Date object
+    date.setMinutes(date.getMinutes() + 15*index);
+
+    // Extract the hours and minutes from the updated Date object
+    let startHours = date.getHours();
+    let startMinutes = date.getMinutes();
+    startHours = startHours.toString().padStart(2, '0');
+    startMinutes = startMinutes.toString().padStart(2, '0');
+    // Pad the hours and minutes with leading zeros if necessary
+    date.setMinutes(date.getMinutes() + 15);
+    // Extract the hours and minutes from the updated Date object
+    let endHours = date.getHours();
+    let endMinutes = date.getMinutes();
+    endHours = endHours.toString().padStart(2, '0');
+    endMinutes = endMinutes.toString().padStart(2, '0');
+
+    // Combine the hours and minutes into a string and return it
+    const startTime = `${startHours}:${startMinutes}`
+    const endTime = `${endHours}:${endMinutes}`
+    return [startTime, endTime]
+}
+// Function to create and add the subperiod dropdown to the DOM
+function createSubperiodDropdown(slotLength, startTime) {
+  // Calculate the number of subperiods
+  const numberOfSubperiods = slotLength / 15
+  
+  // Create the subperiod dropdown
+  const subperiodDropdown = document.createElement('select')
+  subperiodDropdown.id = 'subperiodDropdown'
+  const defaultOption = document.createElement('option')
+  defaultOption.text = 'Select a 15-minute subperiod'
+  defaultOption.value = ''
+  subperiodDropdown.add(defaultOption)
+
+  // Populate the dropdown with the subperiods
+  for (let i = 0; i < numberOfSubperiods; i++) {
+    const option = document.createElement('option')
+    let times = getSubPeriod(startTime, slotLength, i)
+    option.text = `${times[0]} - ${times[1]}`
+    option.value = i
+    subperiodDropdown.add(option)
+  }
+
+  // Add the dropdown to the DOM
+  dropdownContainer.appendChild(subperiodDropdown)
+}
+
+// Function to remove the subperiod dropdown from the DOM
+function removeSubperiodDropdown() {
+  const subperiodDropdown = document.querySelector('#subperiodDropdown')
+  if (subperiodDropdown) {
+    dropdownContainer.removeChild(subperiodDropdown)
+  }
+}
+
+// Event listener for when a slot is selected
+slotDropdownMenu.addEventListener('change', function() {
+  if (this.value !== "") { //if a slot is selected
+    existingConsultationsMenu.setAttribute('disabled', true) // disable existing consultations
+    existingConsultationsMenu.selectedIndex = 0 //reset selection to default
+    bookButton.textContent = "Book"
+    joinExisting = false
+
+    // Create the subperiod dropdown
+    // Create the subperiod dropdown
+  const slotLength = this.options[this.selectedIndex].dataset.length
+  const startTime = this.options[this.selectedIndex].dataset.start
+  createSubperiodDropdown(slotLength, startTime)
+
+  } else { 
+    existingConsultationsMenu.removeAttribute('disabled') // enable existing consultations
+    bookButton.textContent = "Join"
+    joinExisting = true
+
+    // Remove the subperiod dropdown
+    removeSubperiodDropdown()
+  }
+  checkButtonStatus()
+})
