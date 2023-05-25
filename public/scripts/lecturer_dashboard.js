@@ -17,23 +17,29 @@ function handleEventClick(info) {
   consultationsDropdown.appendChild(optionElem)
 }
 
+let calendar // Declare the calendar variable
+
 function displayConsultations() {
   const calendarDiv = document.querySelector('#calendar')
+  // Clear the calendar if it has already been generated
+  if (calendar) {
+    calendar.removeAllEvents()
+    calendar.destroy()
+  }
   calendar = new FullCalendar.Calendar(calendarDiv, {
     initialView: "dayGridMonth",
     height: 'auto',
     eventClick: handleEventClick // Add eventClick callback
   })
-  calendar.render();
+  calendar.render()
+
   // Retrieve the lecturer ID (email address with auth0)
   //const id = req.oidc.user.email
   const id = "Robert.Taylor@wits.ac.za"
   fetch(`/class/api/consultationDetailSearch/${id}`)
     .then((response) => response.json())
     .then((data) => {
-      console.log(data);
-      // Remove all existing events from the calendar
-      calendar.getEvents().forEach((event) => event.remove())
+      console.log(data)
       // Add all the consultations to the calendar
       data.forEach((data) => {
         const start = new Date(`${data.date}T${data.startTime}`)
@@ -43,15 +49,17 @@ function displayConsultations() {
           start: start,
           end: end,
           date: start,
-          backgroundColor: data.status === "approved" ? "green" : "red", // Change event color based on status
+          color: data.status === "approved" ? "green" : "red", // Change event color based on status
+          textColor: data.status === "approved" ? "white" : "black", // Change text color based on status
         };
         calendar.addEvent(event)
       });
     })
     .catch((error) => {
       console.error("Error fetching consultations:", error)
-    })
+    });
 }
+
 // Call displayConsultations when the webpage is loaded
 window.onload = displayConsultations
 
@@ -108,22 +116,30 @@ async function executeCancel() {
   }
 }
 
-const approveConsultation = document.getElementById("approveConsultation") 
+const approveConsultation = document.getElementById("approveConsultation");
 if (approveConsultation) {
   approveConsultation.addEventListener("click", () => {
-    console.log("Cancel Consultation button clicked") 
-    executeApproval().catch((error) => {
-      console.error("Error removing consultation:", error) 
-    }) 
-  }) 
+    console.log("Cancel Consultation button clicked")
+    executeApproval()
+      .then(() => {
+        displayConsultations(); // Call the function to refresh the calendar
+      })
+      .catch((error) => {
+        console.error("Error removing consultation:", error);
+      })
+  })
 }
 
-const cancelConsultation = document.getElementById("cancelConsultation") 
+const cancelConsultation = document.getElementById("cancelConsultation")
 if (cancelConsultation) {
   cancelConsultation.addEventListener("click", () => {
-    console.log("Cancel Consultation button clicked") 
-    executeCancel().catch((error) => {
-      console.error("Error removing consultation:", error) 
-    }) 
-  }) 
+    console.log("Cancel Consultation button clicked")
+    executeCancel()
+      .then(() => {
+        displayConsultations(); // Call the function to refresh the calendar
+      })
+      .catch((error) => {
+        console.error("Error removing consultation:", error)
+      })
+  })
 }
