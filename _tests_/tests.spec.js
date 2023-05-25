@@ -1,8 +1,5 @@
 /* eslint-env jest */
 
-test('This is a dummy test', () => {
-  // Do nothing
-})
 const { getS } = require('../src/studentConsultation.js')
 
 test('get function returns the correct list of consultations', () => {

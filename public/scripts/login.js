@@ -4,7 +4,6 @@ const loginBtn = document.querySelector('#loginBtn');
 const loginAlert = document.querySelector('#loginAlert');
 const logoutBtn = document.querySelector('#logoutBtn');
 
-
 if (loginBtn) {
   loginBtn.addEventListener('click', () => {
     const toast = new bootstrap.Toast(loginAlert)
