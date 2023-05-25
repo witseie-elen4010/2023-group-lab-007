@@ -71,6 +71,9 @@ test('get function returns the correct searched consultations', () => {
   expect(real).toEqual(expected)
 })
 
+
+
+
 // const request = require('supertest')
 // const app = require('../index.js')
 // const consultationDetails = require('../database.js')

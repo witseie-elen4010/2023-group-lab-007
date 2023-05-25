@@ -14,9 +14,9 @@ test('test', async ({ page }) => {
   await page.getByLabel('Password').fill('aa11BB@@');
   await page.getByRole('button', { name: 'Continue', exact: true }).click();
   await page.goto('https://consultation-scheduler.azurewebsites.net/student_dashboard');
-  //await expect(page.getByRole('button', { name: 'Show Consultations on Calendar' })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Show Consultations on Calendar' })).toBeVisible();
   await page.getByRole('button', { name: 'Show Consultations on Calendar' }).click();
-  //await expect(page.locator('a').filter({ hasText: 'John Doe' })).toBeVisible();
+  // await expect(page.locator('a').filter({ hasText: 'John Doe' })).toBeVisible();
   
 
   // Close the browser
