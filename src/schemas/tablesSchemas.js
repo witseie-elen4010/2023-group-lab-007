@@ -3,8 +3,8 @@ const consultationDetailsScheme = {
   consultationId: Number,
   lecturerId: String,
   date: String,
-  timeMinutes: Number,
-  maximumNumberOfStudents: Number,
+  timeMinutes: Number,                //Number
+  maximumNumberOfStudents: Number,   //Number
   status: String,
   startTime: String,
   endTime: String,
@@ -25,7 +25,6 @@ const lecturerDetailsScheme = {
   emailAddress: String,
   firstName: String,
   lastName: String,
-  password: String,
 };
 
 const studentDetailsScheme = {
@@ -33,7 +32,6 @@ const studentDetailsScheme = {
   emailAddress: String,
   firstName: String,
   lastName: String,
-  password: String,
 };
 
 const studentBookingScheme = {
