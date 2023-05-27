@@ -164,13 +164,7 @@ dropdownMenu.addEventListener('change', async (e) => {
   }
   checkButtonStatus()
 })
-// Initialize the calendar
-let calendar = new FullCalendar.Calendar(calendarDiv, {
-  initialView: 'dayGridMonth',
-  height: 'auto' // or '100%'
 
-  //checkButtonStatus();
-})
 
 slotDropdownMenu.addEventListener('change', (e) => {
   const slotIndex = e.target.value
@@ -188,26 +182,89 @@ slotDropdownMenu.addEventListener('change', (e) => {
   // Enable the book button when a slot is selected
   checkButtonStatus()
 })
-calendar.render()
 
+function formatModalBody(data) {
+  console.log('data2 = ' + data)
+  const consultationInfo = document.createElement("div")
+  
+  consultationInfo.innerHTML = `
+    <strong>Lecturer:</strong> ${data.extendedProps.lecturer}<br><br>
+    <strong>Start Time:</strong> ${data.start}<br><br>
+    <strong>End Time:</strong> ${data.end}<br><br>
+    <strong>Students attending:</strong> ${data.extendedProps.studentCount}<br><br>
+    <strong>Status of consultation:</strong> ${data.extendedProps.status}<br><br>
+  `
+  return consultationInfo.innerHTML
+}
+
+function createConsultationDetailsModal(selectedTitle, selectedConsultationID, data) {
+  const consultationDetails = document.createElement("div")
+  consultationDetails.classList.add("modal", "fade")
+  consultationDetails.id = "consultationDetailsModal"
+  consultationDetails.setAttribute("tabindex", "-1")
+  consultationDetails.setAttribute("aria-labelledby", "consultationDetailsModalLabel")
+  consultationDetails.setAttribute("aria-hidden", "true")
+  const modalDialog = document.createElement("div")
+  modalDialog.classList.add("modal-dialog")
+  consultationDetails.appendChild(modalDialog)
+  const modalContent = document.createElement("div")
+  modalContent.classList.add("modal-content")
+  modalDialog.appendChild(modalContent)
+  const modalHeader = document.createElement("div")
+  modalHeader.classList.add("modal-header")
+  modalContent.appendChild(modalHeader)
+  const consultationTitle = document.createElement("h5")
+  consultationTitle.classList.add("modal-title")
+  consultationTitle.id = "consultationDetailsModalLabel"
+  consultationTitle.textContent = selectedTitle.trim()
+  modalHeader.appendChild(consultationTitle)
+  const closeButton = document.createElement("button")
+  closeButton.type = "button"
+  closeButton.classList.add("btn-close")
+  closeButton.setAttribute("data-bs-dismiss", "modal")
+  closeButton.setAttribute("aria-label", "Close")
+  modalHeader.appendChild(closeButton)
+  const modalBody = document.createElement("div")
+  modalBody.classList.add("modal-body")
+  const consultationInfo = document.createElement("p")
+  consultationInfo.innerHTML = formatModalBody(data)
+  modalBody.appendChild(consultationInfo)
+  modalContent.appendChild(modalBody)
+  return consultationDetails
+}
+// Initialize the calendar
+let calendar = new FullCalendar.Calendar(calendarDiv, {
+  initialView: 'dayGridMonth',
+  height: 'auto' // or '100%'
+
+  //checkButtonStatus();
+})
+calendar.render()
 //if the user presses the "show consultation" button, display the default consulation.
 showConsultation.addEventListener('click', () => {
+  const calendarDiv = document.querySelector('#calendar')
+  // if (calendar) {
+  //   calendar.removeAllEvents()
+  // }
+  calendar = new FullCalendar.Calendar(calendarDiv, {
+    initialView: "dayGridMonth",
+    height: 'auto',
+    eventClick: handleEventClick // Add eventClick callback
+  })
+  calendar.render()
   getConsultations().then(consultations => {
-    if (!calendar) {
-      calendar = new FullCalendar.Calendar(calendarDiv, {
-        initialView: 'dayGridMonth',
-      })
-      calendar.render()
-    }
-    
-    calendar.getEvents().forEach((event) => event.remove())
+   
     consultations.forEach(consultation => {
-      const { date, startTime, endTime, lecturer, consultationId, studentCount } = consultation
+      const { date, startTime, endTime, lecturer, consultationId, studentCount, status } = consultation
       const event = {
-        title: lecturer + `\n Students: ${studentCount}`,
+        title: "\tConsult: " + consultationId,
         start: `${date}T${startTime}`,
         end: `${date}T${endTime}`,
-        description: `Students: ${studentCount}`, // Add the description
+        lecturer: lecturer,
+        status: status,
+        studentCount: studentCount,
+        color: status === "approved" ? "green" : "red", // Change event color based on status
+        textColor: status === "approved" ? "white" : "black", // Change text color based on status  
       }
       console.log(consultations)
       console.log('Event'+event)
@@ -216,6 +273,45 @@ showConsultation.addEventListener('click', () => {
 
   })
 })
+
+// Event click callback function
+function handleEventClick(info) {
+  const selectedTitle = info.event.title;
+  const selectedConsultationID = parseInt(selectedTitle.split(" ")[1])
+  console.log("Selected consultation title:", selectedTitle)
+  console.log("Selected consultation ID:", selectedConsultationID)
+  console.log("Selected consultation date:", info.event.start)
+  console.log("Selected consultation end:", info.event.end)
+  console.log("Selected consultation lecturer:", info.event.extendedProps.lecturer)
+  
+  const consultationsTextField = document.getElementById("consultations")
+  const currentConsultationID = parseInt(consultationsTextField.dataset.consultationID)
+  console.log("Current consultation ID:", currentConsultationID)
+
+  if (selectedConsultationID === currentConsultationID) {
+    // The same consultation is clicked again, show the modal
+    const modal = document.getElementById("consultationDetailsModal")
+    const consultationDetails = createConsultationDetailsModal(selectedTitle, selectedConsultationID, info.event);
+
+    // Display the modal
+    document.body.appendChild(consultationDetails)
+    const bootstrapModal = new bootstrap.Modal(consultationDetails)
+    bootstrapModal.show();
+
+
+  } else {
+    consultationsTextField.value = selectedTitle.trim()
+    consultationsTextField.dataset.consultationID = selectedConsultationID
+    consultationsTextField.style.textAlign = "center"
+
+    // Remove existing modal if present
+    const modal = document.getElementById("consultationDetailsModal")
+    if (modal) {
+      modal.remove();
+    }
+  }
+}
+
 
 
 async function fillLecturerField() {
@@ -280,7 +376,8 @@ function getConsultations() {
           date: item.date,
           startTime: item.startTime,
           endTime: item.endTime,
-          studentCount: studentCountTemp
+          studentCount: studentCountTemp,
+          status: item.status
         }
       })
       return consultations
@@ -339,14 +436,6 @@ function getLecturerDetails() {
     .then(response => response.json())
     .catch(error => console.error('Error fetching lecturer details:', error))
 }
-
-// // call the api to get the student number from the user 
-// function getStudentNumber() {
-//   const url = 'class/api/userStudentNumber'
-//   return fetch(url)
-//     .then(response => response.json())
-//     .catch(error => console.error('Error fetching student details:', error))
-// }
 
 // call the api to get the consultation details of a lecturer from the database
 function searchConsultationsPerLecturer(Id) {
