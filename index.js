@@ -84,6 +84,11 @@ new Promise((resolve, reject) => {
 //   console.error('Failed to connect to MongoDB:', error)
 // })
 
-app.listen(port)
+// Start the server only if the file is being executed directly
+if (require.main === module) {
+  app.listen(port, () => {
+    console.log('Express server running on port', port)
+  })
+}
 console.log('Express server running on port 3000')
 module.exports = app;
