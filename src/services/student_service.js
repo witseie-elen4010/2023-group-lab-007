@@ -6,7 +6,7 @@ async function getStudentByNumber(studentNumber) {
     const student = await studentDetails.find({ studentNumber: studentNumber });
     return student;
   } catch (err) {
-    console.log('Error in getStudentByNumber:', err);
+    console.log(err);
     throw err;
   }
 }
