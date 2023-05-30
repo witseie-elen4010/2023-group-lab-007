@@ -27,6 +27,14 @@ jobs:
           npm run build --if-present
           npm run test --if-present
 
+      - name: Run tests and generate coverage
+        run: jest --coverage --config config/jest.js
+
+      - name: Publish to coveralls.io
+        uses: coverallsapp/github-action@v1.1.2
+        with:
+          github-token: ${{ github.token }}
+
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v3
         with:
