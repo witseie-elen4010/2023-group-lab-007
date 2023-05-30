@@ -26,7 +26,7 @@ router.post('/api/lecturerDetails', async (req, res) => {
   try {
     const newData = req.body
     await insertService.insertLecturerDetails(newData)
-    logger.info('Inserted lecturer details [' + userEmail + ']');
+    console.log('Inserted lecturer details [' + userEmail + ']');
     res.sendStatus(200)
   } catch (err) {
     console.error(err)
@@ -40,7 +40,7 @@ router.post('/api/studentDetails', async (req, res) => {
   try {
     const newData = req.body // Assumes the request body contains the new data
     await insertService.insertStudentDetails(newData)
-    logger.info('Inserted student details [' + userEmail + ']');
+    console.log('Inserted student details [' + userEmail + ']');
     res.sendStatus(200)
   } catch (err) {
     console.error(err)
@@ -55,7 +55,7 @@ router.delete('/api/removeConsultationPeriod', async (req, res) => {
     const lecturerID = req.body.lecturerID;
     const dayOfWeek = req.body.dayOfWeek;
     await consultationPeriodService.deleteConsultationPeriod(lecturerID, dayOfWeek);
-    logger.info('Deleted a consultation availability period [' + userEmail + ']');
+    console.log('Deleted a consultation availability period [' + userEmail + ']');
     res.json({ message: 'Consultation period removed successfully' });
   } catch (err) {
     console.error(err);
@@ -69,7 +69,7 @@ router.post('/api/consultationPeriods', async (req, res) => {
   try {
     const newData = req.body
     await insertService.insertConsultationPeriods(newData)
-    logger.info('Inserted a new consultation availability period [' + userEmail + ']');
+    console.log('Inserted a new consultation availability period [' + userEmail + ']');
     res.sendStatus(200)
   } catch (err) {
     console.error(err)
@@ -83,7 +83,7 @@ router.get('/api/existingConsultationPeriods/:lecturerID', async (req, res) => {
   try {
     const selectedLecturer = req.params.lecturerID;
     const consultationPeriodsData = await consultationPeriodService.getExistingConsultationPeriods(selectedLecturer);
-    logger.info('fetched existing consultation periods for lecturer [' + userEmail + ']');
+    console.log('fetched existing consultation periods for lecturer [' + userEmail + ']');
     res.json(consultationPeriodsData)
   } catch (err) {
     console.error(err)
@@ -121,10 +121,10 @@ router.post('/api/consultationDetails', async (req, res) => {
     const newData = req.body // Assumes the request body contains the new data
     await insertService.insertConsultationDetails(newData)
     res.setHeader('Content-Type', 'application/json')
-    res.status(200).json({message: 'Booking created successfully'})
+    res.status(200).json({ message: 'Booking created successfully' })
   } catch (err) {
     console.error(err)
-    res.status(500).json({error: 'Failed to create booking'})
+    res.status(500).json({ error: 'Failed to create booking' })
   }
 })
 
@@ -168,7 +168,6 @@ router.get('/api/consultationDetailSearchByLecID/:lecturer_id', async (req, res)
     const lecturer_id = req.params.lecturer_id
     const consultationDetailsData = await consultationService.getConsultationDetailsByLecID(lecturer_id)
     res.json(consultationDetailsData)
-    console.log(consultationDetailsData)
   } catch (err) {
     console.error(err)
     res.sendStatus(500)
@@ -184,7 +183,6 @@ router.get('/api/consultationDetailSearchByID/:id', async (req, res) => {
       res.sendStatus(404)
     } else {
       res.json(consultationDetailsData)
-      console.log(consultationDetailsData)
     }
   } catch (err) {
     console.error(err)
@@ -241,14 +239,14 @@ router.get('/api/consultationPerLecturerSearch', async (req, res) => {
 router.get('/api/consultationDetailsSearch', async (req, res, next) => {
   const lecturerId = req.query.lecturerId;
   if (!lecturerId) {
-      return res.status(400).json({ error: 'Missing lecturerId query parameter' })
+    return res.status(400).json({ error: 'Missing lecturerId query parameter' })
   }
 
   try {
-      const consultationDetails = await consultationService.getConsultationDetailsByLecturer(lecturerId)
-      return res.json(consultationDetails)
+    const consultationDetails = await consultationService.getConsultationDetailsByLecturer(lecturerId)
+    return res.json(consultationDetails)
   } catch (err) {
-      next(err)
+    next(err)
   }
 });
 
@@ -271,7 +269,7 @@ router.get('/api/student', async (req, res) => {
 router.get('/api/bookingsByConsultationId', async (req, res) => {
   try {
     const consultationId = req.query.consultationId
-    const bookingData = await getBookingsByConsultationId(consultationId) 
+    const bookingData = await getBookingsByConsultationId(consultationId)
     res.json(bookingData)
   } catch (err) {
     console.error(err)
@@ -285,10 +283,10 @@ router.post('/api/studentBooking', async (req, res) => {
     const bookingDetails = req.body
     const newBooking = await insertService.insertStudentBooking(bookingDetails)
     res.setHeader('Content-Type', 'application/json')
-    res.status(200).json({message: 'Booking created successfully'})
+    res.status(200).json({ message: 'Booking created successfully' })
   } catch (err) {
     console.error(err)
-    res.status(500).json({error: 'Failed to create booking'})
+    res.status(500).json({ error: 'Failed to create booking' })
   }
 });
 

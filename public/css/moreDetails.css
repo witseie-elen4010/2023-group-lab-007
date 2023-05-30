@@ -1,0 +1,22 @@
+.card {
+  background-color: rgba(255, 255, 255, 0.8);
+  /* Adjust the alpha value (0.8) to control transparency */
+  border: 4px solid rgb(128, 187, 214);
+  /* Add RGB color border */
+  border-radius: 20px;
+  /* Add rounded edges */
+  padding: 0em 2em 0em 2em;
+  /* Add padding */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  /* Add box shadow */
+  backdrop-filter: blur(5px);
+  /* Add the blurry glass effect */
+}
+
+
+body {
+  background-image: url("../images/moreDetailsPic.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+}

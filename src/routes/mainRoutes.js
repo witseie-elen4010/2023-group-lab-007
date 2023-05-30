@@ -18,13 +18,13 @@ router.get('/', async (req, res) => {
         res.render('lecturer_dashboard', {
           isAuthenticated: req.oidc.isAuthenticated(), user: req.oidc.user, roll: "lecturer",
         });
-        logger.info('Navigated to landing page [' + userEmail + ']');
+        console.log('Navigated to landing page [' + userEmail + ']');
       }
       else {
         res.render('moreDetails', {
           isAuthenticated: req.oidc.isAuthenticated(), user: req.oidc.user, roll: "lecturer",
         });
-        logger.info('Navigated to more details page [' + userEmail + ']');
+        console.log('Navigated to more details page [' + userEmail + ']');
       }
 
     } else if (isStudent(userEmail)) {
@@ -33,21 +33,21 @@ router.get('/', async (req, res) => {
         res.render('student_dashboard', {
           isAuthenticated: req.oidc.isAuthenticated(), user: req.oidc.user, roll: "student",
         });
-        logger.info('Navigated to landing page [' + userEmail + ']');
+        console.log('Navigated to landing page [' + userEmail + ']');
 
       }
       else {
         res.render('moreDetails', {
           isAuthenticated: req.oidc.isAuthenticated(), user: req.oidc.user, roll: "student",
         });
-        logger.info('Navigated to more details page [' + userEmail + ']');
+        console.log('Navigated to more details page [' + userEmail + ']');
       }
 
     } else {
       res.render('notamember', {
         isAuthenticated: req.oidc.isAuthenticated(), user: req.oidc.user, roll: "other",
       });
-      logger.info('Navigated to notamember page [' + userEmail + ']');
+      console.log('Navigated to notamember page [' + userEmail + ']');
     }
   } else {
     res.redirect('/login');
@@ -76,54 +76,32 @@ router.get('/dashboard', function (req, res) {
       res.render('lecturer_dashboard', {
         isAuthenticated: req.oidc.isAuthenticated(), user: req.oidc.user, roll: "lecturer",
       });
-      logger.info('Navigated to lecturer dashboard page [' + userEmail + ']');
+      console.log('Navigated to lecturer dashboard page [' + userEmail + ']');
     } else if (isStudent(userEmail)) {
       res.render('student_dashboard', {
         isAuthenticated: req.oidc.isAuthenticated(), user: req.oidc.user, roll: "student",
       });
-      logger.info('Navigated to student dashboard page [' + userEmail + ']');
+      console.log('Navigated to student dashboard page [' + userEmail + ']');
     } else {
       res.render('notamember', {
         isAuthenticated: req.oidc.isAuthenticated(), user: req.oidc.user, roll: "other",
       });
-      logger.info('Navigated to notamember page [' + userEmail + ']');
+      console.log('Navigated to notamember page [' + userEmail + ']');
     }
   } else {
     res.redirect('/login');
   }
 })
 
-//Replace [delete] these two dashboard with the one above at a later stage
-
-// router.get('/lecturer_dashboard', function (req, res) {
-//   const isAuthenticated = req.oidc.isAuthenticated()
-//   const userEmail = req.oidc.user.email;
-
-//   res.render('lecturer_dashboard', {
-//     isAuthenticated: req.oidc.isAuthenticated(), user: req.oidc.user, roll: "lecturer",
-//   });
-//   logger.info('Navigated to lecturer dashboard page [' + userEmail + ']');
-// })
-
-// router.get('/student_dashboard', function (req, res) {
-//   const isAuthenticated = req.oidc.isAuthenticated()
-//   const userEmail = req.oidc.user.email;
-
-//   res.render('student_dashboard', {
-//     isAuthenticated: req.oidc.isAuthenticated(), user: req.oidc.user, roll: "student",
-//   });
-//   logger.info('Navigated to student dashboard page [' + userEmail + ']');
-// })
-
 router.get('/loginorlogout', function (req, res) {
   const isAuthenticated = req.oidc.isAuthenticated()
   const userEmail = req.oidc.user.email;
   if (isAuthenticated) {
-    logger.info('Logged out [' + userEmail + ']');
+    console.log('Logged out [' + userEmail + ']');
     res.redirect('/logout');
   }
   else {
-    logger.info('Navigated to login page [' + userEmail + ']');
+    console.log('Navigated to login page [' + userEmail + ']');
     res.redirect('/login');
   }
 })
@@ -136,30 +114,7 @@ router.get('/settings', function (req, res) {
   res.render('settings', {
     isAuthenticated: req.oidc.isAuthenticated(), user: req.oidc.user, roll: "lecturer",
   });
-  logger.info('Navigated to settings page [' + userEmail + ']');
+  console.log('Navigated to settings page [' + userEmail + ']');
 })
-
-// router.get('/create_consultation', function (req, res) {
-//   const isAuthenticated = req.oidc.isAuthenticated()
-//   const userEmail = req.oidc.user.email;
-
-//   //Replace with this on final version
-//   // if (userEmail.includes('@students.wits.co.za')) {
-//   //   res.render('create_consultation', {
-//   //     isAuthenticated: req.oidc.isAuthenticated(), user: req.oidc.user, roll: "student",
-//   //   });
-//   //   logger.info('Navigated to lecturer dashboard page [' + userEmail + ']');
-//   // } else {
-//   //   res.render('notamember', {
-//   //     isAuthenticated: req.oidc.isAuthenticated(), user: req.oidc.user, roll: "other",
-//   //   });
-//   //   logger.info('Navigated to notamember page [' + userEmail + ']');
-//   // }
-
-//   res.render('create_consultation', {
-//     isAuthenticated: req.oidc.isAuthenticated(), user: req.oidc.user, roll: "student",
-//   });
-//   logger.info('Navigated to create consultation page [' + userEmail + ']');
-// })
 
 module.exports = router

@@ -11,8 +11,10 @@
   "jest": {
     "collectCoverage": true,
     "coverageReporters": [
-      "html"
+      "json",
+      "lcov"
     ],
+    "coverageDirectory": "./coverage",
     "preset": "@shelf/jest-mongodb",
     "testMatch": [
       "**/_tests_/**/*.[jt]s?(x)"
