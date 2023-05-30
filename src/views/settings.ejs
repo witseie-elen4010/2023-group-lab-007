@@ -21,61 +21,64 @@
   <header>
     <%- include('./partials/navbar'); %>
   </header>
-  <div class="container" style="padding-top:3em; padding-bottom:5em;  max-width: 500px;
+  <div class="center">
+    <div class="card" style="padding-top:3em; padding-bottom:5em;  max-width: 650px;
   ">
-    <h2>Specify a consultation period</h2>
-    <form id="consPeriod">
-      <div class="form-group">
-        <label for="dayOfWeek">Day of the Week</label>
-        <select class="form-control" id="dayOfWeek">
-          <option>Monday</option>
-          <option>Tuesday</option>
-          <option>Wednesday</option>
-          <option>Thursday</option>
-          <option>Friday</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label for="timeRange">Start and End Time</label>
-        <input type="text" class="form-control" id="timepicker" name="start_time" placeholder="HH:MM AM/PM">
-        <p></p>
-        <input type="text" class="form-control" id="timepicker" name="end_time" placeholder="HH:MM AM/PM">
-      </div>
-      <h2>Consultation settings</h2>
-      <div class="form-group">
-        <label for="numberPicker">Specify the max number of students per consultation</label>
-        <div class="input-group">
-          <input type="number" class="form-control" id="numberPicker" name="maxStudents" min="1" max="100" value="1">
-        </div>
-      </div>
-      <div class="form-group">
-        <label for="numberPicker">Specify the max number of consulatations per period/day</label>
-        <div class="input-group">
-          <input type="number" class="form-control" id="numberPicker" name="maxConsultations" min="1" max="100"
-            value="1">
-        </div>
-      </div>
-      <div class="form-group">
-        <label for="durationPicker">Select duration of a consultation (in minutes):</label>
-        <div class="input-group">
-          <select class="form-control" id="durationPicker" name="maxDuration">
-            <% for (let i=15; i <=60; i +=15) { %>
-              <option value="<%= i %>">
-                <%= i %> minutes
-              </option>
-              <% } %>
+      <h2>Specify a consultation period</h2>
+      <form id="consPeriod">
+        <div class="form-group">
+          <label for="dayOfWeek">Day of the Week</label>
+          <select class="form-control" id="dayOfWeek">
+            <option>Monday</option>
+            <option>Tuesday</option>
+            <option>Wednesday</option>
+            <option>Thursday</option>
+            <option>Friday</option>
           </select>
         </div>
-      </div>
-      <div class="form-group">
-        <input type="hidden" id="email" value="<%= user.email %>">
-      </div>
-      <button type="submit" class="btn btn-primary">Submit</button>
-    </form>
-    <p></p>
-    <h4>Current periods:</h4>
-    <button class="btn btn-primary" onclick="handleEmail('<%= user.email %>')">Show</button>
-    <ul id="entryList"></ul>
+        <div class="form-group">
+          <label for="timeRange">Start and End Time</label>
+          <input type="text" class="form-control" id="timepicker" name="start_time" placeholder="HH:MM AM/PM">
+          <p></p>
+          <input type="text" class="form-control" id="timepicker" name="end_time" placeholder="HH:MM AM/PM">
+        </div>
+        <h2>Consultation settings</h2>
+        <div class="form-group">
+          <label for="numberPicker">Specify the max number of students per consultation</label>
+          <div class="input-group">
+            <input type="number" class="form-control" id="numberPicker" name="maxStudents" min="1" max="100" value="1">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="numberPicker">Specify the max number of consulatations per period/day</label>
+          <div class="input-group">
+            <input type="number" class="form-control" id="numberPicker" name="maxConsultations" min="1" max="100"
+              value="1">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="durationPicker">Select duration of a consultation (in minutes):</label>
+          <div class="input-group">
+            <select class="form-control" id="durationPicker" name="maxDuration">
+              <% for (let i=15; i <=60; i +=15) { %>
+                <option value="<%= i %>">
+                  <%= i %> minutes
+                </option>
+                <% } %>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <input type="hidden" id="email" value="<%= user.email %>">
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </form>
+      <p></p>
+      <h4>Current periods:</h4>
+      <button class="btn btn-primary" onclick="handleEmail('<%= user.email %>')">Show</button>
+      <p></p>
+      <ul id="entryList"></ul>
+    </div>
   </div>
 
   <!-- Include the JavaScript files for jQuery and the timepicker plugin -->

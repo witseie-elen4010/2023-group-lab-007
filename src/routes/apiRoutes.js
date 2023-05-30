@@ -26,7 +26,7 @@ router.post('/api/lecturerDetails', async (req, res) => {
   try {
     const newData = req.body
     await insertService.insertLecturerDetails(newData)
-    logger.info('Inserted lecturer details [' + userEmail + ']');
+    console.log('Inserted lecturer details [' + userEmail + ']');
     res.sendStatus(200)
   } catch (err) {
     console.error(err)
@@ -40,7 +40,7 @@ router.post('/api/studentDetails', async (req, res) => {
   try {
     const newData = req.body // Assumes the request body contains the new data
     await insertService.insertStudentDetails(newData)
-    logger.info('Inserted student details [' + userEmail + ']');
+    console.log('Inserted student details [' + userEmail + ']');
     res.sendStatus(200)
   } catch (err) {
     console.error(err)
@@ -55,7 +55,7 @@ router.delete('/api/removeConsultationPeriod', async (req, res) => {
     const lecturerID = req.body.lecturerID;
     const dayOfWeek = req.body.dayOfWeek;
     await consultationPeriodService.deleteConsultationPeriod(lecturerID, dayOfWeek);
-    logger.info('Deleted a consultation availability period [' + userEmail + ']');
+    console.log('Deleted a consultation availability period [' + userEmail + ']');
     res.json({ message: 'Consultation period removed successfully' });
   } catch (err) {
     console.error(err);
@@ -69,7 +69,7 @@ router.post('/api/consultationPeriods', async (req, res) => {
   try {
     const newData = req.body
     await insertService.insertConsultationPeriods(newData)
-    logger.info('Inserted a new consultation availability period [' + userEmail + ']');
+    console.log('Inserted a new consultation availability period [' + userEmail + ']');
     res.sendStatus(200)
   } catch (err) {
     console.error(err)
@@ -83,7 +83,7 @@ router.get('/api/existingConsultationPeriods/:lecturerID', async (req, res) => {
   try {
     const selectedLecturer = req.params.lecturerID;
     const consultationPeriodsData = await consultationPeriodService.getExistingConsultationPeriods(selectedLecturer);
-    logger.info('fetched existing consultation periods for lecturer [' + userEmail + ']');
+    console.log('fetched existing consultation periods for lecturer [' + userEmail + ']');
     res.json(consultationPeriodsData)
   } catch (err) {
     console.error(err)
