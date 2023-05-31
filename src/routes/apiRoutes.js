@@ -11,6 +11,7 @@ const lecturerService = require('../services/lecturer_service');
 const consultationService = require('../services/consultation_service');
 const consultationPeriodService = require('../services/consultation_period_service');
 const studentConsulationService = require('../services/student_consulation_service');
+const studentBookingService = require('../services/student_service')
 
 router.get('/api/studentConsultations', function (req, res) {
   res.json(studentConsultations) // Respond with JSON
@@ -28,6 +29,17 @@ router.post('/api/lecturerDetails', async (req, res) => {
     await insertService.insertLecturerDetails(newData)
     logger.info('Inserted lecturer details [' + userEmail + ']');
     res.sendStatus(200)
+  } catch (err) {
+    console.error(err)
+    res.sendStatus(500)
+  }
+})
+
+router.get('class/api/getConsultationPerBooking', async (req, res) => {
+  try {
+    const consultationId = req.query.consultationId
+    const bookingData = await getBookingsByConsultationId(consultationId) 
+    res.json(bookingData)
   } catch (err) {
     console.error(err)
     res.sendStatus(500)
@@ -343,5 +355,32 @@ router.get('/api/userStudentNumber', async (req, res) => {
   }
 })
 
+router.get('/api/userStudentBooking', async (req, res) => {
+  try {
+    const studentNumber = req.query.studentNumber; // Access the studentNumber query parameter
+    const studentDetails = await studentBookingService.getBookingsByStudentNumber(studentNumber);
+    res.json(studentDetails);
+  } catch (err) {
+    console.error(err);
+    res.sendStatus(500);
+  }
+});
+
+router.get('/api/consultationDetailSearchByID/:consultationId', async (req, res) => {
+  try {
+    const consultationId = req.params.consultationId
+    const consultationDetailsData = await consultationService.getConsultationDetailsByID(consultationId)
+    if (!consultationDetailsData) {
+      // Return a 404 Not Found response if the consultation details are not found
+      res.sendStatus(404)
+    } else {
+      res.json(consultationDetailsData)
+      console.log(consultationDetailsData)
+    }
+  } catch (err) {
+    console.error(err)
+    res.sendStatus(500)
+  }
+})
 
 module.exports = router

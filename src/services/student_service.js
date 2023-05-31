@@ -22,6 +22,15 @@ async function getBookingsByConsultationId(consultationId) {
     }
   }
 
+  async function getBookingsByStudentNumber(studentNumber) {
+    try {
+      const studentBookings = await studentBooking.find({ studentNumber: studentNumber });
+      return studentBookings;
+    } catch (err) {
+      console.error(err);
+      throw err; // Throw the error to handle it in the calling function
+    }
+  }
   
-module.exports = { getStudentByNumber, getBookingsByConsultationId };
+module.exports = { getStudentByNumber, getBookingsByConsultationId, getBookingsByStudentNumber };
   
