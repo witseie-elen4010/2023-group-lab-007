@@ -287,19 +287,25 @@ function handleEventClick(info) {
   const consultationRole = info.event.extendedProps.role
   const consultationsTextField = document.getElementById("consultations")
   const currentConsultationID = parseInt(consultationsTextField.dataset.consultationID)
-  console.log("Consultation role:", consultationRole)
-  
+ 
   // Remove existing delete button if present
   const deleteButtonContainer = document.getElementById("deleteButtonContainer")
   deleteButtonContainer.innerHTML = "" // Clear the container first
   // Create a delete button if the user is the organizer
   if (consultationRole === "Organizer") {
-    console.log("Here Organizer")
     const deleteButton = document.createElement("button")
     deleteButton.type = "button";
     deleteButton.classList.add("btn", "btn-danger")
     deleteButton.textContent = "Delete Consultation"
-    deleteButton.addEventListener("click", () => {  
+    deleteButton.addEventListener("click", () => { 
+      console.log("Cancel Consultation button clicked")
+      executeCancel()
+        .then(() => {
+          //showConsultations()  // Call the function to refresh the calendar
+        })
+        .catch((error) => {
+          console.error("Error removing consultation:", error)
+        }) 
     })
     deleteButtonContainer.appendChild(deleteButton)
   }
@@ -906,3 +912,26 @@ async function showAvailableConsultations(){
   createSubperiodDropdown(possibleSlots, 30)
 }
 
+async function executeCancel() {
+  const selectedTextField = document.getElementById("consultations")
+  const consultationID = parseInt(selectedTextField.dataset.consultationID)
+  if (!consultationID) {
+    alert("Invalid consultation ID. PLease select from the calendar.")
+    return
+  }
+  console.log("Selected consultation ID:", consultationID)
+  try {
+    const confirmation = confirm("Are you sure you want to cancel the consultation?")
+    if (!confirmation) {
+      console.log("Consultation cancellation canceled by user")
+      return 
+    }
+    const response = await fetch(`/class/api/cancelConsultation/${consultationID}`, {
+      method: "DELETE",
+    })
+    const data = await response.json()
+    console.log("Consultation cancelled in the database:", data)
+  } catch (error) {
+    console.error("Error cancelling consultation:", error)
+  }
+}
