@@ -370,7 +370,7 @@ function getNextDate(day, j) {
     today.setDate(today.getDate() + ((j * 7) + daysUntilNextTargetDay))
     return today
   } else {
-    throw new Error(`Invalid day name: ${dayName}`)
+    throw new Error(`Invalid day name: ${day}`)
   }
 }
 
