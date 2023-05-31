@@ -704,6 +704,16 @@ function removeSubperiodDropdown() {
     dropdownContainer.removeChild(subperiodDropdown)
   }
 }
+//if the user presses the "hide consultation on calendar" button, hide the consultations displayed on the calendar
+if (hideConsultation) {
+  console.log('Clicked hide consultation button') //log to the web console
+  hideConsultation.addEventListener('click', () => {
+  
+    // Remove all existing events from the calendar
+    calendar.getEvents().forEach((event) => event.remove())
+
+  })
+}
 
 // Event listener for when a slot is selected
 slotDropdownMenu.addEventListener('change', function() {
