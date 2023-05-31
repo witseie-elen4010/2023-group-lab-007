@@ -63,6 +63,10 @@ bookButton.addEventListener('click', async() => {
     const consultationIds = detailsArray.map(detail => detail.consultationId)
     const maxConsultationId = Math.max(...consultationIds)
     const consultationId = maxConsultationId+1
+    let title = document.getElementById("consultationTitle").value
+    if(title===""){
+      title = `Consultation at ${slotStart} - ${slotEnd}`
+    }
     details = {
       consultationId: parseInt(consultationId),
       lecturerId: String(selectedLecturerId),
@@ -72,7 +76,7 @@ bookButton.addEventListener('click', async() => {
       status: String("approved"), //set default of disapproved, requires lecturer to accept consultation. 
       startTime: String(slotStart),
       endTime: String(slotEnd),
-      title: String("test"),
+      title: String(title),
    }
    console.log(details)
    createConsultation(details)
@@ -703,6 +707,15 @@ function createSubperiodDropdown(possibleSlots, duration) {
 
   // Add the dropdown to the DOM
   dropdownContainer.appendChild(subperiodDropdown)
+  const titleLabel = document.createElement('label');
+  titleLabel.textContent = "Enter a consultation title";
+  titleLabel.setAttribute('for', 'consultationTitle');
+  dropdownContainer.appendChild(titleLabel);
+
+  const title = document.createElement('input');
+  title.id = "consultationTitle";
+  dropdownContainer.appendChild(title);
+
   subperiodDropdown.addEventListener('change', function() {
     bookButton.removeAttribute('disabled');
   });
@@ -714,6 +727,15 @@ function removeSubperiodDropdown() {
   if (subperiodDropdown) {
     dropdownContainer.removeChild(subperiodDropdown)
   }
+  const title = document.querySelector('#consultationTitle')
+  if (title) {
+    dropdownContainer.removeChild(title)
+  }
+  const titleLabel = document.querySelector('#titleLabel')
+  if (titleLabel) {
+    dropdownContainer.removeChild(titleLabel)
+  }
+
 }
 //if the user presses the "hide consultation on calendar" button, hide the consultations displayed on the calendar
 if (hideConsultation) {
