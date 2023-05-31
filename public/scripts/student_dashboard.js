@@ -121,6 +121,8 @@ bookButton.addEventListener('click', async() => {
      createBooking(bookingDetails) // create a booking entry for the student for the consultation selected.
   .then(data => {
     console.log('Booking created successfully:', data)
+    alert("Succesfully Joined Consultation!")
+    location.reload()
     // Perform any additional actions after successful booking
   })
   .catch(error => {
