@@ -51,7 +51,7 @@ dropdownMenu.addEventListener('change', () => {
     const messageContainer = document.getElementById('messageContainer')
     messageContainer.textContent = ''
   }
-});
+})
 
 slotDropdownMenu.addEventListener('change', () => {
   // Check if the button is in the "Error" state
@@ -60,7 +60,7 @@ slotDropdownMenu.addEventListener('change', () => {
     const messageContainer = document.getElementById('messageContainer')
     messageContainer.textContent = ''
   }
-});
+})
 
 
 bookButton.addEventListener('click', async () => {
@@ -75,7 +75,7 @@ bookButton.addEventListener('click', async () => {
   if (!joinExisting) {
     selectedSlot = slotDropdownMenu.value
     selectedPeriod = document.getElementById("subperiodDropdown")
-    const maxStudents = slotDropdownMenu.options[slotDropdownMenu.selectedIndex].dataset.maxCapacity;
+    const maxStudents = slotDropdownMenu.options[slotDropdownMenu.selectedIndex].dataset.maxCapacity
     if (!selectedPeriod) {
       return;
     }
@@ -110,7 +110,7 @@ bookButton.addEventListener('click', async () => {
           const messageContainer = document.getElementById('messageContainer')
           messageContainer.textContent = message
           hasConflict = true
-          break;
+          break
         }
       }
     }
@@ -158,9 +158,9 @@ bookButton.addEventListener('click', async () => {
 
     getAllConsultations()
       .then(detailsArray => {
-        const consultationIds = detailsArray.map(detail => detail.consultationId);
-        const maxConsultationId = Math.max(...consultationIds);
-        const consultationId = maxConsultationId + 1;
+        const consultationIds = detailsArray.map(detail => detail.consultationId)
+        const maxConsultationId = Math.max(...consultationIds)
+        const consultationId = maxConsultationId + 1
         details = {
           consultationId: parseInt(consultationId),
           lecturerId: String(selectedLecturerId),
@@ -177,7 +177,7 @@ bookButton.addEventListener('click', async () => {
         createConsultation(details)
           .then(data => {
             console.log('Booking created successfully:', data);
-            console.log('Booking for Student: ', userStudentNumber);
+            console.log('Booking for Student: ', userStudentNumber)
             // Perform any additional actions after successful booking
             // Make a function for this whole thing and call it both times.
             bookingDetails = {
@@ -225,7 +225,7 @@ bookButton.addEventListener('click', async () => {
       const consultationDetailsCheck = await getConsultationPerBooking(consultationId)
       const checkDate = consultationDetailsCheck.some(check => {
         return check.date === existingConsultationDetails[0].date
-      });
+      })
 
       if (checkDate) {
         const overlappingConsultation = consultationDetailsCheck.find(check => {
@@ -241,7 +241,7 @@ bookButton.addEventListener('click', async () => {
           const messageContainer = document.getElementById('messageContainer')
           messageContainer.textContent = message
           hasConflict = true
-          break;
+          break
         }
       }
     }
@@ -252,13 +252,13 @@ bookButton.addEventListener('click', async () => {
 
       // Add event listeners to the input fields
       dropdownMenu.addEventListener('change', () => {
-        bookButton.textContent = 'Join'; // Change the button text back to "Book"
+        bookButton.textContent = 'Join' // Change the button text back to "Book"
         const messageContainer = document.getElementById('messageContainer')
         messageContainer.textContent = ''
       });
 
       slotDropdownMenu.addEventListener('change', () => {
-        bookButton.textContent = 'Join'; // Change the button text back to "Book"
+        bookButton.textContent = 'Join' // Change the button text back to "Book"
         const messageContainer = document.getElementById('messageContainer')
         messageContainer.textContent = ''
       })
@@ -281,7 +281,7 @@ bookButton.addEventListener('click', async () => {
       consultationId: selectedSlot,
       studentNumber: userStudentNumber,
       role: "Member"
-    };
+    }
 
     createBooking(bookingDetails)
       .then(data => {
@@ -295,9 +295,9 @@ bookButton.addEventListener('click', async () => {
       .catch(error => {
         console.error('Failed to create booking:', error)
         // Handle the error appropriately
-      });
+      })
   }
-});
+})
 
 dropdownMenu.addEventListener('change', async (e) => {
   const selectedTeacher = e.target.value
@@ -731,7 +731,7 @@ existingConsultationsMenu.addEventListener('change', function() {
 })
 
 function getBookings(studentNumber) {
-  const url = `class/api/userStudentBooking?studentNumber=${studentNumber}`;
+  const url = `class/api/userStudentBooking?studentNumber=${studentNumber}`
   return fetch(url)
     .then(response => response.json())
     .catch(error => {
@@ -759,18 +759,18 @@ function getStudentDetails(studentNumber) {
 }
 
 function getConsultationPerBooking(consultationId) {
-  const url = `class/api/consultationDetailSearchByID/${consultationId}`;
+  const url = `class/api/consultationDetailSearchByID/${consultationId}`
   return fetch(url)
     .then(response => {
       if (!response.ok) {
-        throw new Error('Error fetching consultation details');
+        throw new Error('Error fetching consultation details')
       }
-      return response.json();
+      return response.json()
     })
     .catch(error => {
-      console.error('Error fetching consultation details:', error);
+      console.error('Error fetching consultation details:', error)
       throw error; // Re-throw the error to handle it in the calling function
-    });
+    })
 } 
 
 //function to get a list of all consultations

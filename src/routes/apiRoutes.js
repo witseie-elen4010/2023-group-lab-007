@@ -357,12 +357,12 @@ router.get('/api/userStudentNumber', async (req, res) => {
 
 router.get('/api/userStudentBooking', async (req, res) => {
   try {
-    const studentNumber = req.query.studentNumber; // Access the studentNumber query parameter
-    const studentDetails = await studentBookingService.getBookingsByStudentNumber(studentNumber);
-    res.json(studentDetails);
+    const studentNumber = req.query.studentNumber // Access the studentNumber query parameter
+    const studentDetails = await studentBookingService.getBookingsByStudentNumber(studentNumber)
+    res.json(studentDetails)
   } catch (err) {
-    console.error(err);
-    res.sendStatus(500);
+    console.error(err)
+    res.sendStatus(500)
   }
 });
 
