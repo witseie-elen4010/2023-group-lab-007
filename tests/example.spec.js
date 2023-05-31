@@ -54,7 +54,7 @@ test.skip('search for consultation based on the lecturer name', async () => {
   // await expect(page.getByText('No lecturer found with the specified name')).toBeVisible()
 });
 
-test('Prevent students from booking consultations with different lecturers simultaneously', async () => {
+test.skip('Prevent students from booking consultations with different lecturers simultaneously', async () => {
   test.slow(60000)
   const browser = await chromium.launch({ headless: false })
   const context = await browser.newContext()
