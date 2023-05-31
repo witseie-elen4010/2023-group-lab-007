@@ -260,7 +260,7 @@ showConsultation.addEventListener('click', () => {
   getConsultations().then(consultations => {
    
     consultations.forEach(consultation => {
-      const { date, startTime, endTime, lecturer, consultationId, studentCount, status, title } = consultation
+      const { date, startTime, endTime, lecturer, consultationId, studentCount, status, title, role } = consultation
       const event = {
         title:title,
         consultationId: consultationId,
@@ -269,6 +269,7 @@ showConsultation.addEventListener('click', () => {
         lecturer: lecturer,
         status: status,
         studentCount: studentCount,
+        role: role,
         color: status === "approved" ? "green" : "red", // Change event color based on status
         textColor: status === "approved" ? "white" : "black", // Change text color based on status  
       }
@@ -283,15 +284,26 @@ showConsultation.addEventListener('click', () => {
 // Event click callback function
 function handleEventClick(info) {
   const selectedConsultationID = info.event.extendedProps.consultationId; 
-  console.log("Selected consultation ID:", selectedConsultationID)
-  console.log("Selected consultation date:", info.event.start)
-  console.log("Selected consultation end:", info.event.end)
-  console.log("Selected consultation lecturer:", info.event.extendedProps.lecturer)
-  
+  const consultationRole = info.event.extendedProps.role
   const consultationsTextField = document.getElementById("consultations")
   const currentConsultationID = parseInt(consultationsTextField.dataset.consultationID)
-  console.log("Current consultation ID:", currentConsultationID)
-
+  console.log("Consultation role:", consultationRole)
+  
+  // Remove existing delete button if present
+  const deleteButtonContainer = document.getElementById("deleteButtonContainer")
+  deleteButtonContainer.innerHTML = "" // Clear the container first
+  // Create a delete button if the user is the organizer
+  if (consultationRole === "Organizer") {
+    console.log("Here Organizer")
+    const deleteButton = document.createElement("button")
+    deleteButton.type = "button";
+    deleteButton.classList.add("btn", "btn-danger")
+    deleteButton.textContent = "Delete Consultation"
+    deleteButton.addEventListener("click", () => {  
+    })
+    deleteButtonContainer.appendChild(deleteButton)
+  }
+    
   if (selectedConsultationID === currentConsultationID) {
     // The same consultation is clicked again, show the modal
     const modal = document.getElementById("consultationDetailsModal")
@@ -384,7 +396,8 @@ function getConsultations() {
           endTime: item.endTime,
           studentCount: studentCountTemp,
           status: item.status,
-          title:item.title
+          title:item.title,
+          role: item.student_booking[0].role
         }
       })
       return consultations
@@ -891,6 +904,5 @@ async function showAvailableConsultations(){
   duration = document.getElementById("duration").value
   possibleSlots = getPossibleSlots(startTime, endTime, bookedSlots, duration)
   createSubperiodDropdown(possibleSlots, 30)
-  
-
 }
+
