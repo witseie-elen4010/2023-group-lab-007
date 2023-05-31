@@ -21,18 +21,7 @@ async function getBookingsByConsultationId(consultationId) {
       throw err; // Throw the error to handle it in the calling function
     }
   }
-  
 
-// async function createStudentBooking(bookingDetails) {
-//     try {
-//       const newBooking = new studentBooking(bookingDetails);
-//       await newBooking.save();
-//       return newBooking;
-//     } catch (err) {
-//       console.log('Error in createStudentBooking:', err);
-//       throw err;
-//     }
-//   }
   
 module.exports = { getStudentByNumber, getBookingsByConsultationId };
   
