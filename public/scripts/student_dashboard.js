@@ -98,15 +98,14 @@ bookButton.addEventListener('click', async () => {
       if (checkDate) {
         const overlappingConsultation = consultationDetailsCheck.find(check => {
           return (
-            check.startTime === String(slotStart) &&
-            check.endTime === String(slotEnd) &&
-            check.status === 'approved'
+            ((check.startTime <= String(slotStart) && check.endTime >= String(slotStart)) ||
+            (check.startTime >= String(slotStart) && check.startTime <= String(slotEnd))) && check.status === 'approved'
           )
         })
 
         if (overlappingConsultation) {
           const lecturerName = overlappingConsultation.lecturerId.split('@')[0].replace('.', ' ')
-          const message = `Already has a consultation booked with ${lecturerName} on ${selectedSlot} at ${slotStart} - ${slotEnd}`
+          const message = `Already has a consultation booked with ${lecturerName} on ${selectedSlot} at ${overlappingConsultation.startTime} - ${overlappingConsultation.endTime}`
           const messageContainer = document.getElementById('messageContainer')
           messageContainer.textContent = message
           hasConflict = true
@@ -170,8 +169,7 @@ bookButton.addEventListener('click', async () => {
           status: String("approved"),
           startTime: String(slotStart),
           endTime: String(slotEnd),
-      title: String("test"),
-          title: 'test'
+          title: String("test")
         };
         console.log(details);
 
