@@ -64,6 +64,8 @@ slotDropdownMenu.addEventListener('change', () => {
 
 
 bookButton.addEventListener('click', async () => {
+  const messageContainer = document.getElementById('messageContainer')
+  messageContainer.textContent = ''
   const userStudentNumber = await getUserStudentNumber()
   console.log('studentNumber: ', userStudentNumber)
   console.log('Type of userStudentNumber:', typeof userStudentNumber)
