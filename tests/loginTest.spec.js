@@ -17,7 +17,6 @@ test.skip('test', async ({ page }) => {
   //await expect(page.getByRole('button', { name: 'Show Consultations on Calendar' })).toBeVisible();
  // await page.getByRole('button', { name: 'Show Consultations on Calendar' }).click();
   //await expect(page.locator('a').filter({ hasText: 'John Doe' })).toBeVisible();
-  
 
   // Close the browser
   await browser.close();
