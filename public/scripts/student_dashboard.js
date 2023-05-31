@@ -643,37 +643,38 @@ function createConsultation(bookingDetails) {
 // Container where the subperiod dropdown will go
 const dropdownContainer = document.querySelector('#dropdownContainer')
 
-function getSubPeriod(start, duration, index){ //change when the slots are not a defined length.
-    // Create a new Date object
-    const date = new Date()
+//commented out because I dont think it is used anywhere.
+// function getSubPeriod(start, duration, index){ //change when the slots are not a defined length.
+//     // Create a new Date object
+//     const date = new Date()
 
-    // Get the hours and minutes from the startTime
-    const [hours, minutes] = start.split(':')
+//     // Get the hours and minutes from the startTime
+//     const [hours, minutes] = start.split(':')
 
-    // Set the hours and minutes of the Date object
-    date.setHours(hours, minutes, 0, 0) // Set seconds and milliseconds to 0
+//     // Set the hours and minutes of the Date object
+//     date.setHours(hours, minutes, 0, 0) // Set seconds and milliseconds to 0
 
-    // Add the duration to the Date object
-    date.setMinutes(date.getMinutes() + duration*index)
+//     // Add the duration to the Date object
+//     date.setMinutes(date.getMinutes() + duration*index)
 
-    // Extract the hours and minutes from the updated Date object
-    let startHours = date.getHours()
-    let startMinutes = date.getMinutes()
-    startHours = startHours.toString().padStart(2, '0')
-    startMinutes = startMinutes.toString().padStart(2, '0')
-    // Pad the hours and minutes with leading zeros if necessary
-    date.setMinutes(date.getMinutes() + duration)
-    // Extract the hours and minutes from the updated Date object
-    let endHours = date.getHours()
-    let endMinutes = date.getMinutes()
-    endHours = endHours.toString().padStart(2, '0')
-    endMinutes = endMinutes.toString().padStart(2, '0')
+//     // Extract the hours and minutes from the updated Date object
+//     let startHours = date.getHours()
+//     let startMinutes = date.getMinutes()
+//     startHours = startHours.toString().padStart(2, '0')
+//     startMinutes = startMinutes.toString().padStart(2, '0')
+//     // Pad the hours and minutes with leading zeros if necessary
+//     date.setMinutes(date.getMinutes() + duration)
+//     // Extract the hours and minutes from the updated Date object
+//     let endHours = date.getHours()
+//     let endMinutes = date.getMinutes()
+//     endHours = endHours.toString().padStart(2, '0')
+//     endMinutes = endMinutes.toString().padStart(2, '0')
 
-    // Combine the hours and minutes into a string and return it
-    const startTime = `${startHours}:${startMinutes}`
-    const endTime = `${endHours}:${endMinutes}`
-    return [startTime, endTime]
-}
+//     // Combine the hours and minutes into a string and return it
+//     const startTime = `${startHours}:${startMinutes}`
+//     const endTime = `${endHours}:${endMinutes}`
+//     return [startTime, endTime]
+// }
 // Function to create and add the subperiod dropdown to the DOM
 function createSubperiodDropdown(possibleSlots, duration) {
   // Calculate the number of subperiods
@@ -739,20 +740,20 @@ slotDropdownMenu.addEventListener('change',async function() {
     const approvedConsultations = consultations.filter(consultation => consultation.status === "approved")
     const date = slotDropdownMenu.value
     const existingConsultations = approvedConsultations.filter(consultation => consultation.date === date)
-  console.log(existingConsultations)
-  const slotLength = this.options[this.selectedIndex].dataset.length
-  const startTime = this.options[this.selectedIndex].dataset.start
-  const endTime = this.options[this.selectedIndex].dataset.end
-  bookedSlots = []
-  for(let i=0;i<existingConsultations.length;i++){
-    start = existingConsultations[i].startTime
-    end = existingConsultations[i].endTime
-    bookedSlots.push([start, end])
-  }
-  console.log(bookedSlots)
-  duration = document.getElementById("duration").value
-  possibleSlots = getPossibleSlots(startTime, endTime, bookedSlots, duration)
-  createSubperiodDropdown(possibleSlots, duration)
+    console.log(existingConsultations)
+    const slotLength = this.options[this.selectedIndex].dataset.length
+    const startTime = this.options[this.selectedIndex].dataset.start
+    const endTime = this.options[this.selectedIndex].dataset.end
+    bookedSlots = []
+    for(let i=0;i<existingConsultations.length;i++){
+      start = existingConsultations[i].startTime
+      end = existingConsultations[i].endTime
+      bookedSlots.push([start, end])
+    }
+    console.log(bookedSlots)
+    duration = document.getElementById("duration").value
+    possibleSlots = getPossibleSlots(startTime, endTime, bookedSlots, duration)
+    createSubperiodDropdown(possibleSlots, duration)
 
   } else { 
     existingConsultationsMenu.removeAttribute('disabled') // enable existing consultations
@@ -872,11 +873,10 @@ document.getElementById('plus').addEventListener('click', function() {
 async function showAvailableConsultations(){
   selectedTeacher = dropdownMenu.value
     
-    const consultations = await getExistingConsultations(selectedTeacher)
-    const approvedConsultations = consultations.filter(consultation => consultation.status === "approved")
-    const date = slotDropdownMenu.value
-    const existingConsultations = approvedConsultations.filter(consultation => consultation.date === date)
-  console.log(existingConsultations)
+  const consultations = await getExistingConsultations(selectedTeacher)
+  const approvedConsultations = consultations.filter(consultation => consultation.status === "approved")
+  const date = slotDropdownMenu.value
+  const existingConsultations = approvedConsultations.filter(consultation => consultation.date === date)
   const slotLength = slotDropdownMenu.options[slotDropdownMenu.selectedIndex].dataset.length
   const startTime = slotDropdownMenu.options[slotDropdownMenu.selectedIndex].dataset.start
   const endTime = slotDropdownMenu.options[slotDropdownMenu.selectedIndex].dataset.end
