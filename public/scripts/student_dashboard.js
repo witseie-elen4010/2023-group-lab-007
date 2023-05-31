@@ -57,7 +57,7 @@ bookButton.addEventListener('click', async() => {
      }
      const slotStart = selectedPeriod.options[selectedPeriod.selectedIndex].dataset.start
      const slotEnd = selectedPeriod.options[selectedPeriod.selectedIndex].dataset.end
-     const duration = selectedPeriod.value
+     const duration = document.getElementById("duration").value
      getAllConsultations()
   .then(detailsArray => {
     const consultationIds = detailsArray.map(detail => detail.consultationId)
@@ -145,6 +145,7 @@ dropdownMenu.addEventListener('change', async (e) => {
     existingConsultationsMenu.remove(1)
   }
   removeSubperiodDropdown()
+  existingConsultationsMenu.removeAttribute('disabled') // enable existing consultations
   if (selectedTeacher) {
     // I am assuming that teacher object has an id field that represents the lecturerId
     const slots = await searchConsultations(selectedTeacher)
@@ -344,7 +345,9 @@ function getDateString(date) {
 
 function checkButtonStatus() {
   const teacherSelected = dropdownMenu.value !== ""
-  const slotSelected = slotDropdownMenu.value !== ""
+  const subPeriodDropdown = document.getElementById("subPeriodDropdown");
+  const slotSelected = (subPeriodDropdown !== null && subPeriodDropdown.value !== "") ? true : false;
+
   const existingConsultationSelected = existingConsultationsMenu.value !== ""
 
   if (teacherSelected && (slotSelected||existingConsultationSelected)) {
@@ -526,6 +529,7 @@ dropdownMenu.addEventListener('change', async (e) => {
       option.dataset.endTime = consultation.endTime
       option.dataset.numberOfStudents = consultation.maximumNumberOfStudents
       existingConsultationsMenu.add(option)
+      existingConsultationsMenu.add(option)
     }
   }
 })
@@ -698,6 +702,9 @@ function createSubperiodDropdown(possibleSlots, duration) {
 
   // Add the dropdown to the DOM
   dropdownContainer.appendChild(subperiodDropdown)
+  subperiodDropdown.addEventListener('change', function() {
+    bookButton.removeAttribute('disabled');
+  });
 }
 
 // Function to remove the subperiod dropdown from the DOM
@@ -745,7 +752,7 @@ slotDropdownMenu.addEventListener('change',async function() {
   console.log(bookedSlots)
   duration = document.getElementById("duration").value
   possibleSlots = getPossibleSlots(startTime, endTime, bookedSlots, duration)
-  createSubperiodDropdown(possibleSlots, 30)
+  createSubperiodDropdown(possibleSlots, duration)
 
   } else { 
     existingConsultationsMenu.removeAttribute('disabled') // enable existing consultations
@@ -829,6 +836,7 @@ slotDropdownMenu.addEventListener('change', function() {
 
 
 document.getElementById('minus').addEventListener('click', function() {
+  removeSubperiodDropdown()
   var durationInput = document.getElementById('duration')
   var currentValue = parseInt(durationInput.value, 10)
   if(currentValue>0){
@@ -844,6 +852,7 @@ document.getElementById('minus').addEventListener('click', function() {
 })
 
 document.getElementById('plus').addEventListener('click', function() {
+  removeSubperiodDropdown()
   var durationInput = document.getElementById('duration')
   const maxDuration = durationInput.dataset.maxDuration
   console.log(maxDuration)
@@ -881,4 +890,6 @@ async function showAvailableConsultations(){
   duration = document.getElementById("duration").value
   possibleSlots = getPossibleSlots(startTime, endTime, bookedSlots, duration)
   createSubperiodDropdown(possibleSlots, 30)
+  
+
 }
