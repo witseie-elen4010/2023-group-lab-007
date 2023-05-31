@@ -92,7 +92,6 @@ bookButton.addEventListener('click', async () => {
     for (const booking of verificationStud) {
       const consultationId = booking.consultationId
       const consultationDetailsCheck = await getConsultationPerBooking(consultationId)
-
       const checkDate = consultationDetailsCheck.some(check => {
         return check.date === selectedSlot
       });
@@ -207,8 +206,77 @@ bookButton.addEventListener('click', async () => {
       })
       .catch(err => console.error(err))
   } else {
+
+
     // if the student has selected an existing consultation, then add them to that consultation.
     selectedSlot = existingConsultationsMenu.value //get the consultationId.
+    // Search for existing consultation
+    const existingConsultationDetails = await getConsultationPerBooking(selectedSlot)
+    console.log((existingConsultationDetails[0].date))
+    
+    // Change the book button text to "Loading..."
+    bookButton.textContent = 'Loading...'
+
+    const verificationStud = await getBookings(userStudentNumber)
+    let hasConflict = false
+
+    for (const booking of verificationStud) {
+      const consultationId = booking.consultationId
+      const consultationDetailsCheck = await getConsultationPerBooking(consultationId)
+      const checkDate = consultationDetailsCheck.some(check => {
+        return check.date === existingConsultationDetails[0].date
+      });
+
+      if (checkDate) {
+        const overlappingConsultation = consultationDetailsCheck.find(check => {
+          return (
+            ((check.startTime <= String(existingConsultationDetails[0].startTime) && check.endTime > String(existingConsultationDetails[0].startTime)) ||
+            (check.startTime >= String(existingConsultationDetails[0].endTime) && check.endTime < String(existingConsultationDetails[0].endTime))) && check.status === 'approved'
+          )
+        })
+
+        if (overlappingConsultation) {
+          const lecturerName = overlappingConsultation.lecturerId.split('@')[0].replace('.', ' ')
+          const message = `Already has a consultation booked with ${lecturerName} on ${overlappingConsultation.date} at ${overlappingConsultation.startTime} - ${overlappingConsultation.endTime}`
+          const messageContainer = document.getElementById('messageContainer')
+          messageContainer.textContent = message
+          hasConflict = true
+          break;
+        }
+      }
+    }
+
+    if (hasConflict) {
+      // Change the book button text to "Error"
+      bookButton.textContent = 'Error'
+
+      // Add event listeners to the input fields
+      dropdownMenu.addEventListener('change', () => {
+        bookButton.textContent = 'Join'; // Change the button text back to "Book"
+        const messageContainer = document.getElementById('messageContainer')
+        messageContainer.textContent = ''
+      });
+
+      slotDropdownMenu.addEventListener('change', () => {
+        bookButton.textContent = 'Join'; // Change the button text back to "Book"
+        const messageContainer = document.getElementById('messageContainer')
+        messageContainer.textContent = ''
+      })
+      return
+    } else{
+      // Add event listeners to the input fields
+      dropdownMenu.addEventListener('change', () => {
+        const messageContainer = document.getElementById('messageContainer')
+        messageContainer.textContent = ''
+      })
+
+      slotDropdownMenu.addEventListener('change', () => {
+        const messageContainer = document.getElementById('messageContainer')
+        messageContainer.textContent = ''
+      })
+    }
+
+    
     bookingDetails = {
       consultationId: selectedSlot,
       studentNumber: userStudentNumber,
@@ -217,6 +285,9 @@ bookButton.addEventListener('click', async () => {
 
     createBooking(bookingDetails)
       .then(data => {
+        const message = 'Booking successful'
+        const messageContainer = document.getElementById('messageContainer')
+        messageContainer.textContent = message
         console.log('Booking created successfully:', data)
         bookButton.textContent = 'Book'; // Change the button text back to "Book"
         // Perform any additional actions after successful booking
