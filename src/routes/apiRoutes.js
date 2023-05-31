@@ -307,8 +307,17 @@ router.get('/api/studentConsultationDetails', async (req, res) => {
 router.get('/api/studentDetails', async (req, res) => {
   try {
     const userEmail = req.oidc.user.email
-    const studentDetails = await studentConsulationService.getStudentDetails(userEmail);
-    res.json(studentDetails)
+    if(!userEmail) {
+      return res.status(400).json({ error: 'Missing userEmail query parameter' })
+    }
+    if(userEmail.includes('@students.wits.ac.za')){
+      const studentDetails = await studentConsulationService.getStudentDetails(userEmail);
+      res.json(studentDetails)
+    }
+    else{
+      return res.status(400).json({ error: 'Invalid email address, not logged in as student' })
+    }
+
   } catch (err) {
     console.error(err)
     res.sendStatus(500)
@@ -318,8 +327,16 @@ router.get('/api/studentDetails', async (req, res) => {
 router.get('/api/userStudentNumber', async (req, res) => {
   try {
     const userEmail = req.oidc.user.email
-    const studentDetails = await studentConsulationService.getStudentDetails(userEmail);
-    res.json(studentDetails[0].studentNumber)
+    if(!userEmail) {
+      return res.status(400).json({ error: 'Missing userEmail query parameter' })
+    }
+    if(userEmail.includes('@students.wits.ac.za')){
+      const studentDetails = await studentConsulationService.getStudentDetails(userEmail);
+      res.json(studentDetails[0].studentNumber)
+    }
+    else{
+      return res.status(400).json({ error: 'Invalid email address, not logged in as student' })
+    }
   } catch (err) {
     console.error(err)
     res.sendStatus(500)
