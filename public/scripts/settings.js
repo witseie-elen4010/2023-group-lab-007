@@ -1,6 +1,6 @@
-const form = document.querySelector('#consPeriod');
-const entryList = document.getElementById('entryList');
-const statusMessage = document.getElementById('statusMessage');
+const form = document.querySelector('#consPeriod')
+const entryList = document.getElementById('entryList')
+const statusMessage = document.getElementById('statusMessage')
 
 let entries = [];
 
@@ -13,13 +13,13 @@ function handleEmail(email) {
 form.addEventListener('submit', async (event) => {
   event.preventDefault();
 
-  var email = document.getElementById('email').value;
-  const dayOfWeek = document.getElementById('dayOfWeek').value;
-  const startTime = convertTo24(document.querySelector('input[name="start_time"]').value);
-  const endTime = convertTo24(document.querySelector('input[name="end_time"]').value);
+  var email = document.getElementById('email').value
+  const dayOfWeek = document.getElementById('dayOfWeek').value
+  const startTime = convertTo24(document.querySelector('input[name="start_time"]').value)
+  const endTime = convertTo24(document.querySelector('input[name="end_time"]').value)
   const maxStudents = document.querySelector('input[name="maxStudents"]').value;
-  const maxConsultations = document.querySelector('input[name="maxConsultations"]').value;
-  const duration = document.querySelector('select[name="maxDuration"]').value;
+  const maxConsultations = document.querySelector('input[name="maxConsultations"]').value
+  const duration = document.querySelector('select[name="maxDuration"]').value
 
   const entry = {
     lecturerId: email,
@@ -31,13 +31,13 @@ form.addEventListener('submit', async (event) => {
     numberOfStudents: maxStudents,
   };
 
-  const status = checkForOverlap(dayOfWeek, convertToMinutes(startTime), convertToMinutes(endTime), entries);
+  const status = checkForOverlap(dayOfWeek, convertToMinutes(startTime), convertToMinutes(endTime), entries)
 
   if (!status) {
     handleEmail(email)
-    entries.push(entry);
-    displayEntries();
-    insertConsultationPeriods(entry);
+    entries.push(entry)
+    displayEntries()
+    insertConsultationPeriods(entry)
   }
   else {
     displayStatus();
@@ -59,7 +59,7 @@ async function insertConsultationPeriods(entry) {
     if (response.status === 200) {
       console.log('Data inserted successfully!');
     } else {
-      console.log('Error occurred while inserting data.');
+      console.log('Error occurred while inserting data.')
     }
   } catch (error) {
     console.error(error);
@@ -80,9 +80,9 @@ async function deleteConsultationPeriod(lecturerID, dayOfWeek) {
     })
 
     if (response.status === 200) {
-      console.log('Data deleted successfully!');
+      console.log('Data deleted successfully!')
     } else {
-      console.log('Error occurred while inserting data.');
+      console.log('Error occurred while inserting data.')
     }
   } catch (error) {
     console.error(error);
@@ -118,9 +118,9 @@ async function getConsultationPeriods(lecturerID) {
     displayEntries();
 
     if (response.status === 200) {
-      console.log('Data fetched successfully!');
+      console.log('Data fetched successfully!')
     } else {
-      console.log('Error occurred while inserting data.');
+      console.log('Error occurred while inserting data.')
     }
   } catch (error) {
     console.error(error);
@@ -128,7 +128,7 @@ async function getConsultationPeriods(lecturerID) {
 }
 
 function displayStatus() {
-  statusMessage.innerHTML = 'Canceled. There appears to be a conflict with an existing consultation period. Please try again.';
+  statusMessage.innerHTML = 'Canceled. There appears to be a conflict with an existing consultation period. Please try again.'
 }
 
 //Display existing consultation settings as a list
@@ -137,7 +137,7 @@ function displayEntries() {
 
   for (let i = 0; i < entries.length; i++) {
     const entry = entries[i];
-    const listItem = document.createElement('li');
+    const listItem = document.createElement('li')
     listItem.innerHTML = `
     <div style="padding: 10px">
       ${i + 1}. ${entry.dayOfWeek} - ${entry.startTime} to ${entry.endTime} where ${entry.maximumNumberOfConsultationsPerDay} consultations of ${entry.durationMinutes} minutes can be booked with a max of ${entry.numberOfStudents} students per consultation.
@@ -148,13 +148,13 @@ function displayEntries() {
   }
 
   //Delete button calls the delete consultation function for that consultation 
-  const deleteButtons = document.querySelectorAll('.deleteEntry');
+  const deleteButtons = document.querySelectorAll('.deleteEntry')
   deleteButtons.forEach(button => {
     button.addEventListener('click', (event) => {
-      const index = parseInt(event.target.getAttribute('data-index'));
-      deleteConsultationPeriod(entries[index].lecturerId, entries[index].dayOfWeek);
-      entries.splice(index, 1);
-      displayEntries();
+      const index = parseInt(event.target.getAttribute('data-index'))
+      deleteConsultationPeriod(entries[index].lecturerId, entries[index].dayOfWeek)
+      entries.splice(index, 1)
+      displayEntries()
     });
   });
 }
@@ -181,9 +181,9 @@ $(document).ready(function () {
 
   // Code to disable options not divisible by 15
   $("#durationPicker option").each(function () {
-    var value = parseInt($(this).val());
+    var value = parseInt($(this).val())
     if (value % 15 !== 0) {
-      $(this).prop("disabled", true);
+      $(this).prop("disabled", true)
     }
   });
 });

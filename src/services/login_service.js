@@ -6,4 +6,4 @@ function isStudent (email) {
   return email.includes('@students.wits.ac.za')
 }
 
-module.exports = { isLecturer, isStudent };
+module.exports = { isLecturer, isStudent }

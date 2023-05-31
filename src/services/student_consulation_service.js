@@ -8,8 +8,8 @@ async function getStudentConsultationDetails(email) {
       const consultationDetailsStudentData = await consultationDetails.aggregate(studentConsultationPipeline(studentNumber))
       return consultationDetailsStudentData
     } catch (err) {
-      console.error(err);
-      throw err; // Throw the error to handle it in the calling function
+      console.error(err)
+      throw err // Throw the error to handle it in the calling function
     }
   }
 
@@ -19,10 +19,10 @@ async function getStudentDetails(email) {
       const studentDetailsData = await studentDetails.aggregate(studentDetailsPipeline(email))
       return studentDetailsData
     } catch (err) {
-      console.error(err);
-      throw err; // Throw the error to handle it in the calling function
+      console.error(err)
+      throw err // Throw the error to handle it in the calling function
     }
   }
 
 
-module.exports = {getStudentConsultationDetails, getStudentDetails};
+module.exports = {getStudentConsultationDetails, getStudentDetails}

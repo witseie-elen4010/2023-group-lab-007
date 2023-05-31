@@ -3,23 +3,23 @@ const { lecturerDetails, studentDetails, consultationDetails, studentBooking, co
 // Function to insert new data into the consultationPeriods collection
 async function getConsultationPeriods(selectedLecturer) {
   try {
-    const consultationPeriodsData = await consultationPeriods.find({ lecturerId: selectedLecturer });
-    return consultationPeriodsData;
+    const consultationPeriodsData = await consultationPeriods.find({ lecturerId: selectedLecturer })
+    return consultationPeriodsData
   } catch (err) {
-    console.error(err);
-    throw err; // Throw the error to handle it in the calling function
+    console.error(err)
+    throw err // Throw the error to handle it in the calling function
   }
 }
 
 //function that gets the lecturer details
 async function getLecturerDetails() {
   try {
-    const lecturerDetailsData = await lecturerDetails.find({});
-    return lecturerDetailsData;
+    const lecturerDetailsData = await lecturerDetails.find({})
+    return lecturerDetailsData
   } catch (err) {
-    console.error(err);
-    throw err; // Throw the error to handle it in the calling function
+    console.error(err)
+    throw err // Throw the error to handle it in the calling function
   }
 }
 
-module.exports = { getConsultationPeriods, getLecturerDetails };
+module.exports = { getConsultationPeriods, getLecturerDetails }

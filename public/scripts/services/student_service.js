@@ -5,7 +5,7 @@ function getPossibleSlots(totalStart, totalEnd, bookedSlots, duration) {
         let [hour, minute] = time.split(':')
         let date = new Date()
         date.setHours(hour, minute, 0, 0)
-        return date;
+        return date
     }
   
     // Function to check overlap
