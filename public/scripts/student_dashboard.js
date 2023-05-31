@@ -465,6 +465,7 @@ function generateConsultationsHTML(consultation) {
       html += '<li>'
       html += `Date: ${consultation.date}<br>` // Display the consultation date
       html += `Time: ${consultation.startTime} - ${consultation.endTime}<br>` // Display the consultation time range
+      html += `Title: ${consultation.title}<br>` 
       html += `Maximum number of students: ${consultation.maximumNumberOfStudents}<br>` // Display the maximum number of students
       html += '</li>'
     html += '</ul>'
@@ -533,6 +534,7 @@ dropdownMenu.addEventListener('change', async (e) => {
       option.dataset.startTime = consultation.startTime
       option.dataset.endTime = consultation.endTime
       option.dataset.numberOfStudents = consultation.maximumNumberOfStudents
+      option.dataset.title = consultation.title
       existingConsultationsMenu.add(option)
       existingConsultationsMenu.add(option)
     }
@@ -553,6 +555,7 @@ existingConsultationsMenu.addEventListener('change', function() {
       startTime : this.options[this.selectedIndex].dataset.startTime,
       endTime : this.options[this.selectedIndex].dataset.endTime,
       maximumNumberOfStudents : existingConsultationsMenu[existingConsultationsMenu.selectedIndex].dataset.numberOfStudents,
+      title : existingConsultationsMenu[existingConsultationsMenu.selectedIndex].dataset.title,
     }
     const consultationsHTML = generateConsultationsHTML(details)
     displayConsultations(consultationsHTML)
