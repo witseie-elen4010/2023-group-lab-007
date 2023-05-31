@@ -143,7 +143,7 @@ dropdownMenu.addEventListener('change', async (e) => {
   while (existingConsultationsMenu.options.length > 1) {
     existingConsultationsMenu.remove(1)
   }
-
+  removeSubperiodDropdown()
   if (selectedTeacher) {
     // I am assuming that teacher object has an id field that represents the lecturerId
     const slots = await searchConsultations(selectedTeacher)
@@ -157,7 +157,9 @@ dropdownMenu.addEventListener('change', async (e) => {
         option.value = getDateString(getNextDate(slot.dayOfWeek, j))
         option.dataset.length = slot.durationMinutes
         option.dataset.start = slot.startTime
+        option.dataset.end = slot.endTime
         option.dataset.maxCapacity = slot.numberOfStudents
+        option.dataset.maxDuration = slot.durationMinutes/slot.maximumNumberOfConsultationsPerDay
         slotDropdownMenu.add(option)
       }
     }
@@ -475,7 +477,6 @@ function clearConsultationsContainer() {
   // Clear the consultations container by emptying its content
   consultationContainer.innerHTML = ''
 }
-
 const consultationContainer = document.getElementById('consultation')
 
 // Selecting the new dropdown menu
@@ -490,7 +491,7 @@ dropdownMenu.addEventListener('change', async (e) => {
     existingConsultationsMenu.remove(1)
   }
   clearConsultationsContainer()
-
+  document.getElementById('durationSelector').style.display = 'none'; // Hide the duration selector
   if (selectedTeacher) {
     // Fetch consultation periods for selected lecturer
 
@@ -669,10 +670,9 @@ function getSubPeriod(start, duration, index){ //change when the slots are not a
     return [startTime, endTime]
 }
 // Function to create and add the subperiod dropdown to the DOM
-function createSubperiodDropdown(slotLength, startTime) {
+function createSubperiodDropdown(possibleSlots, duration) {
   // Calculate the number of subperiods
   removeSubperiodDropdown()
-  const numberOfSubperiods = slotLength / 15
   
   // Create the subperiod dropdown
   const subperiodDropdown = document.createElement('select')
@@ -683,13 +683,14 @@ function createSubperiodDropdown(slotLength, startTime) {
   subperiodDropdown.add(defaultOption)
 
   // Populate the dropdown with the subperiods
-  for (let i = 0; i < numberOfSubperiods; i++) {
+  for (let i = 0; i < possibleSlots.length; i++) {
     const option = document.createElement('option')
-    let times = getSubPeriod(startTime, 15, i)
-    option.text = `${times[0]} - ${times[1]}`
-    option.value = 15//change in future.
-    option.dataset.start = times[0]
-    option.dataset.end = times[1]
+    time1 = possibleSlots[i][0]
+    time2 = possibleSlots[i][1]
+    option.text = `${time1} - ${time2}`
+    option.value = duration//change in future.
+    option.dataset.start = time1
+    option.dataset.end = time2
     subperiodDropdown.add(option)
   }
 
@@ -716,18 +717,33 @@ if (hideConsultation) {
 }
 
 // Event listener for when a slot is selected
-slotDropdownMenu.addEventListener('change', function() {
+slotDropdownMenu.addEventListener('change',async function() {
   if (this.value !== "") { //if a slot is selected
     existingConsultationsMenu.setAttribute('disabled', true) // disable existing consultations
     existingConsultationsMenu.selectedIndex = 0 //reset selection to default
     bookButton.textContent = "Book"
     joinExisting = false
 
-    // Create the subperiod dropdown
-    // Create the subperiod dropdown
+    selectedTeacher = dropdownMenu.value
+    
+    const consultations = await getExistingConsultations(selectedTeacher)
+    const approvedConsultations = consultations.filter(consultation => consultation.status === "approved")
+    const date = slotDropdownMenu.value
+    const existingConsultations = approvedConsultations.filter(consultation => consultation.date === date)
+  console.log(existingConsultations)
   const slotLength = this.options[this.selectedIndex].dataset.length
   const startTime = this.options[this.selectedIndex].dataset.start
-  createSubperiodDropdown(slotLength, startTime)
+  const endTime = this.options[this.selectedIndex].dataset.end
+  bookedSlots = []
+  for(let i=0;i<existingConsultations.length;i++){
+    start = existingConsultations[i].startTime
+    end = existingConsultations[i].endTime
+    bookedSlots.push([start, end])
+  }
+  console.log(bookedSlots)
+  duration = document.getElementById("duration").value
+  possibleSlots = getPossibleSlots(startTime, endTime, bookedSlots, duration)
+  createSubperiodDropdown(possibleSlots, 30)
 
   } else { 
     existingConsultationsMenu.removeAttribute('disabled') // enable existing consultations
@@ -739,3 +755,128 @@ slotDropdownMenu.addEventListener('change', function() {
   }
   checkButtonStatus()
 })
+
+
+function getPossibleSlots(totalStart, totalEnd, bookedSlots, duration) {
+  // Create date object and set time
+  const setDateTime = (time) => {
+      let [hour, minute] = time.split(':')
+      let date = new Date()
+      date.setHours(hour, minute, 0, 0)
+      return date;
+  }
+
+  // Function to check overlap
+  const isOverlap = (start1, end1, start2, end2) => {
+      if (start1 >= start2 && start1 < end2) return true;
+      if (start2 >= start1 && start2 < end1) return true;
+      return false;
+  }
+
+  // Function to add minutes to a date object
+  const addMinutes = (date, minutes) => {
+      return new Date(date.getTime() + minutes*60000)
+  }
+
+  // Function to format date object to time string
+  const formatTime = (date) => {
+      let hours = date.getHours().toString().padStart(2, '0')
+      let minutes = date.getMinutes().toString().padStart(2, '0')
+      return `${hours}:${minutes}`
+  }
+
+  // Convert total period strings to date objects
+  let totalStartObj = setDateTime(totalStart)
+  let totalEndObj = setDateTime(totalEnd)
+
+  // Create an array to hold the possible slots
+  let possibleSlots = []
+
+  // Iterate over the total period, advancing by the duration each time
+  for (let start = totalStartObj; start < totalEndObj; start = addMinutes(start, 15)) {
+      let end = addMinutes(start, duration)
+
+      if (end > totalEndObj) break
+
+      let overlap = bookedSlots.some(booked => {
+          let bookedStart = setDateTime(booked[0])
+          let bookedEnd = setDateTime(booked[1])
+          return isOverlap(start, end, bookedStart, bookedEnd)
+      });
+
+      if (!overlap) {
+          possibleSlots.push([formatTime(start), formatTime(end)])
+      }
+  }
+
+  return possibleSlots;
+}
+
+// Existing duration adjustment code here...
+
+slotDropdownMenu.addEventListener('change', function() {
+  var selectedOption = this.value;
+  if (selectedOption !== '') { 
+      document.getElementById('durationSelector').style.display = 'block'; // Show the duration selector
+      document.getElementById('duration').value = '15'
+      document.getElementById('duration').dataset.maxDuration = this.options[this.selectedIndex].dataset.maxDuration
+  } else {
+      document.getElementById('durationSelector').style.display = 'none'; // Hide the duration selector
+  }
+});
+
+
+document.getElementById('minus').addEventListener('click', function() {
+  var durationInput = document.getElementById('duration');
+  var currentValue = parseInt(durationInput.value, 10);
+  if(currentValue>0){
+
+  }
+  else{
+    currentValue=15
+  }
+  if (currentValue > 15) { // Prevent the value from dropping below 15
+      durationInput.value = currentValue - 15;
+  }
+  showAvailableConsultations()
+});
+
+document.getElementById('plus').addEventListener('click', function() {
+  var durationInput = document.getElementById('duration');
+  const maxDuration = durationInput.dataset.maxDuration
+  console.log(maxDuration)
+  var currentValue = parseInt(durationInput.value, 10);
+  if(currentValue>0){
+
+  }
+  else{
+    currentValue=15
+  }
+  if (currentValue+15<=maxDuration){
+  durationInput.value = currentValue + 15
+  }
+  showAvailableConsultations()
+});
+
+async function showAvailableConsultations(){
+  selectedTeacher = dropdownMenu.value
+    
+    const consultations = await getExistingConsultations(selectedTeacher)
+    const approvedConsultations = consultations.filter(consultation => consultation.status === "approved")
+    const date = slotDropdownMenu.value
+    const existingConsultations = approvedConsultations.filter(consultation => consultation.date === date)
+  console.log(existingConsultations)
+  const slotLength = slotDropdownMenu.options[slotDropdownMenu.selectedIndex].dataset.length
+  const startTime = slotDropdownMenu.options[slotDropdownMenu.selectedIndex].dataset.start
+  const endTime = slotDropdownMenu.options[slotDropdownMenu.selectedIndex].dataset.end
+  bookedSlots = []
+  for(let i=0;i<existingConsultations.length;i++){
+    start = existingConsultations[i].startTime
+    end = existingConsultations[i].endTime
+    bookedSlots.push([start, end])
+  }
+  console.log(bookedSlots)
+  duration = document.getElementById("duration").value
+  possibleSlots = getPossibleSlots(startTime, endTime, bookedSlots, duration)
+  createSubperiodDropdown(possibleSlots, 30)
+}
