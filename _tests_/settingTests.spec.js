@@ -27,6 +27,20 @@ describe('periodEvaluation', () => {
 
     test('should return true for start time after end time', () => {
       const dayOfWeek = 'tuesday';
+      const startTime = convertToMinutes('20:00');
+      const endTime = convertToMinutes('21:00');
+      expect(checkForOverlap(dayOfWeek, startTime, endTime, entries)).toBe(true);
+    });
+
+    test('should return false when specifying a consultation period on a different day of the week', () => {
+      const dayOfWeek = 'thursday';
+      const startTime = convertToMinutes('21:00');
+      const endTime = convertToMinutes('22:00');
+      expect(checkForOverlap(dayOfWeek, startTime, endTime, entries)).toBe(false);
+    });
+
+    test('should return true when specifying two or more consultation periods on the same day of the week', () => {
+      const dayOfWeek = 'tuesday';
       const startTime = convertToMinutes('18:00');
       const endTime = convertToMinutes('16:00');
       expect(checkForOverlap(dayOfWeek, startTime, endTime, entries)).toBe(true);

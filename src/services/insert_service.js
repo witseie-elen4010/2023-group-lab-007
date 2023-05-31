@@ -5,7 +5,7 @@ async function insertLecturerDetails(newData) {
     const document = new lecturerDetails(newData)
     await document.save()
   } catch (err) {
-    console.error('Failed to insert new data into lecturerDetails collection.', err)
+    console.error(err)
   }
 }
 
@@ -15,7 +15,7 @@ async function insertStudentDetails(newData) {
     const document = new studentDetails(newData)
     await document.save()
   } catch (err) {
-    console.error('Failed to insert new data into studentDetails collection.', err)
+    console.error(err)
   }
 }
 
@@ -25,7 +25,7 @@ async function insertConsultationDetails(newData) {
     const document = new consultationDetails(newData)
     await document.save()
   } catch (err) {
-    console.error('Failed to insert new data into consultationDetails collection.', err)
+    console.error(err)
   }
 }
 
@@ -34,9 +34,8 @@ async function insertStudentBooking(newData) {
   try {
     const document = new studentBooking(newData)
     await document.save()
-    console.log('New data inserted into studentBooking collection.')
   } catch (err) {
-    console.error('Failed to insert new data into studentBooking collection.', err)
+    console.error(err)
   }
 }
 
@@ -47,7 +46,7 @@ async function insertConsultationPeriods(newData) {
     await document.save()
     // console.log('New data inserted into consultationPeriods collection.')
   } catch (err) {
-    console.error('Failed to insert new data into consultationPeriods collection.', err)
+    console.error(err)
   }
 }
 

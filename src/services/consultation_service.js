@@ -4,21 +4,21 @@ const examplePipeline = require('../controllers/examplePipeline')
 // Function to get all consultations
 async function getConsultationDetails() {
   try {
-    const consultationDetailsData = await consultationDetails.find({});
-    return consultationDetailsData;
+    const consultationDetailsData = await consultationDetails.find({})
+    return consultationDetailsData
   } catch (err) {
-    console.error(err);
-    throw err; // Throw the error to handle it in the calling function
+    console.error(err)
+    throw err // Throw the error to handle it in the calling function
   }
 }
 
 async function getConsultationDetailsByLecID(lecturer_id) {
   try {
     const consultationDetailsData = await consultationDetails.find({ lecturerId: lecturer_id })
-    return consultationDetailsData;
+    return consultationDetailsData
   } catch (err) {
     console.error(err)
-    throw err; // Throw the error to handle it in the calling function
+    throw err // Throw the error to handle it in the calling function
   }
 }
 
@@ -28,7 +28,7 @@ async function getConsultationDetailsByID(id) {
     return consultationDetailsData
   } catch (err) {
     console.error(err)
-    throw err; // Throw the error to handle it in the calling function
+    throw err // Throw the error to handle it in the calling function
   }
 }
 
@@ -37,10 +37,10 @@ async function approveConsultation(consultationID) {
     await consultationDetails.updateOne(
       { consultationId: consultationID },
       { $set: { status: "approved" } }
-    );
+    )
   } catch (err) {
-    console.error(err);
-    throw err; // Throw the error to handle it in the calling function
+    console.error(err)
+    throw err // Throw the error to handle it in the calling function
   }
 }
 
@@ -49,40 +49,40 @@ async function cancelConsultation(consultationID) {
     await consultationDetails.updateOne(
       { consultationId: consultationID },
       { $set: { status: "disapproved" } }
-    );
+    )
   } catch (err) {
-    console.error(err);
-    throw err; // Throw the error to handle it in the calling function
+    console.error(err)
+    throw err // Throw the error to handle it in the calling function
   }
 }
 
 async function getMoreDetails() {
   try {
     const consultationDetailsData = await consultationDetails.aggregate(examplePipeline)
-    return consultationDetailsData;
+    return consultationDetailsData
   } catch (err) {
-    console.error(err);
-    throw err; // Throw the error to handle it in the calling function
+    console.error(err)
+    throw err // Throw the error to handle it in the calling function
   }
 }
 
 async function searchConsultationDetails(selectedLecturer) {
   try {
-    const consultationPeriodsData = await consultationDetails.find({ lecturerId: selectedLecturer });
-    return consultationPeriodsData;
+    const consultationPeriodsData = await consultationDetails.find({ lecturerId: selectedLecturer })
+    return consultationPeriodsData
   } catch (err) {
-    console.error(err);
-    throw err; // Throw the error to handle it in the calling function
+    console.error(err)
+    throw err // Throw the error to handle it in the calling function
   }
 }
 // Function to get consultation details for a specific lecturer
 async function getConsultationDetailsByLecturer(lecturerId) {
   try {
-    const consultationDetailsData = await consultationDetails.find({ lecturerId: lecturerId });
-    return consultationDetailsData;
+    const consultationDetailsData = await consultationDetails.find({ lecturerId: lecturerId })
+    return consultationDetailsData
   } catch (err) {
-    console.error(err);
-    throw err; // Throw the error to handle it in the calling function
+    console.error(err)
+    throw err // Throw the error to handle it in the calling function
   }
 }
 
