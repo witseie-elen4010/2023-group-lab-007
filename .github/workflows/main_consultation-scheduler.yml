@@ -28,7 +28,9 @@ jobs:
           npm run test --if-present
 
       - name: Run tests and generate coverage
-        run: jest --coverage
+        run: | 
+          npm install
+          npm run cov --if-present
 
       - name: Publish to coveralls.io
         uses: coverallsapp/github-action@v1.1.2
