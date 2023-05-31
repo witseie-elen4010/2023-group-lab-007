@@ -197,11 +197,12 @@ function formatModalBody(data) {
     <strong>End Time:</strong> ${data.end}<br><br>
     <strong>Students attending:</strong> ${data.extendedProps.studentCount}<br><br>
     <strong>Status of consultation:</strong> ${data.extendedProps.status}<br><br>
+    <strong>Consultation ID:</strong> ${data.extendedProps.consultationId}<br><br>
   `
   return consultationInfo.innerHTML
 }
 
-function createConsultationDetailsModal(selectedTitle, selectedConsultationID, data) {
+function createConsultationDetailsModal(selectedConsultationID , selectedConsultationID, data) {
   const consultationDetails = document.createElement("div")
   consultationDetails.classList.add("modal", "fade")
   consultationDetails.id = "consultationDetailsModal"
@@ -220,7 +221,7 @@ function createConsultationDetailsModal(selectedTitle, selectedConsultationID, d
   const consultationTitle = document.createElement("h5")
   consultationTitle.classList.add("modal-title")
   consultationTitle.id = "consultationDetailsModalLabel"
-  consultationTitle.textContent = selectedTitle.trim()
+  consultationTitle.textContent = data.title
   modalHeader.appendChild(consultationTitle)
   const closeButton = document.createElement("button")
   closeButton.type = "button"
@@ -259,9 +260,10 @@ showConsultation.addEventListener('click', () => {
   getConsultations().then(consultations => {
    
     consultations.forEach(consultation => {
-      const { date, startTime, endTime, lecturer, consultationId, studentCount, status } = consultation
+      const { date, startTime, endTime, lecturer, consultationId, studentCount, status, title } = consultation
       const event = {
-        title: "\tConsult: " + consultationId,
+        title:title,
+        consultationId: consultationId,
         start: `${date}T${startTime}`,
         end: `${date}T${endTime}`,
         lecturer: lecturer,
@@ -280,9 +282,7 @@ showConsultation.addEventListener('click', () => {
 
 // Event click callback function
 function handleEventClick(info) {
-  const selectedTitle = info.event.title;
-  const selectedConsultationID = parseInt(selectedTitle.split(" ")[1])
-  console.log("Selected consultation title:", selectedTitle)
+  const selectedConsultationID = info.event.extendedProps.consultationId; 
   console.log("Selected consultation ID:", selectedConsultationID)
   console.log("Selected consultation date:", info.event.start)
   console.log("Selected consultation end:", info.event.end)
@@ -295,23 +295,23 @@ function handleEventClick(info) {
   if (selectedConsultationID === currentConsultationID) {
     // The same consultation is clicked again, show the modal
     const modal = document.getElementById("consultationDetailsModal")
-    const consultationDetails = createConsultationDetailsModal(selectedTitle, selectedConsultationID, info.event);
+    const consultationDetails = createConsultationDetailsModal(selectedConsultationID , selectedConsultationID, info.event);
 
     // Display the modal
     document.body.appendChild(consultationDetails)
     const bootstrapModal = new bootstrap.Modal(consultationDetails)
-    bootstrapModal.show();
+    bootstrapModal.show()
 
 
   } else {
-    consultationsTextField.value = selectedTitle.trim()
+    consultationsTextField.value = selectedConsultationID
     consultationsTextField.dataset.consultationID = selectedConsultationID
     consultationsTextField.style.textAlign = "center"
 
     // Remove existing modal if present
     const modal = document.getElementById("consultationDetailsModal")
     if (modal) {
-      modal.remove();
+      modal.remove()
     }
   }
 }
@@ -383,7 +383,8 @@ function getConsultations() {
           startTime: item.startTime,
           endTime: item.endTime,
           studentCount: studentCountTemp,
-          status: item.status
+          status: item.status,
+          title:item.title
         }
       })
       return consultations
