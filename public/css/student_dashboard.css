@@ -5,17 +5,15 @@
   /* Add RGB color border */
   border-radius: 20px;
   /* Add rounded edges */
-  padding: 0em 2em 0em 2em;
+  padding: 2em 2em 2em 2em;
   /* Add padding */
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
   /* Add box shadow */
   backdrop-filter: blur(5px);
   /* Add the blurry glass effect */
-  margin: 3em 3em 0.5em 3em;
-  margin-left: auto;
-  margin-right: auto;
+  margin: 2em 2em 2em 2em;
 
-  max-width: 70%;
+  max-width: 100%;
 }
 
 
@@ -24,4 +22,27 @@ body {
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
+}
+
+.containerRow {
+  display: flex;
+}
+
+.div1,
+.div2 {
+  display: inline-block;
+}
+
+.div1 {
+  max-width: 100%;
+  min-width: 35%;
+}
+
+.div2 {
+  max-width: 100%;
+  min-width: 65%;
+}
+
+.title {
+  margin: 1em 1em 0em 1em;
 }
