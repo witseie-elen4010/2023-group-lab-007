@@ -4,6 +4,7 @@
 <head>
   <title>Student Form</title>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="/cdn/css/moreDetails.css">
   <style>
     body {
       display: flex;
@@ -15,7 +16,7 @@
 </head>
 
 <body>
-  <div class="container" style="padding-top:3em; padding-bottom:5em;  max-width: 700px">
+  <div class="card" style="padding: 2em 2em 2em 2em; max-width: 700px;">
     <h3>
       <% if (locals.isAuthenticated) { %>
         Hi <%= locals.user.nickname%>
@@ -42,27 +43,33 @@
           <input type="hidden" id="email" value="<%= user.email %>">
         </div>
         <button type="submit" class="btn btn-primary">Submit</button>
-        <% } %>
+        <a href="/loginorlogout">
+          <button type="button" href="/loginorlogout" class="btn btn-primary" id="logoutBtn">Leave</button>
+        </a>
     </form>
 
-
-    <form id="lecturerForm">
-      <% if (roll=='lecturer' ) { %>
-        <h1>Lecturer Form</h1>
-        <div class="form-group">
-          <label for="firstName">First Name</label>
-          <input type="text" class="form-control" id="firstName" name="firstName">
-        </div>
-        <div class="form-group">
-          <label for="lastName">Last Name</label>
-          <input type="text" class="form-control" id="lastName" name="lastName">
-        </div>
-        <div class="form-group">
-          <input type="hidden" id="email" value="<%= user.email %>">
-          <button type="submit" class="btn btn-primary">Submit</button>
-        </div>
-        <% } %>
-    </form>
+    <% } %>
+      </form>
+      <form id="lecturerForm">
+        <% if (roll=='lecturer' ) { %>
+          <h1>Lecturer Form</h1>
+          <div class="form-group">
+            <label for="firstName">First Name</label>
+            <input type="text" class="form-control" id="firstName" name="firstName">
+          </div>
+          <div class="form-group">
+            <label for="lastName">Last Name</label>
+            <input type="text" class="form-control" id="lastName" name="lastName">
+          </div>
+          <div class="form-group">
+            <input type="hidden" id="email" value="<%= user.email %>">
+            <button type="submit" class="btn btn-primary">Submit</button>
+            <a href="/loginorlogout">
+              <button type="button" href="/loginorlogout" class="btn btn-primary" id="logoutBtn">Leave</button>
+            </a>
+          </div>
+          <% } %>
+      </form>
 
   </div>
   <script src="/cdn/scripts/more_details.js"></script>
