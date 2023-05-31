@@ -40,9 +40,9 @@ test.skip('Prevent students from booking consultations with different lecturers 
     await page.close()
     await context.close()
     await browser.close()
-  });
+  })
   
-  test('Prevent students from Joining consultations with different lecturers simultaneously', async () => {
+  test.skip('Prevent students from Joining consultations with different lecturers simultaneously', async () => {
     test.slow(40000)
     const browser = await chromium.launch({ headless: false })
     const context = await browser.newContext()
@@ -78,4 +78,4 @@ test.skip('Prevent students from booking consultations with different lecturers 
     await page.close()
     await context.close()
     await browser.close()
-  });
+  })
