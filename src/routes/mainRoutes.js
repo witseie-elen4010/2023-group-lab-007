@@ -19,12 +19,14 @@ router.get('/', async (req, res) => {
           isAuthenticated: req.oidc.isAuthenticated(), user: req.oidc.user, roll: "lecturer",
         });
         console.log('Navigated to landing page [' + userEmail + ']');
+        logger.info('Navigated to landing page [' + userEmail + ']');
       }
       else {
         res.render('moreDetails', {
           isAuthenticated: req.oidc.isAuthenticated(), user: req.oidc.user, roll: "lecturer",
         });
         console.log('Navigated to more details page [' + userEmail + ']');
+        logger.info('Navigated to more details page [' + userEmail + ']');
       }
 
     } else if (isStudent(userEmail)) {
@@ -34,13 +36,14 @@ router.get('/', async (req, res) => {
           isAuthenticated: req.oidc.isAuthenticated(), user: req.oidc.user, roll: "student",
         });
         console.log('Navigated to landing page [' + userEmail + ']');
-
+        logger.info('Navigated to landing page [' + userEmail + ']');
       }
       else {
         res.render('moreDetails', {
           isAuthenticated: req.oidc.isAuthenticated(), user: req.oidc.user, roll: "student",
         });
         console.log('Navigated to more details page [' + userEmail + ']');
+        logger.info('Navigated to more details page [' + userEmail + ']');
       }
 
     } else {
@@ -48,6 +51,8 @@ router.get('/', async (req, res) => {
         isAuthenticated: req.oidc.isAuthenticated(), user: req.oidc.user, roll: "other",
       });
       console.log('Navigated to notamember page [' + userEmail + ']');
+      logger.info('Navigated to notamember page [' + userEmail + ']');
+
     }
   } else {
     res.redirect('/login');
@@ -77,16 +82,22 @@ router.get('/dashboard', function (req, res) {
         isAuthenticated: req.oidc.isAuthenticated(), user: req.oidc.user, roll: "lecturer",
       });
       console.log('Navigated to lecturer dashboard page [' + userEmail + ']');
+      logger.info('Navigated to lecturer dashboard page [' + userEmail + ']');
+
     } else if (isStudent(userEmail)) {
       res.render('student_dashboard', {
         isAuthenticated: req.oidc.isAuthenticated(), user: req.oidc.user, roll: "student",
       });
       console.log('Navigated to student dashboard page [' + userEmail + ']');
+      logger.info('Navigated to student dashboard page [' + userEmail + ']');
+
     } else {
       res.render('notamember', {
         isAuthenticated: req.oidc.isAuthenticated(), user: req.oidc.user, roll: "other",
       });
       console.log('Navigated to notamember page [' + userEmail + ']');
+      logger.info('Navigated to notamember page [' + userEmail + ']');
+
     }
   } else {
     res.redirect('/login');
@@ -98,10 +109,12 @@ router.get('/loginorlogout', function (req, res) {
   const userEmail = req.oidc.user.email;
   if (isAuthenticated) {
     console.log('Logged out [' + userEmail + ']');
+    logger.info('Logged out [' + userEmail + ']');
     res.redirect('/logout');
   }
   else {
     console.log('Navigated to login page [' + userEmail + ']');
+    logger.info('Navigated to login page [' + userEmail + ']');
     res.redirect('/login');
   }
 })
@@ -115,6 +128,8 @@ router.get('/settings', function (req, res) {
     isAuthenticated: req.oidc.isAuthenticated(), user: req.oidc.user, roll: "lecturer",
   });
   console.log('Navigated to settings page [' + userEmail + ']');
+  logger.info('Navigated to settings page [' + userEmail + ']');
+
 })
 
 module.exports = router

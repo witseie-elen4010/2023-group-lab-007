@@ -5,6 +5,7 @@ const dotenv = require('dotenv').config();
 const ejs = require('ejs');
 const path = require('path');
 const logger = require("./logger");
+const fs = require('fs');
 const mongoose = require('mongoose');
 
 // Authzero configuration file
@@ -78,11 +79,30 @@ new Promise((resolve, reject) => {
   });
 });
 
-// require('./src/services/dbProvider').connect().then(() => {
-//   console.log('Connected to MongoDB!')
-// }).catch((error) => {
-//   console.error('Failed to connect to MongoDB:', error)
-// })
+// Delete the logs.txt file on startup
+const filePath = path.join(__dirname, './public/logs.txt');
+fs.unlink(filePath, (err) => {
+  if (err) {
+    console.error(err);
+  } else {
+    console.log('logs.txt file deleted successfully.');
+  }
+});
+
+// Define the route for /logs
+app.get('/logs', (req, res) => {
+  const filePath = path.join(__dirname, './public/logs.txt');
+
+  fs.readFile(filePath, 'utf8', (err, data) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).send('Error retrieving logs.');
+    }
+
+    // Display the content of the logs.txt file on the web page
+    res.send(`<pre>${data}</pre>`);
+  });
+});
 
 // Start the server only if the file is being executed directly
 if (require.main === module) {
