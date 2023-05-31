@@ -27,16 +27,19 @@
   <header>
     <%- include('./partials/navbar'); %>
   </header>
-  <div class="container mt-5">
-    <h1>Lecturer dashboard</h1>
-    <div class="input-group mb-3">
-      <input id="consultations" type="text" readonly value="Select Consultation" style="width: auto;">
-      <div class="input-group-append">
-        <button type="button" id="approveConsultation" class="btn btn-primary">Approve Consultation</button>
-        <button type="button" id="cancelConsultation" class="btn btn-danger">Cancel Consultation</button>
+  <div class="card">
+    <div class="container mt-5">
+      <h1>Lecturer dashboard</h1>
+      <div class="input-group mb-3">
+        <input id="consultations" type="text" readonly value="Select Consultation" style="width: auto;">
+        <div class="input-group-append">
+          <button type="button" id="approveConsultation" class="btn btn-primary">Approve Consultation</button>
+          <button type="button" id="cancelConsultation" class="btn btn-danger">Cancel Consultation</button>
+        </div>
       </div>
+      <div id="calendar"></div>
+      <p></p>
     </div>
-    <div id="calendar"></div>
   </div>
   <footer>
     <%- include('./partials/footer'); %>

@@ -1,5 +1,6 @@
 const form = document.querySelector('#consPeriod');
 const entryList = document.getElementById('entryList');
+const statusMessage = document.getElementById('statusMessage');
 
 let entries = [];
 
@@ -33,9 +34,13 @@ form.addEventListener('submit', async (event) => {
   const status = checkForOverlap(dayOfWeek, convertToMinutes(startTime), convertToMinutes(endTime), entries);
 
   if (!status) {
+    handleEmail(email)
     entries.push(entry);
     displayEntries();
     insertConsultationPeriods(entry);
+  }
+  else {
+    displayStatus();
   }
 });
 
@@ -122,6 +127,9 @@ async function getConsultationPeriods(lecturerID) {
   }
 }
 
+function displayStatus() {
+  statusMessage.innerHTML = 'Canceled. There appears to be a conflict with an existing consultation period. Please try again.';
+}
 
 //Display existing consultation settings as a list
 function displayEntries() {

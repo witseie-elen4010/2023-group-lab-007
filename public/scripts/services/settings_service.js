@@ -1,6 +1,6 @@
 //Display existing consultation settings as a list
 function checkForOverlap(dayOfWeek, startTime, endTime, entries) {
-  if (startTime >= endTime) {                   
+  if (startTime >= endTime) {
     return true;
   }
 
@@ -14,6 +14,7 @@ function checkForOverlap(dayOfWeek, startTime, endTime, entries) {
       }
       else {
       }
+      return true; //Ensures that only one consultation period per day can be specified
     }
     else {
     }
@@ -51,5 +52,5 @@ function convertTo24(timeString) {
   return (combined)
 }
 
-module.exports = { checkForOverlap, convertToMinutes, convertTo24}
+module.exports = { checkForOverlap, convertToMinutes, convertTo24 }
 

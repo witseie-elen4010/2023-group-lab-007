@@ -211,7 +211,7 @@ router.delete('/api/cancelConsultation/:consultationID', async (req, res) => {
   try {
     const consultationID = parseInt(req.params.consultationID)
     await consultationService.cancelConsultation(consultationID)
-    console.log('Cancelled consultation with id ' + consultationID + '[' + userEmail + ']');
+    console.log('Cancelled consultation with ID ' + consultationID + ' [' + userEmail + ']');
     res.json({ message: 'Consultation removed successfully' })
   } catch (err) {
     console.error(err)
@@ -318,15 +318,15 @@ router.get('/api/studentConsultationDetails', async (req, res) => {
 router.get('/api/studentDetails', async (req, res) => {
   try {
     const userEmail = req.oidc.user.email
-    if(!userEmail) {
+    if (!userEmail) {
       return res.status(400).json({ error: 'Missing userEmail query parameter' })
     }
-    if(userEmail.includes('@students.wits.ac.za')){
+    if (userEmail.includes('@students.wits.ac.za')) {
       const studentDetails = await studentConsulationService.getStudentDetails(userEmail);
-    console.log('Fetched student details [' + userEmail + ']');
+      console.log('Fetched student details [' + userEmail + ']');
       res.json(studentDetails)
     }
-    else{
+    else {
       return res.status(400).json({ error: 'Invalid email address, not logged in as student' })
     }
 
@@ -339,15 +339,15 @@ router.get('/api/studentDetails', async (req, res) => {
 router.get('/api/userStudentNumber', async (req, res) => {
   try {
     const userEmail = req.oidc.user.email
-    if(!userEmail) {
+    if (!userEmail) {
       return res.status(400).json({ error: 'Missing userEmail query parameter' })
     }
-    if(userEmail.includes('@students.wits.ac.za')){
+    if (userEmail.includes('@students.wits.ac.za')) {
       const studentDetails = await studentConsulationService.getStudentDetails(userEmail);
-    console.log('Fetched student number for this student [' + userEmail + ']');
+      console.log('Fetched student number for this student [' + userEmail + ']');
       res.json(studentDetails[0].studentNumber)
     }
-    else{
+    else {
       return res.status(400).json({ error: 'Invalid email address, not logged in as student' })
     }
   } catch (err) {
