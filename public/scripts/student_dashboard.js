@@ -44,159 +44,123 @@ slotDropdownMenu.selectedIndex = 0 // Set the default option as selected
 const messageContainer = document.getElementById("messageContainer");
 
 // Function to check if a consultation is already booked at the selected slot
-async function isConsultationAlreadyBooked(consultationId, selectedSlot, selectedLecturerId, slotStart, slotEnd) {
-  const consultationDetailsCheck = await getConsultationPerBooking(consultationId);
-  const checkDate = consultationDetailsCheck.some(check => (check.date === selectedSlot));
-  if (checkDate) {
-    const overlappingConsultation = consultationDetailsCheck.find(check => (
-      check.startTime === String(slotStart) && check.endTime === String(slotEnd) && check.status === 'approved'
-    ));
-
-    if (overlappingConsultation) {
-      const lecturerName = overlappingConsultation.lecturerId.split('@')[0].replace('.', ' ');
-      const message = `Already has a consultation booked with ${lecturerName} on ${selectedSlot} at ${slotStart} - ${slotEnd}`;
-      const messageContainer = document.getElementById('messageContainer');
-      messageContainer.textContent = message;
-      return true;
-    }
-  }
-
-  return false;
-}
-
-// Function to create a new consultation
-async function createNewConsultation(userStudentNumber, selectedLecturerId, selectedSlot, duration, maxStudents, slotStart, slotEnd) {
-  const allConsultations = await getAllConsultations();
-  const consultationIds = allConsultations.map(detail => detail.consultationId);
-  const maxConsultationId = Math.max(...consultationIds);
-  const consultationId = maxConsultationId + 1;
-
-  const details = {
-    consultationId: parseInt(consultationId),
-    lecturerId: String(selectedLecturerId),
-    date: String(selectedSlot),
-    timeMinutes: parseInt(duration),
-    maximumNumberOfStudents: parseInt(maxStudents),
-    status: 'approved', // set default status to "approved"
-    startTime: String(slotStart),
-    endTime: String(slotEnd),
-    title: 'Testing'
-  };  
-
-  try {
-    const consultation = await createConsultation(details);
-    console.log('Booking created successfully:', consultation);
-    console.log('Booking for Student:', userStudentNumber);
-
-    const bookingDetails = {
-      consultationId: consultationId,
-      studentNumber: userStudentNumber,
-      role: "Organizer"
-    };
-
-    const booking = await createBooking(bookingDetails);
-    const message = 'Booking successful'
-    const messageContainer = document.getElementById('messageContainer');
-    messageContainer.textContent = message;
-    console.log('Booking created successfully:', booking);
-
-    // Perform any additional actions after successful booking
-  } catch (error) {
-    console.error('Failed to create booking:', error);
-    // Handle the error appropriately
-  }
-}
-
-// Function to join an existing consultation
-async function joinExistingConsultation(userStudentNumber, selectedSlot) {
-  const bookingDetails = {
-    consultationId: selectedSlot,
-    studentNumber: userStudentNumber,
-    role: "Member"
-  };
-
-  try {
-    const booking = await createBooking(bookingDetails);
-    console.log('Booking created successfully:', booking);
-
-    // Perform any additional actions after successful booking
-  } catch (error) {
-    console.error('Failed to create booking:', error);
-    // Handle the error appropriately
-  }
-}
-
-// Function to update the button text to "Loading..."
-function updateButtonToLoading() {
-  bookButton.textContent = "Loading...";
-  bookButton.disabled = true;
-}
-
-// Function to reset the button text to "Book"
-function resetButton() {
-  bookButton.textContent = "Book";
-  bookButton.disabled = false;
-}
-
-// Event listener for bookButton click
 bookButton.addEventListener('click', async () => {
-  try {
-    const userStudentNumber = await getUserStudentNumber();
-    console.log('studentNumber:', userStudentNumber);
-    console.log('Type of userStudentNumber:', typeof userStudentNumber);
-    const selectedLecturerId = dropdownMenu.value;
-    let selectedSlot = "";
+  const userStudentNumber = await getUserStudentNumber();
+  console.log('studentNumber: ', userStudentNumber);
+  console.log('Type of userStudentNumber:', typeof userStudentNumber);
+  const selectedLecturerId = dropdownMenu.value;
+  let selectedSlot = "";
 
-    if (!joinExisting) {
-      selectedSlot = slotDropdownMenu.value;
-      const selectedPeriod = document.getElementById("subperiodDropdown");
+  if (!joinExisting) {
+    selectedSlot = slotDropdownMenu.value;
+    selectedPeriod = document.getElementById("subperiodDropdown");
+    const maxStudents = slotDropdownMenu.options[slotDropdownMenu.selectedIndex].dataset.maxCapacity;
+    if (!selectedPeriod) {
+      return;
+    }
+    const slotStart = selectedPeriod.options[selectedPeriod.selectedIndex].dataset.start;
+    const slotEnd = selectedPeriod.options[selectedPeriod.selectedIndex].dataset.end;
+    const duration = selectedPeriod.value;
 
-      if (!selectedPeriod) {
-        return;
-      }
+    // Change the book button text to "Loading..."
+    bookButton.textContent = 'Loading...';
 
-      const maxStudents = slotDropdownMenu.options[slotDropdownMenu.selectedIndex].dataset.maxCapacity;
-      const slotStart = selectedPeriod.options[selectedPeriod.selectedIndex].dataset.start;
-      const slotEnd = selectedPeriod.options[selectedPeriod.selectedIndex].dataset.end;
-      const duration = selectedPeriod.value;
+    const verificationStud = await getBookings(userStudentNumber);
+    // Iterate over the verificationStud collection and get the consultation details for each consultationId
+    let hasConflict = false;
+    for (const booking of verificationStud) {
+      const consultationId = booking.consultationId;
+      const consultationDetailsCheck = await getConsultationPerBooking(consultationId);
 
-      // Update button text to "Loading..."
-      updateButtonToLoading();
+      const checkDate = consultationDetailsCheck.some(check => {
+        return check.date === selectedSlot;
+      });
 
-      const verificationStud = await getBookings(userStudentNumber);
-      for (const booking of verificationStud) {
-        const consultationId = booking.consultationId;
-        const isAlreadyBooked = await isConsultationAlreadyBooked(consultationId, selectedSlot, selectedLecturerId, slotStart, slotEnd);
+      if (checkDate) {
+        const overlappingConsultation = consultationDetailsCheck.find(check => {
+          return (
+            check.startTime === String(slotStart) && check.endTime === String(slotEnd) && check.status === 'approved'
+          );
+        });
 
-        if (isAlreadyBooked) {
-          // Reset the button text to "Book"
-          resetButton();
-          return;
+        if (overlappingConsultation) {
+          const lecturerName = overlappingConsultation.lecturerId.split('@')[0].replace('.', ' ');
+          const message = `Already has a consultation booked with ${lecturerName} on ${selectedSlot} at ${slotStart} - ${slotEnd}`;
+          const messageContainer = document.getElementById('messageContainer');
+          messageContainer.textContent = message;
+
+          // Change the book button text to "Error"
+          bookButton.textContent = 'Error';
+          hasConflict = true;
+          break;
         }
       }
-
-      await createNewConsultation(userStudentNumber, selectedLecturerId, selectedSlot, duration, maxStudents, slotStart, slotEnd);
-    } else {
-      selectedSlot = existingConsultationsMenu.value;
-      await joinExistingConsultation(userStudentNumber, selectedSlot);
     }
 
-    // Get student details
-    const student = await getStudentDetails(userStudentNumber);
-    console.log(student);
+    if (!hasConflict) {
+      getAllConsultations()
+        .then(detailsArray => {
+          const consultationIds = detailsArray.map(detail => detail.consultationId);
+          const maxConsultationId = Math.max(...consultationIds);
+          const consultationId = maxConsultationId + 1;
+          details = {
+            consultationId: parseInt(consultationId),
+            lecturerId: String(selectedLecturerId),
+            date: String(selectedSlot),
+            timeMinutes: parseInt(duration),
+            maximumNumberOfStudents: parseInt(maxStudents),
+            status: String("approved"),
+            startTime: String(slotStart),
+            endTime: String(slotEnd),
+            title: 'test'
+          };
+          console.log(details);
+          createConsultation(details) 
+            .then(data => {
+              console.log('Booking created successfully:', data);
+              console.log('Booking for Student: ', userStudentNumber);
+              // Perform any additional actions after successful booking
+              // Make a function for this whole thing and call it both times.
+              bookingDetails = {
+                consultationId: consultationId,
+                studentNumber: userStudentNumber,
+                role: "Organizer"
+              };
+              createBooking(bookingDetails)
+                .then(data => {
+                  console.log('Booking created successfully:', data);
+                  // Perform any additional actions after successful booking
+                })
+                .catch(error => {
+                  console.error('Failed to create booking:', error);
+                  // Handle the error appropriately
+                });
+            })
+            .catch(error => {
+              console.error('Failed to create booking:', error);
+              // Handle the error appropriately
+            });
+        })
+        .catch(err => console.error(err));
+    }
+  } else {
+    // if the student has selected an existing consultation, then add them to that consultation.
+    selectedSlot = existingConsultationsMenu.value; //get the consultationId.
+    bookingDetails = {
+      consultationId: selectedSlot,
+      studentNumber: userStudentNumber,
+      role: "Member"
+    };
 
-    // Get lecturer details
-    const lecturerDetailsArray = await lecturerDetails;
-    const selectedLecturer = lecturerDetailsArray.find(detail => detail.lecturerId === selectedLecturerId);
-    console.log(`${student.given_name} has booked a consultation with ${selectedLecturer ? selectedLecturer.firstName + ' ' + selectedLecturer.lastName : 'none'} at ${selectedSlot}`);
-
-    // Reset the button text to "Book"
-    resetButton();
-  } catch (error) {
-    console.error(error);
-    // Handle the error appropriately
-    // Reset the button text to "Book"
-    resetButton();
+    createBooking(bookingDetails)
+      .then(data => {
+        console.log('Booking created successfully:', data);
+        // Perform any additional actions after successful booking
+      })
+      .catch(error => {
+        console.error('Failed to create booking:', error);
+        // Handle the error appropriately
+      });
   }
 });
 
