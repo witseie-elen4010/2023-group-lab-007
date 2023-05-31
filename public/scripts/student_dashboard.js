@@ -98,8 +98,8 @@ bookButton.addEventListener('click', async () => {
       if (checkDate) {
         const overlappingConsultation = consultationDetailsCheck.find(check => {
           return (
-            ((check.startTime <= String(slotStart) && check.endTime >= String(slotStart)) ||
-            (check.startTime >= String(slotStart) && check.startTime <= String(slotEnd))) && check.status === 'approved'
+            ((check.startTime <= String(slotStart) && check.endTime > String(slotStart)) ||
+            (check.startTime >= String(slotStart) && check.endTime < String(slotEnd))) && check.status === 'approved'
           )
         })
 
