@@ -1,4 +1,4 @@
-const { getPossibleSlots, getNextDate, getDateString } = require('../public/scripts/services/student_service');
+const { getPossibleSlots, getNextDate, getDateString } = require('../public/scripts/services/student_service')
 
 describe('Check for available time slot that does not conflict with other bookings, with the desired duration', () => {
 

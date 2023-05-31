@@ -93,6 +93,8 @@ bookButton.addEventListener('click', async() => {
      createBooking(bookingDetails) // create a booking entry for the student for the consultation selected.
   .then(data => {
     console.log('Booking created successfully:', data)
+    alert("New Consultation Booking Succesful!")
+    location.reload()
     // Perform any additional actions after successful booking
   })
   .catch(error => {
@@ -651,38 +653,6 @@ function createConsultation(bookingDetails) {
 // Container where the subperiod dropdown will go
 const dropdownContainer = document.querySelector('#dropdownContainer')
 
-//commented out because I dont think it is used anywhere.
-// function getSubPeriod(start, duration, index){ //change when the slots are not a defined length.
-//     // Create a new Date object
-//     const date = new Date()
-
-//     // Get the hours and minutes from the startTime
-//     const [hours, minutes] = start.split(':')
-
-//     // Set the hours and minutes of the Date object
-//     date.setHours(hours, minutes, 0, 0) // Set seconds and milliseconds to 0
-
-//     // Add the duration to the Date object
-//     date.setMinutes(date.getMinutes() + duration*index)
-
-//     // Extract the hours and minutes from the updated Date object
-//     let startHours = date.getHours()
-//     let startMinutes = date.getMinutes()
-//     startHours = startHours.toString().padStart(2, '0')
-//     startMinutes = startMinutes.toString().padStart(2, '0')
-//     // Pad the hours and minutes with leading zeros if necessary
-//     date.setMinutes(date.getMinutes() + duration)
-//     // Extract the hours and minutes from the updated Date object
-//     let endHours = date.getHours()
-//     let endMinutes = date.getMinutes()
-//     endHours = endHours.toString().padStart(2, '0')
-//     endMinutes = endMinutes.toString().padStart(2, '0')
-
-//     // Combine the hours and minutes into a string and return it
-//     const startTime = `${startHours}:${startMinutes}`
-//     const endTime = `${endHours}:${endMinutes}`
-//     return [startTime, endTime]
-// }
 // Function to create and add the subperiod dropdown to the DOM
 function createSubperiodDropdown(possibleSlots, duration) {
   // Calculate the number of subperiods
@@ -712,24 +682,26 @@ function createSubperiodDropdown(possibleSlots, duration) {
   // Add the dropdown to the DOM
   dropdownContainer.appendChild(subperiodDropdown)
   // Check if the label already exists
-  let titleLabel = document.getElementById('titleLabel');
+  let titleLabel = document.getElementById('titleLabel')
 
   // If it doesn't exist, create it
   if (!titleLabel) {
-    titleLabel = document.createElement('label');
-    titleLabel.textContent = "Enter a consultation title";
-    titleLabel.id = 'titleLabel';
-    titleLabel.setAttribute('for', 'consultationTitle');
-    dropdownContainer.appendChild(titleLabel);
+    titleLabel = document.createElement('label')
+    titleLabel.textContent = "Enter a consultation title: "
+    titleLabel.id = 'titleLabel'
+    titleLabel.setAttribute('for', 'consultationTitle')
+    titleLabel.style.display = 'block'  // This makes the label a block-level element
+    titleLabel.style.padding = '10px'  // This adds padding to the label
+    dropdownContainer.appendChild(titleLabel)
   }
 
-  const title = document.createElement('input');
-  title.id = "consultationTitle";
-  dropdownContainer.appendChild(title);
+  const title = document.createElement('input')
+  title.id = "consultationTitle"
+  dropdownContainer.appendChild(title)
 
   subperiodDropdown.addEventListener('change', function() {
-    bookButton.removeAttribute('disabled');
-  });
+    bookButton.removeAttribute('disabled')
+  })
 }
 
 // Function to remove the subperiod dropdown from the DOM
