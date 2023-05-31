@@ -8,6 +8,7 @@ const consultationDetailsScheme = {
   status: String,
   startTime: String,
   endTime: String,
+  title: String,
 };
 
 const consultationPeriodsScheme = {
