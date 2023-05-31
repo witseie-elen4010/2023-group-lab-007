@@ -69,9 +69,10 @@ bookButton.addEventListener('click', async() => {
       date: String(selectedSlot),
       timeMinutes: parseInt(duration),
       maximumNumberOfStudents: parseInt(maxStudents),
-      status: String("disapproved"), //set default of disapproved, requires lecturer to accept consultation. 
+      status: String("approved"), //set default of disapproved, requires lecturer to accept consultation. 
       startTime: String(slotStart),
       endTime: String(slotEnd),
+      title: String("test"),
    }
    console.log(details)
    createConsultation(details)
@@ -676,6 +677,7 @@ function createSubperiodDropdown(possibleSlots, duration) {
   
   // Create the subperiod dropdown
   const subperiodDropdown = document.createElement('select')
+  subperiodDropdown.classList.add('form-control');
   subperiodDropdown.id = 'subperiodDropdown'
   const defaultOption = document.createElement('option')
   defaultOption.text = 'Select a consultation slot'
@@ -809,26 +811,26 @@ function getPossibleSlots(totalStart, totalEnd, bookedSlots, duration) {
       }
   }
 
-  return possibleSlots;
+  return possibleSlots
 }
 
 // Existing duration adjustment code here...
 
 slotDropdownMenu.addEventListener('change', function() {
-  var selectedOption = this.value;
+  var selectedOption = this.value
   if (selectedOption !== '') { 
-      document.getElementById('durationSelector').style.display = 'block'; // Show the duration selector
+      document.getElementById('durationSelector').style.display = 'block' // Show the duration selector
       document.getElementById('duration').value = '15'
       document.getElementById('duration').dataset.maxDuration = this.options[this.selectedIndex].dataset.maxDuration
   } else {
-      document.getElementById('durationSelector').style.display = 'none'; // Hide the duration selector
+      document.getElementById('durationSelector').style.display = 'none' // Hide the duration selector
   }
-});
+})
 
 
 document.getElementById('minus').addEventListener('click', function() {
-  var durationInput = document.getElementById('duration');
-  var currentValue = parseInt(durationInput.value, 10);
+  var durationInput = document.getElementById('duration')
+  var currentValue = parseInt(durationInput.value, 10)
   if(currentValue>0){
 
   }
@@ -836,16 +838,16 @@ document.getElementById('minus').addEventListener('click', function() {
     currentValue=15
   }
   if (currentValue > 15) { // Prevent the value from dropping below 15
-      durationInput.value = currentValue - 15;
+      durationInput.value = currentValue - 15
   }
   showAvailableConsultations()
-});
+})
 
 document.getElementById('plus').addEventListener('click', function() {
-  var durationInput = document.getElementById('duration');
+  var durationInput = document.getElementById('duration')
   const maxDuration = durationInput.dataset.maxDuration
   console.log(maxDuration)
-  var currentValue = parseInt(durationInput.value, 10);
+  var currentValue = parseInt(durationInput.value, 10)
   if(currentValue>0){
 
   }
@@ -856,7 +858,7 @@ document.getElementById('plus').addEventListener('click', function() {
   durationInput.value = currentValue + 15
   }
   showAvailableConsultations()
-});
+})
 
 async function showAvailableConsultations(){
   selectedTeacher = dropdownMenu.value
