@@ -165,7 +165,8 @@ dropdownMenu.addEventListener('change', async (e) => {
         option.dataset.start = slot.startTime
         option.dataset.end = slot.endTime
         option.dataset.maxCapacity = slot.numberOfStudents
-        option.dataset.maxDuration = slot.durationMinutes/slot.maximumNumberOfConsultationsPerDay
+        option.dataset.maxDuration = slot.durationMinutes//slot.maximumNumberOfConsultationsPerDay
+        option.dataset.maxConsultations = slot.maximumNumberOfConsultationsPerDay
         slotDropdownMenu.add(option)
       }
     }
@@ -707,10 +708,17 @@ function createSubperiodDropdown(possibleSlots, duration) {
 
   // Add the dropdown to the DOM
   dropdownContainer.appendChild(subperiodDropdown)
-  const titleLabel = document.createElement('label');
-  titleLabel.textContent = "Enter a consultation title";
-  titleLabel.setAttribute('for', 'consultationTitle');
-  dropdownContainer.appendChild(titleLabel);
+  // Check if the label already exists
+  let titleLabel = document.getElementById('titleLabel');
+
+  // If it doesn't exist, create it
+  if (!titleLabel) {
+    titleLabel = document.createElement('label');
+    titleLabel.textContent = "Enter a consultation title";
+    titleLabel.id = 'titleLabel';
+    titleLabel.setAttribute('for', 'consultationTitle');
+    dropdownContainer.appendChild(titleLabel);
+  }
 
   const title = document.createElement('input');
   title.id = "consultationTitle";
@@ -766,8 +774,17 @@ slotDropdownMenu.addEventListener('change',async function() {
     const slotLength = this.options[this.selectedIndex].dataset.length
     const startTime = this.options[this.selectedIndex].dataset.start
     const endTime = this.options[this.selectedIndex].dataset.end
+    const numOfBookedConsultations = existingConsultations.length
+    const maxNumberOfConsultations = this.options[this.selectedIndex].dataset.maxConsultations
+    console.log(numOfBookedConsultations, maxNumberOfConsultations)
+    if(numOfBookedConsultations>=maxNumberOfConsultations){
+      alert("This consultation period already has the maximum number of consultations booked!");
+      slotDropdownMenu.selectedIndex=0
+      document.getElementById('durationSelector').style.display = 'none' // Hide the duration selector
+      return
+    }
     bookedSlots = []
-    for(let i=0;i<existingConsultations.length;i++){
+    for(let i=0;i<numOfBookedConsultations;i++){
       start = existingConsultations[i].startTime
       end = existingConsultations[i].endTime
       bookedSlots.push([start, end])
