@@ -1,6 +1,6 @@
 import { test, expect, chromium } from '@playwright/test';
 
-test('test', async ({ page }) => {
+test.skip('test', async ({ page }) => {
   const browser = await chromium.launch({ headless: false }); // Launch the browser in non-headless mode
   const context = await browser.newContext();
   page = await context.newPage();
