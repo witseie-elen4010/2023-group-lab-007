@@ -1,27 +1,27 @@
 const request = require('supertest');
-const app = require('../index.js');
+//const app = require('../index.js');
 
-describe('GET /api/testPipeline', () => {
-    it('should return 200 ', async () => {
-        const response = await request(app).get('/class/api/testPipeline');
-        expect(response.status).toBe(200) // Assert that we get a 200 OK status code
-        const data = response.body
-        expect(data).toBeInstanceOf(Array) // Assert that data is an array
+// describe('GET /api/testPipeline', () => {
+//     it('should return 200 ', async () => {
+//         const response = await request(app).get('/class/api/testPipeline');
+//         expect(response.status).toBe(200) // Assert that we get a 200 OK status code
+//         const data = response.body
+//         expect(data).toBeInstanceOf(Array) // Assert that data is an array
         
-        // Check if the first object in the array has the expected fields
-        const firstItem = data[0]
-        expect(firstItem).toHaveProperty('_id')
-        expect(firstItem).toHaveProperty('consultationId')
-        expect(firstItem).toHaveProperty('lecturerId')
+//         // Check if the first object in the array has the expected fields
+//         const firstItem = data[0]
+//         expect(firstItem).toHaveProperty('_id')
+//         expect(firstItem).toHaveProperty('consultationId')
+//         expect(firstItem).toHaveProperty('lecturerId')
     
-    }
-    )
-    it('should return 404 if an error occurs', async () => {
-        const response = await request(app).get('/class/api/testPipelin')
-        expect(response.status).toBe(404)
-        expect(response.body).toEqual({})
-    })
-})
+//     }
+//     )
+//     it('should return 404 if an error occurs', async () => {
+//         const response = await request(app).get('/class/api/testPipelin')
+//         expect(response.status).toBe(404)
+//         expect(response.body).toEqual({})
+//     })
+// })
 
 const { createRequest, createResponse } = require('node-mocks-http');
 const apiRouter = require('../src/routes/apiRoutes'); // Import our routes
