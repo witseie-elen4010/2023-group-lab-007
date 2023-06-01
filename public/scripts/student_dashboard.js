@@ -86,7 +86,7 @@ bookButton.addEventListener('click', async () => {
     // Change the book button text to "Loading..."
     bookButton.textContent = 'Loading...'
 
-    const verificationStud = await getBookings(userStudentNumber)
+    const verificationStud = await getBookingsStudentNumber(userStudentNumber)
     let hasConflict = false
 
     for (const booking of verificationStud) {
@@ -197,7 +197,7 @@ bookButton.addEventListener('click', async () => {
                 console.log('Booking created successfully:', data)
                 bookButton.textContent = 'Book' // Change the button text back to "Book"
                 alert("New Consultation Booking Succesful!")
-    location.reload()
+                location.reload()
     // Perform any additional actions after successful booking
               })
               .catch(error => {
@@ -223,7 +223,7 @@ bookButton.addEventListener('click', async () => {
     // Change the book button text to "Loading..."
     bookButton.textContent = 'Loading...'
 
-    const verificationStud = await getBookings(userStudentNumber)
+    const verificationStud = await getBookingsStudentNumber(userStudentNumber)
     let hasConflict = false
 
     for (const booking of verificationStud) {
@@ -742,7 +742,7 @@ existingConsultationsMenu.addEventListener('change', function() {
   checkButtonStatus()
 })
 
-function getBookings(studentNumber) {
+function getBookingsStudentNumber(studentNumber) {
   const url = `class/api/userStudentBooking?studentNumber=${studentNumber}`
   return fetch(url)
     .then(response => response.json())
