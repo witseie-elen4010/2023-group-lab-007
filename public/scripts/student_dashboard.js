@@ -677,8 +677,10 @@ dropdownMenu.addEventListener('change', async (e) => {
 
     // Fetch existing consultations for selected lecturer
     const consultations = await getExistingConsultations(selectedTeacher)
-    const existingConsultations = consultations.filter(consultation => consultation.status === "approved")
+    const approvedConsultations = consultations.filter(consultation => consultation.status === "approved")
+    const existingConsultations = approvedConsultations.filter(consultation => isPast(consultation.date) === false)
 
+    
     // Fill the existing consultations dropdown
     let numberOfStudents=0
     for (let i = 0; i < existingConsultations.length; i++) {
@@ -1096,4 +1098,14 @@ async function showAvailableConsultations(){
   createSubperiodDropdown(possibleSlots, 30)
   
 
+}
+
+function isPast(dateString) {
+  const date = new Date(dateString)
+  
+  const today = new Date()
+  today.setHours(0, 0, 0, 0)
+
+  // If date is less than today, it's in the past
+  return date < today
 }
