@@ -1,4 +1,4 @@
-//const { lecturerDetails } = require("../../database");
+//const { lecturerDetails } = require("../../database")
 
 //const { get } = require("mongoose")
 
@@ -143,7 +143,7 @@ bookButton.addEventListener('click', async() => {
 })
 dropdownMenu.addEventListener('change', async (e) => {
   const selectedTeacher = e.target.value
-  //const selectedTeacher = lecturerDetails.find(teacher => teacher.email === teacherEmail);
+  //const selectedTeacher = lecturerDetails.find(teacher => teacher.email === teacherEmail)
 
   // Clear out the previous slots besides the default unselected option. 
   while (slotDropdownMenu.options.length > 1) {
@@ -251,7 +251,7 @@ let calendar = new FullCalendar.Calendar(calendarDiv, {
   initialView: 'dayGridMonth',
   height: 'auto' // or '100%'
 
-  //checkButtonStatus();
+  //checkButtonStatus()
 })
 calendar.render()
 //if the user presses the "show consultation" button, display the default consulation.
@@ -296,7 +296,7 @@ function displayConsultationsOnCalendar() {
 
 // Event click callback function
 function handleEventClick(info) {
-  const selectedConsultationID = info.event.extendedProps.consultationId; 
+  const selectedConsultationID = info.event.extendedProps.consultationId
   const consultationRole = info.event.extendedProps.role
   const consultationsTextField = document.getElementById("consultations")
   const currentConsultationID = parseInt(consultationsTextField.dataset.consultationID)
@@ -307,7 +307,7 @@ function handleEventClick(info) {
   // Create a delete button if the user is the organizer
   if (consultationRole === "Organizer") {
     const deleteButton = document.createElement("button")
-    deleteButton.type = "button";
+    deleteButton.type = "button"
     deleteButton.classList.add("btn", "btn-danger")
     deleteButton.textContent = "Delete Consultation"
     deleteButton.addEventListener("click", () => { 
@@ -326,7 +326,7 @@ function handleEventClick(info) {
   if (selectedConsultationID === currentConsultationID) {
     // The same consultation is clicked again, show the modal
     const modal = document.getElementById("consultationDetailsModal")
-    const consultationDetails = createConsultationDetailsModal(selectedConsultationID , selectedConsultationID, info.event);
+    const consultationDetails = createConsultationDetailsModal(selectedConsultationID , selectedConsultationID, info.event)
 
     // Display the modal
     document.body.appendChild(consultationDetails)
@@ -376,8 +376,8 @@ function getDateString(date) {
 
 function checkButtonStatus() {
   const teacherSelected = dropdownMenu.value !== ""
-  const subPeriodDropdown = document.getElementById("subPeriodDropdown");
-  const slotSelected = (subPeriodDropdown !== null && subPeriodDropdown.value !== "") ? true : false;
+  const subPeriodDropdown = document.getElementById("subPeriodDropdown")
+  const slotSelected = (subPeriodDropdown !== null && subPeriodDropdown.value !== "") ? true : false
 
   const existingConsultationSelected = existingConsultationsMenu.value !== ""
 
@@ -406,7 +406,7 @@ function getConsultations() {
     .then(response => response.json())
     .then(data => {
       const consultations = data.map(item => {
-        const studentCountTemp = item.student_booking.length;
+        const studentCountTemp = item.student_booking.length
         return {
           lecturer: item.lecturerId,
           consultationId: item.consultationId,
@@ -529,7 +529,7 @@ dropdownMenu.addEventListener('change', async (e) => {
     existingConsultationsMenu.remove(1)
   }
   clearConsultationsContainer()
-  document.getElementById('durationSelector').style.display = 'none'; // Hide the duration selector
+  document.getElementById('durationSelector').style.display = 'none' // Hide the duration selector
   if (selectedTeacher) {
     // Fetch consultation periods for selected lecturer
 
@@ -623,11 +623,11 @@ function getStudentDetails(studentNumber) {
 
 //function to get a list of all consultations
 function getAllConsultations() {
-  const url = `class/api/consultationDetailSearch`;
+  const url = `class/api/consultationDetailSearch`
   return fetch(url)
     .then(response => response.json())
     .catch(error => {
-      console.error("Error fetching consultations:", error);
+      console.error("Error fetching consultations:", error)
     })
 }
 // function to create a booking for the student. 
@@ -686,7 +686,7 @@ function createSubperiodDropdown(possibleSlots, duration) {
   
   // Create the subperiod dropdown
   const subperiodDropdown = document.createElement('select')
-  subperiodDropdown.classList.add('form-control');
+  subperiodDropdown.classList.add('form-control')
   subperiodDropdown.id = 'subperiodDropdown'
   const defaultOption = document.createElement('option')
   defaultOption.text = 'Select a consultation slot'
@@ -779,7 +779,7 @@ slotDropdownMenu.addEventListener('change',async function() {
     const maxNumberOfConsultations = this.options[this.selectedIndex].dataset.maxConsultations
     console.log(numOfBookedConsultations, maxNumberOfConsultations)
     if(numOfBookedConsultations>=maxNumberOfConsultations){
-      alert("This consultation period already has the maximum number of consultations booked!");
+      alert("This consultation period already has the maximum number of consultations booked!")
       slotDropdownMenu.selectedIndex=0
       document.getElementById('durationSelector').style.display = 'none' // Hide the duration selector
       return
@@ -813,14 +813,14 @@ function getPossibleSlots(totalStart, totalEnd, bookedSlots, duration) {
       let [hour, minute] = time.split(':')
       let date = new Date()
       date.setHours(hour, minute, 0, 0)
-      return date;
+      return date
   }
 
   // Function to check overlap
   const isOverlap = (start1, end1, start2, end2) => {
-      if (start1 >= start2 && start1 < end2) return true;
-      if (start2 >= start1 && start2 < end1) return true;
-      return false;
+      if (start1 >= start2 && start1 < end2) return true
+      if (start2 >= start1 && start2 < end1) return true
+      return false
   }
 
   // Function to add minutes to a date object
