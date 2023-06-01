@@ -6,8 +6,8 @@ async function getStudentByNumber(studentNumber) {
     const student = await studentDetails.find({ studentNumber: studentNumber })
     return student
   } catch (err) {
-    console.log(err)
-    throw err
+    console.error('An error occurred in getStudentByNumber:', err)
+    throw new Error('Failed to get student details')
   }
 }
 
@@ -17,8 +17,8 @@ async function getBookingsByConsultationId(consultationId) {
       const studentBookings = await studentBooking.find({ consultationId: consultationId })
       return studentBookings
     } catch (err) {
-      console.error(err)
-      throw err // Throw the error to handle it in the calling function
+      console.error('An error occurred in getBookingsByConsultationId:', err)
+      throw new Error('Failed to get student Bookings')
     }
   }
 

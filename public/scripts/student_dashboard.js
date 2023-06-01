@@ -1,4 +1,4 @@
-//const { lecturerDetails } = require("../../database");
+//const { lecturerDetails } = require("../../database")
 
 //const { get } = require("mongoose")
 
@@ -309,7 +309,7 @@ bookButton.addEventListener('click', async () => {
 
 dropdownMenu.addEventListener('change', async (e) => {
   const selectedTeacher = e.target.value
-  //const selectedTeacher = lecturerDetails.find(teacher => teacher.email === teacherEmail);
+  //const selectedTeacher = lecturerDetails.find(teacher => teacher.email === teacherEmail)
 
   // Clear out the previous slots besides the default unselected option. 
   while (slotDropdownMenu.options.length > 1) {
@@ -362,21 +362,22 @@ slotDropdownMenu.addEventListener('change', (e) => {
   checkButtonStatus()
 })
 
+//format the body of the calendar pop up
 function formatModalBody(data) {
-  console.log('data2 = ' + data)
   const consultationInfo = document.createElement("div")
-  
   consultationInfo.innerHTML = `
     <strong>Lecturer:</strong> ${data.extendedProps.lecturer}<br><br>
-    <strong>Start Time:</strong> ${data.start}<br><br>
-    <strong>End Time:</strong> ${data.end}<br><br>
+    <strong>Date:</strong> ${data.extendedProps.datePopUp}<br><br>
+    <strong>Start Time:</strong> ${data.extendedProps.startTimePopUp}<br><br>
+    <strong>End Time:</strong> ${data.extendedProps.endTimePopUp}<br><br>
     <strong>Students attending:</strong> ${data.extendedProps.studentCount}<br><br>
     <strong>Status of consultation:</strong> ${data.extendedProps.status}<br><br>
+    <strong>Role of Student:</strong> ${data.extendedProps.role}<br><br>  
   `
   return consultationInfo.innerHTML
 }
-
-function createConsultationDetailsModal(selectedTitle, selectedConsultationID, data) {
+//format the calendar pop up
+function createConsultationDetailsModal(selectedConsultationID , selectedConsultationID, data) {
   const consultationDetails = document.createElement("div")
   consultationDetails.classList.add("modal", "fade")
   consultationDetails.id = "consultationDetailsModal"
@@ -395,7 +396,7 @@ function createConsultationDetailsModal(selectedTitle, selectedConsultationID, d
   const consultationTitle = document.createElement("h5")
   consultationTitle.classList.add("modal-title")
   consultationTitle.id = "consultationDetailsModalLabel"
-  consultationTitle.textContent = selectedTitle.trim()
+  consultationTitle.textContent = data.title
   modalHeader.appendChild(consultationTitle)
   const closeButton = document.createElement("button")
   closeButton.type = "button"
@@ -416,15 +417,18 @@ let calendar = new FullCalendar.Calendar(calendarDiv, {
   initialView: 'dayGridMonth',
   height: 'auto' // or '100%'
 
-  //checkButtonStatus();
+  //checkButtonStatus()
 })
 calendar.render()
 //if the user presses the "show consultation" button, display the default consulation.
 showConsultation.addEventListener('click', () => {
+  displayConsultationsOnCalendar()
+})
+
+window.onload = displayConsultationsOnCalendar()
+
+function displayConsultationsOnCalendar() {
   const calendarDiv = document.querySelector('#calendar')
-  // if (calendar) {
-  //   calendar.removeAllEvents()
-  // }
   calendar = new FullCalendar.Calendar(calendarDiv, {
     initialView: "dayGridMonth",
     height: 'auto',
@@ -434,59 +438,77 @@ showConsultation.addEventListener('click', () => {
   getConsultations().then(consultations => {
    
     consultations.forEach(consultation => {
-      const { date, startTime, endTime, lecturer, consultationId, studentCount, status } = consultation
+      const { date, startTime, endTime, lecturer, consultationId, studentCount, status, title, role } = consultation
       const event = {
-        title: "\tConsult: " + consultationId,
+        title:title,
+        consultationId: consultationId,
         start: `${date}T${startTime}`,
         end: `${date}T${endTime}`,
+        datePopUp: date,
         lecturer: lecturer,
         status: status,
         studentCount: studentCount,
+        startTimePopUp: startTime,
+        endTimePopUp: endTime,
+        role: role,
         color: status === "approved" ? "green" : "red", // Change event color based on status
         textColor: status === "approved" ? "white" : "black", // Change text color based on status  
       }
-      console.log(consultations)
-      console.log('Event'+event)
       calendar.addEvent(event)
     })
 
   })
-})
+}
 
 // Event click callback function
 function handleEventClick(info) {
-  const selectedTitle = info.event.title;
-  const selectedConsultationID = parseInt(selectedTitle.split(" ")[1])
-  console.log("Selected consultation title:", selectedTitle)
-  console.log("Selected consultation ID:", selectedConsultationID)
-  console.log("Selected consultation date:", info.event.start)
-  console.log("Selected consultation end:", info.event.end)
-  console.log("Selected consultation lecturer:", info.event.extendedProps.lecturer)
-  
+  const selectedConsultationID = info.event.extendedProps.consultationId
+  const consultationRole = info.event.extendedProps.role
   const consultationsTextField = document.getElementById("consultations")
   const currentConsultationID = parseInt(consultationsTextField.dataset.consultationID)
-  console.log("Current consultation ID:", currentConsultationID)
 
+  // Remove existing delete button if present
+  const deleteButtonContainer = document.getElementById("deleteButtonContainer")
+  deleteButtonContainer.innerHTML = "" // Clear the container first
+  // Create a delete button if the user is the organizer
+  if (consultationRole === "Organizer") {
+    const deleteButton = document.createElement("button")
+    deleteButton.type = "button"
+    deleteButton.classList.add("btn", "btn-danger")
+    deleteButton.textContent = "Delete Consultation"
+    deleteButton.addEventListener("click", () => { 
+      console.log("Cancel Consultation button clicked")
+      executeCancel()
+        .then(() => {
+          //showConsultations()  // Call the function to refresh the calendar
+        })
+        .catch((error) => {
+          console.error("Error removing consultation:", error)
+        }) 
+    })
+    deleteButtonContainer.appendChild(deleteButton)
+  }
+    
   if (selectedConsultationID === currentConsultationID) {
     // The same consultation is clicked again, show the modal
     const modal = document.getElementById("consultationDetailsModal")
-    const consultationDetails = createConsultationDetailsModal(selectedTitle, selectedConsultationID, info.event);
+    const consultationDetails = createConsultationDetailsModal(selectedConsultationID , selectedConsultationID, info.event)
 
     // Display the modal
     document.body.appendChild(consultationDetails)
     const bootstrapModal = new bootstrap.Modal(consultationDetails)
-    bootstrapModal.show();
+    bootstrapModal.show()
 
 
   } else {
-    consultationsTextField.value = selectedTitle.trim()
+    consultationsTextField.value = selectedConsultationID
     consultationsTextField.dataset.consultationID = selectedConsultationID
     consultationsTextField.style.textAlign = "center"
 
     // Remove existing modal if present
     const modal = document.getElementById("consultationDetailsModal")
     if (modal) {
-      modal.remove();
+      modal.remove()
     }
   }
 }
@@ -520,8 +542,8 @@ function getDateString(date) {
 
 function checkButtonStatus() {
   const teacherSelected = dropdownMenu.value !== ""
-  const subPeriodDropdown = document.getElementById("subPeriodDropdown");
-  const slotSelected = (subPeriodDropdown !== null && subPeriodDropdown.value !== "") ? true : false;
+  const subPeriodDropdown = document.getElementById("subPeriodDropdown")
+  const slotSelected = (subPeriodDropdown !== null && subPeriodDropdown.value !== "") ? true : false
 
   const existingConsultationSelected = existingConsultationsMenu.value !== ""
 
@@ -550,7 +572,7 @@ function getConsultations() {
     .then(response => response.json())
     .then(data => {
       const consultations = data.map(item => {
-        const studentCountTemp = item.student_booking.length;
+        const studentCountTemp = item.student_booking.length
         return {
           lecturer: item.lecturerId,
           consultationId: item.consultationId,
@@ -558,7 +580,9 @@ function getConsultations() {
           startTime: item.startTime,
           endTime: item.endTime,
           studentCount: studentCountTemp,
-          status: item.status
+          status: item.status,
+          title:item.title,
+          role: item.student_booking[0].role
         }
       })
       return consultations
@@ -671,7 +695,7 @@ dropdownMenu.addEventListener('change', async (e) => {
     existingConsultationsMenu.remove(1)
   }
   clearConsultationsContainer()
-  document.getElementById('durationSelector').style.display = 'none'; // Hide the duration selector
+  document.getElementById('durationSelector').style.display = 'none' // Hide the duration selector
   if (selectedTeacher) {
     // Fetch consultation periods for selected lecturer
 
@@ -789,11 +813,11 @@ function getConsultationPerBooking(consultationId) {
 
 //function to get a list of all consultations
 function getAllConsultations() {
-  const url = `class/api/consultationDetailSearch`;
+  const url = `class/api/consultationDetailSearch`
   return fetch(url)
     .then(response => response.json())
     .catch(error => {
-      console.error("Error fetching consultations:", error);
+      console.error("Error fetching consultations:", error)
     })
 }
 // function to create a booking for the student. 
@@ -852,7 +876,7 @@ function createSubperiodDropdown(possibleSlots, duration) {
   
   // Create the subperiod dropdown
   const subperiodDropdown = document.createElement('select')
-  subperiodDropdown.classList.add('form-control');
+  subperiodDropdown.classList.add('form-control')
   subperiodDropdown.id = 'subperiodDropdown'
   const defaultOption = document.createElement('option')
   defaultOption.text = 'Select a consultation slot'
@@ -919,6 +943,10 @@ if (hideConsultation) {
   
     // Remove all existing events from the calendar
     calendar.getEvents().forEach((event) => event.remove())
+    // Remove existing delete button if present
+    const deleteButtonContainer = document.getElementById("deleteButtonContainer")
+    deleteButtonContainer.innerHTML = "" // Clear the container first
+    deleteButtonContainer.appendChild(deleteButton)
 
   })
 }
@@ -945,7 +973,7 @@ slotDropdownMenu.addEventListener('change',async function() {
     const maxNumberOfConsultations = this.options[this.selectedIndex].dataset.maxConsultations
     console.log(numOfBookedConsultations, maxNumberOfConsultations)
     if(numOfBookedConsultations>=maxNumberOfConsultations){
-      alert("This consultation period already has the maximum number of consultations booked!");
+      alert("This consultation period already has the maximum number of consultations booked!")
       slotDropdownMenu.selectedIndex=0
       document.getElementById('durationSelector').style.display = 'none' // Hide the duration selector
       return
@@ -979,14 +1007,14 @@ function getPossibleSlots(totalStart, totalEnd, bookedSlots, duration) {
       let [hour, minute] = time.split(':')
       let date = new Date()
       date.setHours(hour, minute, 0, 0)
-      return date;
+      return date
   }
 
   // Function to check overlap
   const isOverlap = (start1, end1, start2, end2) => {
-      if (start1 >= start2 && start1 < end2) return true;
-      if (start2 >= start1 && start2 < end1) return true;
-      return false;
+      if (start1 >= start2 && start1 < end2) return true
+      if (start2 >= start1 && start2 < end1) return true
+      return false
   }
 
   // Function to add minutes to a date object
@@ -1096,8 +1124,28 @@ async function showAvailableConsultations(){
   duration = document.getElementById("duration").value
   possibleSlots = getPossibleSlots(startTime, endTime, bookedSlots, duration)
   createSubperiodDropdown(possibleSlots, 30)
-  
+}
 
+async function executeCancel() {
+  const selectedTextField = document.getElementById("consultations")
+  const consultationID = parseInt(selectedTextField.dataset.consultationID)
+  if (!consultationID) {
+    alert("Invalid consultation ID. PLease select from the calendar.")
+    return
+  }
+  try {
+    const confirmation = confirm("Are you sure you want to cancel the consultation?")
+    if (!confirmation) {
+      console.log("Consultation cancellation canceled by user")
+      return 
+    }
+    const response = await fetch(`/class/api/cancelConsultation/${consultationID}`, {
+      method: "DELETE",
+    })
+    const data = await response.json()
+  } catch (error) {
+    console.error("Error cancelling consultation:", error)
+  }
 }
 
 function isPast(dateString) {
