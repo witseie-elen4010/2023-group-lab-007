@@ -80,14 +80,14 @@ new Promise((resolve, reject) => {
 })
 
 // Delete the logs.txt file on startup
-// const filePath = path.join(__dirname, './app.log')
-// fs.unlink(filePath, (err) => {
-//   if (err) {
-//     console.error(err)
-//   } else {
-//     console.log('logs.txt file deleted successfully.')
-//   }
-// })
+const filePath = path.join(__dirname, './app.log')
+fs.unlink(filePath, (err) => {
+  if (err) {
+    console.error(err)
+  } else {
+    console.log('logs.txt file deleted successfully.')
+  }
+})
 
 // Start the server only if the file is being executed directly
 if (require.main === module) {

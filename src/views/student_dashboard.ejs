@@ -63,11 +63,16 @@
   <div id="messageContainer"></div>
           <button id="bookButton" class="btn btn-primary" disabled>Book</button>
           <div id="consultationSlots" style="padding-top: 3rem;"></div>
-          <div class="input-group mb-3">
-            <input id="consultations" type="text" readonly value="Select Consultation" style="width: auto;">
+          <label for="consultations"> Selected Consultation   </label>
+          <div class="input-group mb-3"> 
+            <div>
+              <input id="consultations" type="text" readonly value="Consultation ID" style="width: auto;">
+            </div>
+            <div id="deleteButtonContainer"></div>
           </div>
+          <label for="showConsultations">Show/Hide Consultations on Calendar</label>
           <button type="button" id="showConsultation">Show Consultations on Calendar</button>
-          <button type="button" id="hideConsultation">Clear Consultations on Calendar</button>
+          <button type="button" id="hideConsultation">Hide Consultations on Calendar</button>
         </div>
       </div>
       <div class="div2">
