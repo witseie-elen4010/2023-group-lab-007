@@ -63,3 +63,39 @@
 [2023-06-01 11:00:54.040 PM] [31merror[39m: 	[31mError[39m
 [2023-06-01 11:00:54.044 PM] [32minfo[39m: 	[32mStudent joined an existing consultation [dude@wits.ac.za][39m
 [2023-06-01 11:00:54.050 PM] [31merror[39m: 	[31mError[39m
+[2023-06-01 11:02:03.116 PM] [32minfo[39m: 	[32mFetched all bookings/consultations for this student [dude@students.wits.ac.za][39m
+[2023-06-01 11:02:03.176 PM] [31merror[39m: 	[31mError[39m
+[2023-06-01 11:02:03.181 PM] [32minfo[39m: 	[32mFetched all bookings for consultation (undefined) from the database [dude@students.wits.ac.za][39m
+[2023-06-01 11:02:03.186 PM] [31merror[39m: 	[31mError[39m
+[2023-06-01 11:02:03.190 PM] [32minfo[39m: 	[32mFetched student (undefined) details from the database [dude@students.wits.ac.za][39m
+[2023-06-01 11:02:03.197 PM] [32minfo[39m: 	[32mSearched through a list of available consultation periods for a lecturer [dude@wits.ac.za][39m
+[2023-06-01 11:02:03.201 PM] [32minfo[39m: 	[32mSearched through a list of available consultation periods for a lecturer [dude@wits.ac.za][39m
+[2023-06-01 11:02:03.205 PM] [31merror[39m: 	[31mError[39m
+[2023-06-01 11:02:03.211 PM] [32minfo[39m: 	[32mFetched consultation details for this 4 ID from the database [dude@wits.ac.za][39m
+[2023-06-01 11:02:03.219 PM] [31merror[39m: 	[31mError[39m
+[2023-06-01 11:02:03.223 PM] [32minfo[39m: 	[32mFetched consultation details for this lecturer dude@wits.ac.za from the database [dude@wits.ac.za][39m
+[2023-06-01 11:02:03.228 PM] [32minfo[39m: 	[32mFetched consultation details from the database [dude@students.wits.ac.za][39m
+[2023-06-01 11:02:03.234 PM] [31merror[39m: 	[31mError[39m
+[2023-06-01 11:02:03.243 PM] [32minfo[39m: 	[32mSearched through a list of available consultation periods for this lecturer undefined [dude@students.wits.ac.za][39m
+[2023-06-01 11:02:03.247 PM] [31merror[39m: 	[31mError[39m
+[2023-06-01 11:02:03.254 PM] [32minfo[39m: 	[32mFetched existing consultation periods for this lecturer dude@wits.ac.za [dude@wits.ac.za][39m
+[2023-06-01 11:02:03.258 PM] [31merror[39m: 	[31mError[39m
+[2023-06-01 11:02:03.262 PM] [32minfo[39m: 	[32mFetched lecturers details from the database [dude@wits.ac.za][39m
+[2023-06-01 11:02:03.269 PM] [31merror[39m: 	[31mError[39m
+[2023-06-01 11:02:03.274 PM] [32minfo[39m: 	[32mFetched student number for this student [2351852@students.wits.ac.za][39m
+[2023-06-01 11:02:03.279 PM] [32minfo[39m: 	[32mFetched student details [2351852@students.wits.ac.za][39m
+[2023-06-01 11:02:03.285 PM] [31merror[39m: 	[31mError[39m
+[2023-06-01 11:02:03.288 PM] [32minfo[39m: 	[32mOrganised a new consultation [dude@wits.ac.za][39m
+[2023-06-01 11:02:03.298 PM] [31merror[39m: 	[31mError[39m
+[2023-06-01 11:02:03.303 PM] [32minfo[39m: 	[32mInserted lecturer details [dude@wits.ac.za][39m
+[2023-06-01 11:02:03.307 PM] [31merror[39m: 	[31mError[39m
+[2023-06-01 11:02:03.310 PM] [32minfo[39m: 	[32mInserted student details [dude@wits.ac.za][39m
+[2023-06-01 11:02:03.314 PM] [31merror[39m: 	[31mError[39m
+[2023-06-01 11:02:03.321 PM] [32minfo[39m: 	[32mStudent joined an existing consultation [dude@wits.ac.za][39m
+[2023-06-01 11:02:03.324 PM] [31merror[39m: 	[31mError[39m
+[2023-06-01 11:02:27.346 PM] [32minfo[39m: 	[32mNavigated to landing page [david@wits.ac.za][39m
+[2023-06-01 11:02:28.547 PM] [32minfo[39m: 	[32mFetched consultation details for this lecturer david@wits.ac.za from the database [david@wits.ac.za][39m
+[2023-06-01 11:02:30.183 PM] [32minfo[39m: 	[32mNavigated to lecturer dashboard page [david@wits.ac.za][39m
+[2023-06-01 11:02:31.332 PM] [32minfo[39m: 	[32mFetched consultation details for this lecturer david@wits.ac.za from the database [david@wits.ac.za][39m
+[2023-06-01 11:02:31.647 PM] [32minfo[39m: 	[32mNavigated to settings page [david@wits.ac.za][39m
+[2023-06-01 11:02:33.432 PM] [32minfo[39m: 	[32mNavigated to logs page [david@wits.ac.za][39m
