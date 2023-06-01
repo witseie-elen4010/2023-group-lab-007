@@ -1,5 +1,4 @@
 import { test, expect, chromium } from '@playwright/test'
-
 test.skip('Prevent students from booking consultations with different lecturers simultaneously', async () => {
     test.slow(60000)
     const browser = await chromium.launch({ headless: false })
