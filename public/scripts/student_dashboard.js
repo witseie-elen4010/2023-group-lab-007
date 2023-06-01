@@ -943,6 +943,10 @@ if (hideConsultation) {
   
     // Remove all existing events from the calendar
     calendar.getEvents().forEach((event) => event.remove())
+    // Remove existing delete button if present
+    const deleteButtonContainer = document.getElementById("deleteButtonContainer")
+    deleteButtonContainer.innerHTML = "" // Clear the container first
+    deleteButtonContainer.appendChild(deleteButton)
 
   })
 }
