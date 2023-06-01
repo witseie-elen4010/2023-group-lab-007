@@ -1,5 +1,6 @@
 const winston = require('winston');
 const appRoot = require("app-root-path");
+const path = require('path')
 
 //Winston logger
 const { combine, timestamp, printf, colorize, align } = winston.format;
@@ -17,7 +18,7 @@ const logger = winston.createLogger({
   ),
   transports: [
     new winston.transports.File({
-      filename: './app.log',
+      filename: `${appRoot.path}/app.log`,
     }),
   ],
 });
