@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 
-test('test', async ({ page }) => {
+test('test Organizer Consultation', async ({ page }) => {
   await page.goto('http://localhost:3000')
   await page.getByLabel('Username or email address').click()
   await page.getByLabel('Username or email address').fill('John')
