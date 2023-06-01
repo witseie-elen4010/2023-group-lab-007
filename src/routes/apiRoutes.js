@@ -87,7 +87,7 @@ router.post('/api/consultationPeriods', async (req, res) => {
 })
 
 // Define a route to handle incoming requests for getting consultation periods
-router.get('/api/userStudentNumber/:lecturerID', async (req, res) => {
+router.get('/api/existingConsultationPeriods/:lecturerID', async (req, res) => {
   const userEmail = req.oidc.user.email
   try {
     const selectedLecturer = req.params.lecturerID
