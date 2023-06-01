@@ -3,8 +3,9 @@ const express = require('express')
 const logger = require("../../logger")
 const router = express.Router()
 
-const lecturerConsultations = require('../lecturerConsultation.js').get()
-const studentConsultations = require('../studentConsultation.js').getS()
+// const lecturerConsultations = require('../lecturerConsultation.js').get()
+// const studentConsultations = require('../studentConsultation.js').getS()
+const studentBookingService = require('../services/student_service')
 
 const insertService = require('../services/insert_service')
 const lecturerService = require('../services/lecturer_service')
@@ -12,14 +13,6 @@ const consultationService = require('../services/consultation_service')
 const consultationPeriodService = require('../services/consultation_period_service')
 const studentConsulationService = require('../services/student_consulation_service')
 const { getStudentByNumber, getBookingsByConsultationId } = require('../services/student_service.js') //retrieve the database functions from the student services file.
-
-router.get('/api/studentConsultations', function (req, res) {
-  res.json(studentConsultations) // Respond with JSON
-})
-
-router.get('/api/lecturerConsultations', function (req, res) {
-  res.json(lecturerConsultations) // Respond with JSON
-})
 
 // Route for inserting new data into lecturerDetails collection
 router.post('/api/lecturerDetails', async (req, res) => {
@@ -374,5 +367,32 @@ router.get('/api/userStudentNumber', async (req, res) => {
   }
 })
 
+router.get('/api/userStudentBooking', async (req, res) => {
+  try {
+    const studentNumber = req.query.studentNumber // Access the studentNumber query parameter
+    const studentDetails = await studentBookingService.getBookingsByStudentNumber(studentNumber)
+    res.json(studentDetails)
+  } catch (err) {
+    console.error(err)
+    res.sendStatus(500)
+  }
+});
+
+router.get('/api/consultationDetailSearchByID/:consultationId', async (req, res) => {
+  try {
+    const consultationId = req.params.consultationId
+    const consultationDetailsData = await consultationService.getConsultationDetailsByID(consultationId)
+    if (!consultationDetailsData) {
+      // Return a 404 Not Found response if the consultation details are not found
+      res.sendStatus(404)
+    } else {
+      res.json(consultationDetailsData)
+      console.log(consultationDetailsData)
+    }
+  } catch (err) {
+    console.error(err)
+    res.sendStatus(500)
+  }
+})
 
 module.exports = router

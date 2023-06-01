@@ -5,6 +5,7 @@ const router = express.Router()
 const moreDetailsService = require('../services/more_details_service')
 const { isStudent, isLecturer } = require('../services/login_service')
 var inDatabase = false
+const fs = require('fs')
 
 //Home route
 router.get('/', async (req, res) => {
@@ -130,6 +131,28 @@ router.get('/settings', function (req, res) {
   console.log('Navigated to settings page [' + userEmail + ']')
   logger.info('Navigated to settings page [' + userEmail + ']')
 
+})
+
+router.get('/logs', (req, res) => {
+  const filePath = path.join(__dirname, '../../app.log')
+  const userEmail = req.oidc.user.email
+
+  fs.readFile(filePath, 'utf8', (err, data) => {
+    if (err) {
+      console.error(err)
+      logger.error(err)
+      return res.status(500).send('Error retrieving logs.')
+    }
+    console.log('Navigated to logs page [' + userEmail + ']')
+    logger.info('Navigated to logs page [' + userEmail + ']')
+    if (isLecturer(userEmail)) {
+      res.render('logs', { logs: data, isAuthenticated: req.oidc.isAuthenticated(), user: req.oidc.user, roll: "lecturer" })
+    } else {
+      if (isStudent(userEmail)) {
+        res.render('logs', { logs: data, isAuthenticated: req.oidc.isAuthenticated(), user: req.oidc.user, roll: "student" })
+      }
+    }
+  })
 })
 
 module.exports = router

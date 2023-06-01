@@ -41,98 +41,272 @@ defaultConsultationsOption.text = "Select Consultation Slot"
 defaultConsultationsOption.value = ""
 slotDropdownMenu.appendChild(defaultConsultationsOption)
 slotDropdownMenu.selectedIndex = 0 // Set the default option as selected
+const messageContainer = document.getElementById("messageContainer")
 
-bookButton.addEventListener('click', async() => {
+// Add event listeners to the input fields
+dropdownMenu.addEventListener('change', () => {
+  // Check if the button is in the "Error" state
+  if (bookButton.textContent === 'Error') {
+    bookButton.textContent = 'Book'; // Change the button text back to "Book"
+    const messageContainer = document.getElementById('messageContainer')
+    messageContainer.textContent = ''
+  }
+})
+
+slotDropdownMenu.addEventListener('change', () => {
+  // Check if the button is in the "Error" state
+  if (bookButton.textContent === 'Error') {
+    bookButton.textContent = 'Book'; // Change the button text back to "Book"
+    const messageContainer = document.getElementById('messageContainer')
+    messageContainer.textContent = ''
+  }
+})
+
+
+bookButton.addEventListener('click', async () => {
+  const messageContainer = document.getElementById('messageContainer')
+  messageContainer.textContent = ''
   const userStudentNumber = await getUserStudentNumber()
-  console.log('studentNumber: ', userStudentNumber )
+  console.log('studentNumber: ', userStudentNumber)
   console.log('Type of userStudentNumber:', typeof userStudentNumber)
   const selectedLecturerId = dropdownMenu.value
   let selectedSlot = ""
-  if(!joinExisting){
-     selectedSlot = slotDropdownMenu.value
-     selectedPeriod = document.getElementById("subperiodDropdown")
-     const maxStudents = slotDropdownMenu.options[slotDropdownMenu.selectedIndex].dataset.maxCapacity
-     if(!selectedPeriod){
-      return
-     }
-     const slotStart = selectedPeriod.options[selectedPeriod.selectedIndex].dataset.start
-     const slotEnd = selectedPeriod.options[selectedPeriod.selectedIndex].dataset.end
-     const duration = document.getElementById("duration").value
-     getAllConsultations()
-  .then(detailsArray => {
-    const consultationIds = detailsArray.map(detail => detail.consultationId)
-    const maxConsultationId = Math.max(...consultationIds)
-    const consultationId = maxConsultationId+1
-    details = {
-      consultationId: parseInt(consultationId),
-      lecturerId: String(selectedLecturerId),
-      date: String(selectedSlot),
-      timeMinutes: parseInt(duration),
-      maximumNumberOfStudents: parseInt(maxStudents),
-      status: String("approved"), //set default of disapproved, requires lecturer to accept consultation. 
-      startTime: String(slotStart),
-      endTime: String(slotEnd),
-      title: String("test"),
-   }
-   console.log(details)
-   createConsultation(details)
-   .then(data => {
-    console.log('Booking created successfully:', data)
-    console.log('Booking for Student: ', userStudentNumber)
-    // Perform any additional actions after successful booking
-    //Make a function for this whole thing and call it both times.
-     bookingDetails = { //create the entry for the student booking. 
-      consultationId: consultationId,
-      studentNumber: userStudentNumber, //user.studentNumber
-      role: "Organizer" //s?
-     }
-     createBooking(bookingDetails) // create a booking entry for the student for the consultation selected.
-  .then(data => {
-    console.log('Booking created successfully:', data)
-    // Perform any additional actions after successful booking
-  })
-  .catch(error => {
-    console.error('Failed to create booking:', error)
-    // Handle the error appropriately
-  })
-  })
-  .catch(error => {
-    console.error('Failed to create booking:', error)
-    // Handle the error appropriately
-  })
-  })
-  .catch(err => console.error(err)) 
 
-  }
-  else{ // if the student has selected an existing consultation, then add them to that consultation.
-     selectedSlot = existingConsultationsMenu.value //get the consultationId.
-     bookingDetails = { //create the entry for the student booking. 
-      consultationId: selectedSlot,
-      studentNumber: userStudentNumber, //user.studentNumber
-      role: "Member"
-     }
+  if (!joinExisting) {
+    selectedSlot = slotDropdownMenu.value
+    selectedPeriod = document.getElementById("subperiodDropdown")
+    const maxStudents = slotDropdownMenu.options[slotDropdownMenu.selectedIndex].dataset.maxCapacity
+    if (!selectedPeriod) {
+      return;
+    }
+    const slotStart = selectedPeriod.options[selectedPeriod.selectedIndex].dataset.start
+    const slotEnd = selectedPeriod.options[selectedPeriod.selectedIndex].dataset.end
+    const duration = document.getElementById("duration").value
 
-     createBooking(bookingDetails) // create a booking entry for the student for the consultation selected.
-  .then(data => {
-    console.log('Booking created successfully:', data)
-    // Perform any additional actions after successful booking
-  })
-  .catch(error => {
-    console.error('Failed to create booking:', error)
-    // Handle the error appropriately
-  })
-  }
+    // Change the book button text to "Loading..."
+    bookButton.textContent = 'Loading...'
 
-  getStudentDetails(userStudentNumber)
-      .then(student => {
-        console.log(student)
+    const verificationStud = await getBookingsStudentNumber(userStudentNumber)
+    let hasConflict = false
+
+    for (const booking of verificationStud) {
+      const consultationId = booking.consultationId
+      const consultationDetailsCheck = await getConsultationPerBooking(consultationId)
+      const checkDate = consultationDetailsCheck.some(check => {
+        return check.date === selectedSlot
+      });
+
+      if (checkDate) {
+        const overlappingConsultation = consultationDetailsCheck.find(check => {
+          return (
+            ((check.startTime <= String(slotStart) && check.endTime > String(slotStart)) ||
+            (check.startTime >= String(slotStart) && check.endTime < String(slotEnd))) && check.status === 'approved'
+          )
+        })
+
+        if (overlappingConsultation) {
+          const lecturerName = overlappingConsultation.lecturerId.split('@')[0].replace('.', ' ')
+          const message = `Already has a consultation booked with ${lecturerName} on ${selectedSlot} at ${overlappingConsultation.startTime} - ${overlappingConsultation.endTime}`
+          const messageContainer = document.getElementById('messageContainer')
+          messageContainer.textContent = message
+          hasConflict = true
+          break
+        }
+      }
+    }
+
+    if (hasConflict) {
+      // Change the book button text to "Error"
+      bookButton.textContent = 'Error'
+
+      // Add event listeners to the input fields
+      dropdownMenu.addEventListener('change', () => {
+        bookButton.textContent = 'Book'; // Change the button text back to "Book"
+        const messageContainer = document.getElementById('messageContainer')
+        messageContainer.textContent = ''
+      });
+
+      slotDropdownMenu.addEventListener('change', () => {
+        bookButton.textContent = 'Book'; // Change the button text back to "Book"
+        const messageContainer = document.getElementById('messageContainer')
+        messageContainer.textContent = ''
       })
 
-  lecturerDetails.then(detailsArray => {
-    const selectedLecturer = detailsArray.find(detail => detail.lecturerId === selectedLecturerId)
-    console.log(`${user.given_name} has booked a consultation with ${selectedLecturer ? selectedLecturer.firstName + ' ' + selectedLecturer.lastName : 'none'} at ${selectedSlot}`)
-  })
+      selectedPeriod.addEventListener('change', () => {
+        bookButton.textContent = 'Book'; // Change the button text back to "Book"
+        const messageContainer = document.getElementById('messageContainer')
+        messageContainer.textContent = ''
+      })
+      return
+    } else{
+      // Add event listeners to the input fields
+      dropdownMenu.addEventListener('change', () => {
+        const messageContainer = document.getElementById('messageContainer')
+        messageContainer.textContent = ''
+      });
+
+      slotDropdownMenu.addEventListener('change', () => {
+        const messageContainer = document.getElementById('messageContainer')
+        messageContainer.textContent = ''
+      });
+
+      selectedPeriod.addEventListener('change', () => {
+        const messageContainer = document.getElementById('messageContainer')
+        messageContainer.textContent = ''
+      })
+    }
+
+    getAllConsultations()
+      .then(detailsArray => {
+        const consultationIds = detailsArray.map(detail => detail.consultationId)
+        const maxConsultationId = Math.max(...consultationIds)
+        const consultationId = maxConsultationId + 1
+        let title = document.getElementById("consultationTitle").value
+    if(title===""){
+      title = `Consultation at ${slotStart} - ${slotEnd}`
+    }
+    details = {
+          consultationId: parseInt(consultationId),
+          lecturerId: String(selectedLecturerId),
+          date: String(selectedSlot),
+          timeMinutes: parseInt(duration),
+          maximumNumberOfStudents: parseInt(maxStudents),
+          status: String("approved"),
+          startTime: String(slotStart),
+          endTime: String(slotEnd),
+          title: String(title)
+        };
+        console.log(details);
+
+        createConsultation(details)
+          .then(data => {
+            console.log('Booking created successfully:', data);
+            console.log('Booking for Student: ', userStudentNumber)
+            // Perform any additional actions after successful booking
+            // Make a function for this whole thing and call it both times.
+            bookingDetails = {
+              consultationId: consultationId,
+              studentNumber: userStudentNumber,
+              role: "Organizer"
+            };
+            createBooking(bookingDetails)
+              .then(data => {
+                const message = 'Booking successful'
+                const messageContainer = document.getElementById('messageContainer')
+                messageContainer.textContent = message
+                console.log('Booking created successfully:', data)
+                bookButton.textContent = 'Book' // Change the button text back to "Book"
+                alert("New Consultation Booking Succesful!")
+                location.reload()
+    // Perform any additional actions after successful booking
+              })
+              .catch(error => {
+                console.error('Failed to create booking:', error)
+                // Handle the error appropriately
+              })
+          })
+          .catch(error => {
+            console.error('Failed to create booking:', error)
+            // Handle the error appropriately
+          })
+      })
+      .catch(err => console.error(err))
+  } else {
+
+
+    // if the student has selected an existing consultation, then add them to that consultation.
+    selectedSlot = existingConsultationsMenu.value //get the consultationId.
+    // Search for existing consultation
+    const existingConsultationDetails = await getConsultationPerBooking(selectedSlot)
+    console.log((existingConsultationDetails[0].date))
+    
+    // Change the book button text to "Loading..."
+    bookButton.textContent = 'Loading...'
+
+    const verificationStud = await getBookingsStudentNumber(userStudentNumber)
+    let hasConflict = false
+
+    for (const booking of verificationStud) {
+      const consultationId = booking.consultationId
+      const consultationDetailsCheck = await getConsultationPerBooking(consultationId)
+      const checkDate = consultationDetailsCheck.some(check => {
+        return check.date === existingConsultationDetails[0].date
+      })
+
+      if (checkDate) {
+        const overlappingConsultation = consultationDetailsCheck.find(check => {
+          return (
+            ((check.startTime <= String(existingConsultationDetails[0].startTime) && check.endTime > String(existingConsultationDetails[0].startTime)) ||
+            (check.startTime >= String(existingConsultationDetails[0].endTime) && check.endTime < String(existingConsultationDetails[0].endTime))) && check.status === 'approved'
+          )
+        })
+
+        if (overlappingConsultation) {
+          const lecturerName = overlappingConsultation.lecturerId.split('@')[0].replace('.', ' ')
+          const message = `Already has a consultation booked with ${lecturerName} on ${overlappingConsultation.date} at ${overlappingConsultation.startTime} - ${overlappingConsultation.endTime}`
+          const messageContainer = document.getElementById('messageContainer')
+          messageContainer.textContent = message
+          hasConflict = true
+          break
+        }
+      }
+    }
+
+    if (hasConflict) {
+      // Change the book button text to "Error"
+      bookButton.textContent = 'Error'
+
+      // Add event listeners to the input fields
+      dropdownMenu.addEventListener('change', () => {
+        bookButton.textContent = 'Join' // Change the button text back to "Book"
+        const messageContainer = document.getElementById('messageContainer')
+        messageContainer.textContent = ''
+      });
+
+      slotDropdownMenu.addEventListener('change', () => {
+        bookButton.textContent = 'Join' // Change the button text back to "Book"
+        const messageContainer = document.getElementById('messageContainer')
+        messageContainer.textContent = ''
+      })
+      return
+    } else{
+      // Add event listeners to the input fields
+      dropdownMenu.addEventListener('change', () => {
+        const messageContainer = document.getElementById('messageContainer')
+        messageContainer.textContent = ''
+      })
+
+      slotDropdownMenu.addEventListener('change', () => {
+        const messageContainer = document.getElementById('messageContainer')
+        messageContainer.textContent = ''
+      })
+    }
+
+    
+    bookingDetails = {
+      consultationId: selectedSlot,
+      studentNumber: userStudentNumber,
+      role: "Member"
+    }
+
+    createBooking(bookingDetails)
+      .then(data => {
+        const message = 'Booking successful'
+        const messageContainer = document.getElementById('messageContainer')
+        messageContainer.textContent = message
+        console.log('Booking created successfully:', data)
+        bookButton.textContent = 'Book'; // Change the button text back to "Book"
+        alert("Succesfully Joined Consultation!")
+    location.reload()
+    // Perform any additional actions after successful booking
+      })
+      .catch(error => {
+        console.error('Failed to create booking:', error)
+        // Handle the error appropriately
+      })
+  }
 })
+
 dropdownMenu.addEventListener('change', async (e) => {
   const selectedTeacher = e.target.value
   //const selectedTeacher = lecturerDetails.find(teacher => teacher.email === teacherEmail);
@@ -161,7 +335,8 @@ dropdownMenu.addEventListener('change', async (e) => {
         option.dataset.start = slot.startTime
         option.dataset.end = slot.endTime
         option.dataset.maxCapacity = slot.numberOfStudents
-        option.dataset.maxDuration = slot.durationMinutes/slot.maximumNumberOfConsultationsPerDay
+        option.dataset.maxDuration = slot.durationMinutes//slot.maximumNumberOfConsultationsPerDay
+        option.dataset.maxConsultations = slot.maximumNumberOfConsultationsPerDay
         slotDropdownMenu.add(option)
       }
     }
@@ -365,7 +540,7 @@ function getNextDate(day, j) {
     today.setDate(today.getDate() + ((j * 7) + daysUntilNextTargetDay))
     return today
   } else {
-    throw new Error(`Invalid day name: ${dayName}`)
+    throw new Error(`Invalid day name: ${day}`)
   }
 }
 
@@ -460,6 +635,7 @@ function generateConsultationsHTML(consultation) {
       html += '<li>'
       html += `Date: ${consultation.date}<br>` // Display the consultation date
       html += `Time: ${consultation.startTime} - ${consultation.endTime}<br>` // Display the consultation time range
+      html += `Title: ${consultation.title}<br>` 
       html += `Maximum number of students: ${consultation.maximumNumberOfStudents}<br>` // Display the maximum number of students
       html += '</li>'
     html += '</ul>'
@@ -501,8 +677,10 @@ dropdownMenu.addEventListener('change', async (e) => {
 
     // Fetch existing consultations for selected lecturer
     const consultations = await getExistingConsultations(selectedTeacher)
-    const existingConsultations = consultations.filter(consultation => consultation.status === "approved")
+    const approvedConsultations = consultations.filter(consultation => consultation.status === "approved")
+    const existingConsultations = approvedConsultations.filter(consultation => isPast(consultation.date) === false)
 
+    
     // Fill the existing consultations dropdown
     let numberOfStudents=0
     for (let i = 0; i < existingConsultations.length; i++) {
@@ -528,6 +706,7 @@ dropdownMenu.addEventListener('change', async (e) => {
       option.dataset.startTime = consultation.startTime
       option.dataset.endTime = consultation.endTime
       option.dataset.numberOfStudents = consultation.maximumNumberOfStudents
+      option.dataset.title = consultation.title
       existingConsultationsMenu.add(option)
       existingConsultationsMenu.add(option)
     }
@@ -548,6 +727,7 @@ existingConsultationsMenu.addEventListener('change', function() {
       startTime : this.options[this.selectedIndex].dataset.startTime,
       endTime : this.options[this.selectedIndex].dataset.endTime,
       maximumNumberOfStudents : existingConsultationsMenu[existingConsultationsMenu.selectedIndex].dataset.numberOfStudents,
+      title : existingConsultationsMenu[existingConsultationsMenu.selectedIndex].dataset.title,
     }
     const consultationsHTML = generateConsultationsHTML(details)
     displayConsultations(consultationsHTML)
@@ -564,7 +744,14 @@ existingConsultationsMenu.addEventListener('change', function() {
   checkButtonStatus()
 })
 
-
+function getBookingsStudentNumber(studentNumber) {
+  const url = `class/api/userStudentBooking?studentNumber=${studentNumber}`
+  return fetch(url)
+    .then(response => response.json())
+    .catch(error => {
+      console.error("Error fetching bookings:", error);
+    });
+}
 // Function to fetch existing consultations for a specific lecturer
 function getExistingConsultations(Id) {
   const url = `class/api/consultationDetailsSearch?lecturerId=${Id}`
@@ -584,6 +771,21 @@ function getStudentDetails(studentNumber) {
     })
   
 }
+
+function getConsultationPerBooking(consultationId) {
+  const url = `class/api/consultationDetailSearchByID/${consultationId}`
+  return fetch(url)
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Error fetching consultation details')
+      }
+      return response.json()
+    })
+    .catch(error => {
+      console.error('Error fetching consultation details:', error)
+      throw error; // Re-throw the error to handle it in the calling function
+    })
+} 
 
 //function to get a list of all consultations
 function getAllConsultations() {
@@ -643,38 +845,6 @@ function createConsultation(bookingDetails) {
 // Container where the subperiod dropdown will go
 const dropdownContainer = document.querySelector('#dropdownContainer')
 
-//commented out because I dont think it is used anywhere.
-// function getSubPeriod(start, duration, index){ //change when the slots are not a defined length.
-//     // Create a new Date object
-//     const date = new Date()
-
-//     // Get the hours and minutes from the startTime
-//     const [hours, minutes] = start.split(':')
-
-//     // Set the hours and minutes of the Date object
-//     date.setHours(hours, minutes, 0, 0) // Set seconds and milliseconds to 0
-
-//     // Add the duration to the Date object
-//     date.setMinutes(date.getMinutes() + duration*index)
-
-//     // Extract the hours and minutes from the updated Date object
-//     let startHours = date.getHours()
-//     let startMinutes = date.getMinutes()
-//     startHours = startHours.toString().padStart(2, '0')
-//     startMinutes = startMinutes.toString().padStart(2, '0')
-//     // Pad the hours and minutes with leading zeros if necessary
-//     date.setMinutes(date.getMinutes() + duration)
-//     // Extract the hours and minutes from the updated Date object
-//     let endHours = date.getHours()
-//     let endMinutes = date.getMinutes()
-//     endHours = endHours.toString().padStart(2, '0')
-//     endMinutes = endMinutes.toString().padStart(2, '0')
-
-//     // Combine the hours and minutes into a string and return it
-//     const startTime = `${startHours}:${startMinutes}`
-//     const endTime = `${endHours}:${endMinutes}`
-//     return [startTime, endTime]
-// }
 // Function to create and add the subperiod dropdown to the DOM
 function createSubperiodDropdown(possibleSlots, duration) {
   // Calculate the number of subperiods
@@ -703,9 +873,27 @@ function createSubperiodDropdown(possibleSlots, duration) {
 
   // Add the dropdown to the DOM
   dropdownContainer.appendChild(subperiodDropdown)
+  // Check if the label already exists
+  let titleLabel = document.getElementById('titleLabel')
+
+  // If it doesn't exist, create it
+  if (!titleLabel) {
+    titleLabel = document.createElement('label')
+    titleLabel.textContent = "Enter a consultation title: "
+    titleLabel.id = 'titleLabel'
+    titleLabel.setAttribute('for', 'consultationTitle')
+    titleLabel.style.display = 'block'  // This makes the label a block-level element
+    titleLabel.style.padding = '10px'  // This adds padding to the label
+    dropdownContainer.appendChild(titleLabel)
+  }
+
+  const title = document.createElement('input')
+  title.id = "consultationTitle"
+  dropdownContainer.appendChild(title)
+
   subperiodDropdown.addEventListener('change', function() {
-    bookButton.removeAttribute('disabled');
-  });
+    bookButton.removeAttribute('disabled')
+  })
 }
 
 // Function to remove the subperiod dropdown from the DOM
@@ -714,6 +902,15 @@ function removeSubperiodDropdown() {
   if (subperiodDropdown) {
     dropdownContainer.removeChild(subperiodDropdown)
   }
+  const title = document.querySelector('#consultationTitle')
+  if (title) {
+    dropdownContainer.removeChild(title)
+  }
+  const titleLabel = document.querySelector('#titleLabel')
+  if (titleLabel) {
+    dropdownContainer.removeChild(titleLabel)
+  }
+
 }
 //if the user presses the "hide consultation on calendar" button, hide the consultations displayed on the calendar
 if (hideConsultation) {
@@ -744,8 +941,17 @@ slotDropdownMenu.addEventListener('change',async function() {
     const slotLength = this.options[this.selectedIndex].dataset.length
     const startTime = this.options[this.selectedIndex].dataset.start
     const endTime = this.options[this.selectedIndex].dataset.end
+    const numOfBookedConsultations = existingConsultations.length
+    const maxNumberOfConsultations = this.options[this.selectedIndex].dataset.maxConsultations
+    console.log(numOfBookedConsultations, maxNumberOfConsultations)
+    if(numOfBookedConsultations>=maxNumberOfConsultations){
+      alert("This consultation period already has the maximum number of consultations booked!");
+      slotDropdownMenu.selectedIndex=0
+      document.getElementById('durationSelector').style.display = 'none' // Hide the duration selector
+      return
+    }
     bookedSlots = []
-    for(let i=0;i<existingConsultations.length;i++){
+    for(let i=0;i<numOfBookedConsultations;i++){
       start = existingConsultations[i].startTime
       end = existingConsultations[i].endTime
       bookedSlots.push([start, end])
@@ -892,4 +1098,14 @@ async function showAvailableConsultations(){
   createSubperiodDropdown(possibleSlots, 30)
   
 
+}
+
+function isPast(dateString) {
+  const date = new Date(dateString)
+  
+  const today = new Date()
+  today.setHours(0, 0, 0, 0)
+
+  // If date is less than today, it's in the past
+  return date < today
 }
