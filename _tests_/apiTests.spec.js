@@ -358,6 +358,33 @@ describe('GET /api/studentDetails', () => {
   })
 })
 
+describe('POST /api/insertConsultationPeriod', () => {
+  // Mock the insertConsultationPeriod function
+  insertService.insertConsultationPeriod.mockResolvedValue({ message: 'Consultation period inserted successfully.' })
+
+  it('should return 200 OK', async () => {
+    const req = createRequest({
+      method: 'POST',
+      url: '/api/insertConsultationPeriod',
+      body: {
+        lecturerId: "test123@wits.ac.za",
+        dayOfWeek: "Monday",
+        startTime: "15:00",
+        endTime: "17:00",
+        durationMinutes: 30,
+        maximumNumberOfConsultationsPerDay: 3,
+        numberOfStudents: 4,
+      }
+    })
+
+    const res = createResponse()
+
+    await apiRouter(req, res)
+    expect(res.statusCode).toBe(200)
+    expect(JSON.parse(res._getData())).toEqual({ message: 'Consultation period inserted successfully.' })
+  })
+})
+
 // const app = require('../index.js');
 
 // describe('GET /api/testPipeline', () => {
