@@ -35,17 +35,6 @@ router.post('/api/lecturerDetails', async (req, res) => {
   }
 })
 
-router.get('class/api/getConsultationPerBooking', async (req, res) => {
-  try {
-    const consultationId = req.query.consultationId
-    const bookingData = await getBookingsByConsultationId(consultationId) 
-    res.json(bookingData)
-  } catch (err) {
-    console.error(err)
-    res.sendStatus(500)
-  }
-})
-
 // Route for inserting new data into studentDetails collection
 router.post('/api/studentDetails', async (req, res) => {
   const userEmail = req.oidc.user.email;
