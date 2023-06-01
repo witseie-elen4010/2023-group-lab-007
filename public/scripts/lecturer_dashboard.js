@@ -131,7 +131,7 @@ function handleEventClick(info) {
         alert("Failed to fetch consultation details")
       })
   } else {
-    consultationsTextField.value = info.event.id + ":\t" + selectedTitle
+    consultationsTextField.value = info.event.id + ":\t" + selectedTitle.trim()
     consultationsTextField.dataset.consultationID = selectedConsultationID
     consultationsTextField.style.textAlign = "center"
 
@@ -170,7 +170,7 @@ function displayConsultations() {
         const end = new Date(`${data.date}T${data.endTime}`)
         const event = {
           id: data.consultationId, // Add the id field with the consultation ID
-          title: data.title,
+          title: ' ' + data.title,
           start: start,
           end: end,
           date: start,
@@ -206,29 +206,7 @@ window.onload = displayConsultations
 //   }
 // }
 
-async function executeCancel() {
-  const selectedTextField = document.getElementById("consultations")
-  const consultationID = parseInt(selectedTextField.dataset.consultationID)
-  if (!consultationID) {
-    alert("Invalid consultation ID. PLease select from the calendar.")
-    return
-  }
-  console.log("Selected consultation ID:", consultationID)
-  try {
-    const confirmation = confirm("Are you sure you want to cancel the consultation?")
-    if (!confirmation) {
-      console.log("Consultation cancellation canceled by user")
-      return 
-    }
-    const response = await fetch(`/class/api/cancelConsultation/${consultationID}`, {
-      method: "DELETE",
-    })
-    const data = await response.json()
-    console.log("Consultation cancelled in the database:", data)
-  } catch (error) {
-    console.error("Error cancelling consultation:", error)
-  }
-}
+
 
 // const approveConsultation = document.getElementById("approveConsultation") 
 // if (approveConsultation) {
