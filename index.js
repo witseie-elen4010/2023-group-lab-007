@@ -63,7 +63,7 @@ app.use(function (req, res, next) {
 })
 
 new Promise((resolve, reject) => {
-  mongoose.connect('mongodb+srv://2305164:VZ2jrn9qYUe048tx@cluster.8cexuwk.mongodb.net/StudentConsultationDB', {
+  mongoose.connect(process.env.MONGO, {
     useUnifiedTopology: true,
     useNewUrlParser: true,
   })
@@ -80,29 +80,14 @@ new Promise((resolve, reject) => {
 })
 
 // Delete the logs.txt file on startup
-const filePath = path.join(__dirname, './public/logs.txt')
-fs.unlink(filePath, (err) => {
-  if (err) {
-    console.error(err)
-  } else {
-    console.log('logs.txt file deleted successfully.')
-  }
-})
-
-// Define the route for /logs
-app.get('/logs', (req, res) => {
-  const filePath = path.join(__dirname, './public/logs.txt')
-
-  fs.readFile(filePath, 'utf8', (err, data) => {
-    if (err) {
-      console.error(err)
-      return res.status(500).send('Error retrieving logs.')
-    }
-
-    // Display the content of the logs.txt file on the web page
-    res.send(`<pre>${data}</pre>`)
-  })
-})
+// const filePath = path.join(__dirname, './app.log')
+// fs.unlink(filePath, (err) => {
+//   if (err) {
+//     console.error(err)
+//   } else {
+//     console.log('logs.txt file deleted successfully.')
+//   }
+// })
 
 // Start the server only if the file is being executed directly
 if (require.main === module) {
