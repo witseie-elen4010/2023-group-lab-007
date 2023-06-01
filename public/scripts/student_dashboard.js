@@ -196,21 +196,22 @@ slotDropdownMenu.addEventListener('change', (e) => {
   checkButtonStatus()
 })
 
+//format the body of the calendar pop up
 function formatModalBody(data) {
-  console.log('data2 = ' + data)
   const consultationInfo = document.createElement("div")
-  
+  console.log('date 2 = ' + data.date)
   consultationInfo.innerHTML = `
     <strong>Lecturer:</strong> ${data.extendedProps.lecturer}<br><br>
-    <strong>Start Time:</strong> ${data.start}<br><br>
-    <strong>End Time:</strong> ${data.end}<br><br>
+    <strong>Date:</strong> ${data.extendedProps.datePopUp}<br><br>
+    <strong>Start Time:</strong> ${data.extendedProps.startTimePopUp}<br><br>
+    <strong>End Time:</strong> ${data.extendedProps.endTimePopUp}<br><br>
     <strong>Students attending:</strong> ${data.extendedProps.studentCount}<br><br>
     <strong>Status of consultation:</strong> ${data.extendedProps.status}<br><br>
-    <strong>Consultation ID:</strong> ${data.extendedProps.consultationId}<br><br>
+    <strong>Role of Student:</strong> ${data.extendedProps.role}<br><br>  
   `
   return consultationInfo.innerHTML
 }
-
+//format the calendar pop up
 function createConsultationDetailsModal(selectedConsultationID , selectedConsultationID, data) {
   const consultationDetails = document.createElement("div")
   consultationDetails.classList.add("modal", "fade")
@@ -270,20 +271,24 @@ showConsultation.addEventListener('click', () => {
    
     consultations.forEach(consultation => {
       const { date, startTime, endTime, lecturer, consultationId, studentCount, status, title, role } = consultation
+      console.log('date = ' + date)
       const event = {
         title:title,
         consultationId: consultationId,
         start: `${date}T${startTime}`,
         end: `${date}T${endTime}`,
+        datePopUp: date,
         lecturer: lecturer,
         status: status,
         studentCount: studentCount,
+        startTimePopUp: startTime,
+        endTimePopUp: endTime,
         role: role,
         color: status === "approved" ? "green" : "red", // Change event color based on status
         textColor: status === "approved" ? "white" : "black", // Change text color based on status  
       }
       console.log(consultations)
-      console.log('Event'+event)
+      console.log('Event'+ event.datePopUp)
       calendar.addEvent(event)
     })
 
@@ -296,7 +301,7 @@ function handleEventClick(info) {
   const consultationRole = info.event.extendedProps.role
   const consultationsTextField = document.getElementById("consultations")
   const currentConsultationID = parseInt(consultationsTextField.dataset.consultationID)
- 
+
   // Remove existing delete button if present
   const deleteButtonContainer = document.getElementById("deleteButtonContainer")
   deleteButtonContainer.innerHTML = "" // Clear the container first
