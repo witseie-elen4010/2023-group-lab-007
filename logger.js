@@ -6,7 +6,7 @@ const finalPath = path.join(__dirname, '/app.log')
 const { combine, timestamp, printf, colorize, align } = winston.format;
 
 const logger = winston.createLogger({
-  level: 'info',
+  level: process.env.LOG_LEVEL || 'info' || 'error',
   //Specify the display format for Winston logger
   format: combine(
     colorize({ all: true }),
