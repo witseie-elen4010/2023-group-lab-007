@@ -640,6 +640,41 @@ describe('POST /api/studentDetails', () => {
   })
 })
 
+describe('POST /api/studentBooking', () => {
+  it('should return 200 OK', async () => {
+    const userEmail = 'dude@wits.ac.za'
+    const req = createRequest({
+      method: 'POST',
+      url: '/api/studentBooking',
+      oidc: {
+        user: {
+          email: userEmail
+        },
+      },
+      body: { newData: 'exampleData' } // Provide the request body with the new data
+    })
+    const res = createResponse()
+    await apiRouter(req, res)
+    expect(res.statusCode).toBe(200)
+    })
+    it('should return 500 if error was thrown', async () => {
+      const userEmail = 'dude@wits.ac.za'
+      const req = createRequest({
+        method: 'POST',
+        url: '/api/studentBooking',
+        oidc: {
+          user: {
+            email: userEmail
+          },
+        },
+        body: { newData: 'exampleData' } // Provide the request body with the new data
+      })
+      const res = createResponse()
+      insertService.insertStudentBooking.mockRejectedValue(new Error('Error'))
+      await apiRouter(req, res)
+      expect(res.statusCode).toBe(500)
+    })
+})
 // const app = require('../index.js');
 
 // describe('GET /api/testPipeline', () => {
