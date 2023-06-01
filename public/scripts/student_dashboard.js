@@ -256,10 +256,13 @@ let calendar = new FullCalendar.Calendar(calendarDiv, {
 calendar.render()
 //if the user presses the "show consultation" button, display the default consulation.
 showConsultation.addEventListener('click', () => {
+  displayConsultationsOnCalendar()
+})
+
+window.onload = displayConsultationsOnCalendar()
+
+function displayConsultationsOnCalendar() {
   const calendarDiv = document.querySelector('#calendar')
-  // if (calendar) {
-  //   calendar.removeAllEvents()
-  // }
   calendar = new FullCalendar.Calendar(calendarDiv, {
     initialView: "dayGridMonth",
     height: 'auto',
@@ -289,7 +292,7 @@ showConsultation.addEventListener('click', () => {
     })
 
   })
-})
+}
 
 // Event click callback function
 function handleEventClick(info) {
