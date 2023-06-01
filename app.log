@@ -7,3 +7,18 @@
 [2023-06-01 05:32:46.554 PM] [32minfo[39m: 	[32mFetched all bookings for consultation (16) from the database [dafdafd@students.wits.ac.za][39m
 [2023-06-01 05:32:52.713 PM] [32minfo[39m: 	[32mSearched through a list of available consultation periods for a lecturer [dafdafd@students.wits.ac.za][39m
 [2023-06-01 05:32:53.795 PM] [32minfo[39m: 	[32mNavigated to logs page [dafdafd@students.wits.ac.za][39m
+[2023-06-01 05:57:10.130 PM] [32minfo[39m: 	[32mLogged out [dafdafd@students.wits.ac.za][39m
+[2023-06-01 05:57:26.211 PM] [32minfo[39m: 	[32mNavigated to landing page [david@wits.ac.za][39m
+[2023-06-01 05:57:27.118 PM] [32minfo[39m: 	[32mFetched consultation details for this lecturer Robert.Taylor@wits.ac.za from the database [david@wits.ac.za][39m
+[2023-06-01 05:57:28.918 PM] [32minfo[39m: 	[32mNavigated to settings page [david@wits.ac.za][39m
+[2023-06-01 05:57:30.220 PM] [32minfo[39m: 	[32mNavigated to lecturer dashboard page [david@wits.ac.za][39m
+[2023-06-01 05:57:31.334 PM] [32minfo[39m: 	[32mFetched consultation details for this lecturer Robert.Taylor@wits.ac.za from the database [david@wits.ac.za][39m
+[2023-06-01 05:57:32.497 PM] [32minfo[39m: 	[32mNavigated to logs page [david@wits.ac.za][39m
+[2023-06-01 05:59:46.533 PM] [32minfo[39m: 	[32mNavigated to lecturer dashboard page [david@wits.ac.za][39m
+[2023-06-01 05:59:47.440 PM] [32minfo[39m: 	[32mFetched consultation details for this lecturer Robert.Taylor@wits.ac.za from the database [david@wits.ac.za][39m
+[2023-06-01 05:59:47.829 PM] [32minfo[39m: 	[32mNavigated to settings page [david@wits.ac.za][39m
+[2023-06-01 05:59:48.703 PM] [32minfo[39m: 	[32mNavigated to logs page [david@wits.ac.za][39m
+[2023-06-01 06:04:38.914 PM] [32minfo[39m: 	[32mNavigated to lecturer dashboard page [david@wits.ac.za][39m
+[2023-06-01 06:04:40.076 PM] [32minfo[39m: 	[32mFetched consultation details for this lecturer Robert.Taylor@wits.ac.za from the database [david@wits.ac.za][39m
+[2023-06-01 06:04:40.311 PM] [32minfo[39m: 	[32mNavigated to settings page [david@wits.ac.za][39m
+[2023-06-01 06:04:41.448 PM] [32minfo[39m: 	[32mNavigated to logs page [david@wits.ac.za][39m
