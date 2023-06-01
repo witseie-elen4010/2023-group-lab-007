@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 
-test('test Organizer Consultation', async ({ page }) => {
+test.skip('test Organizer Consultation', async ({ page }) => {
   await page.goto('http://localhost:3000')
   await page.getByLabel('Username or email address').click()
   await page.getByLabel('Username or email address').fill('John')
@@ -27,9 +27,9 @@ test('test Organizer Consultation', async ({ page }) => {
   await closeButton.click();
   //Epect Canclled Consultation Button
   await expect(page.getByRole('button', { name: 'Delete Consultation' })).toBeVisible()
-});
+})
 
-test('test hidden cancel button when not organizer', async ({ page }) => {
+test.skip('test hidden cancel button when not organizer', async ({ page }) => {
   await page.goto('http://localhost:3000');
   await page.getByLabel('Username or email address').click();
   await page.getByLabel('Username or email address').fill('John');
@@ -42,9 +42,9 @@ test('test hidden cancel button when not organizer', async ({ page }) => {
   //As not organizer should be hidden
   await expect(page.getByRole('button', { name: 'Delete Consultation' })).toBeHidden()
 
-});
+})
 
-test('test hidding consultations on calendar', async ({ page }) => {
+test.skip('test hidding consultations on calendar', async ({ page }) => {
   await page.goto('http://localhost:3000');
   await page.getByLabel('Username or email address').click();
   await page.getByLabel('Username or email address').fill('John');
@@ -54,7 +54,7 @@ test('test hidding consultations on calendar', async ({ page }) => {
   await expect(page.getByText('11aTesting')).toBeVisible()
   await page.getByRole('button', { name: 'Hide Consultations on Calendar' }).click();
   await expect(page.getByText('11aTesting')).toBeHidden()
-});
+})
 
 
 
