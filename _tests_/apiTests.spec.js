@@ -8,6 +8,8 @@ const consultationService = require('../src/services/consultation_service')
 const consultationPeriodService = require('../src/services/consultation_period_service')
 const studentConsulationService = require('../src/services/student_consulation_service')
 const { getStudentByNumber, getBookingsByConsultationId } = require('../src/services/student_service.js') // Import our service funciton
+const { get } = require('superagent')
+const { it } = require('node:test')
 
 jest.mock('../src/services/lecturer_service.js')
 jest.mock('../src/services/student_consulation_service.js')
@@ -39,6 +41,24 @@ describe('GET /api/studentConsultationDetails', () => {
     expect(res.statusCode).toBe(200)
     expect(JSON.parse(res._getData())).toEqual([{ mockReturn: 'returned the correct object' }]) //Compare the returned value to the mocked response
   })
+   //test for when an error is thrown
+   it('should return 500 Internal Server Error ', async () => {
+    const userEmail = 'dude@students.wits.ac.za'
+    const req = createRequest({ // Create a mock request object, including oauth0 oicd user object
+      method: 'GET',
+      url: '/api/studentConsultationDetails',
+      oidc: {
+        user: {
+          email: userEmail
+        },
+      }
+    })
+    const res = createResponse()
+    studentConsulationService.getStudentConsultationDetails.mockRejectedValue(new Error('Error'))
+    await apiRouter(req, res) // Use the router function from apiRoutes.js
+    expect(res.statusCode).toBe(500)
+  })
+
 })
 
 describe('GET /api/bookingsByConsultationId', () => {
@@ -64,6 +84,24 @@ describe('GET /api/bookingsByConsultationId', () => {
     expect(res.statusCode).toBe(200)
     expect(JSON.parse(res._getData())).toEqual([{ mockReturn: 'returned the correct object' }]) //Compare the returned value to the mocked response
   })
+    //test for when an error is thrown
+    it('should return 500 Internal Server Error ', async () => {
+      const userEmail = 'dude@students.wits.ac.za'
+      const req = createRequest({ // Create a mock request object, including oauth0 oicd user object
+        method: 'GET',
+        url: '/api/bookingsByConsultationId', 
+        oidc: {
+          user: {
+            email: userEmail
+          },
+        }
+      })
+      const res = createResponse()
+      getBookingsByConsultationId.mockRejectedValue(new Error('Error'))
+      await apiRouter(req, res) // Use the router function from apiRoutes.js
+      expect(res.statusCode).toBe(500)
+  })
+
 })
 
 describe('GET /api/student', () => {
@@ -117,6 +155,8 @@ describe('GET /api/consultationDetailsSearch', () => {
     expect(res.statusCode).toBe(200)
     expect(JSON.parse(res._getData())).toEqual([{ mockReturn: 'returned the correct object' }]) //Compare the returned value to the mocked response
   })
+ 
+
 })
 
 describe('GET /api/consultationPerLecturerSearch', () => {
@@ -167,6 +207,22 @@ describe('GET /api/consultationDetailSearchByID/:id', () => {
     expect(res.statusCode).toBe(200)
     expect(JSON.parse(res._getData())).toEqual([{ mockReturn: 'returned the correct object' }]) //Compare the returned value to the mocked response
   })
+  it('should return 500 Internal Server Error if information could not be found ', async () => {
+    const userEmail = 'dude@students.wits.ac.za'
+    const req = createRequest({ // Create a mock request object, including oauth0 oicd user object
+      method: 'GET',
+      url: '/api/consultationDetailSearchByID/4',
+      oidc: {
+        user: {
+          email: userEmail
+        },
+      }
+    })
+    const res = createResponse()
+    consultationService.getConsultationDetailsByID.mockRejectedValue(new Error('Error'))
+    await apiRouter(req, res) // Use the router function from apiRoutes.js
+    expect(res.statusCode).toBe(500)
+  })
 })
 
 describe('GET /api/consultationDetailSearchByLecID/:lecturer_id', () => {
@@ -192,6 +248,22 @@ describe('GET /api/consultationDetailSearchByLecID/:lecturer_id', () => {
     expect(res.statusCode).toBe(200)
     expect(JSON.parse(res._getData())).toEqual([{ mockReturn: 'returned the correct object' }]) //Compare the returned value to the mocked response
   })
+  it('should return 500 Internal Server Error if information could not be found ', async () => {
+    const userEmail = 'dude@students.wits.ac.za'
+    const req = createRequest({ // Create a mock request object, including oauth0 oicd user object
+      method: 'GET',
+      url: '/api/consultationDetailSearchByLecID/dude@wits.ac.za',
+      oidc: {
+        user: {
+          email: userEmail
+        },
+      }
+    })
+    const res = createResponse()
+    consultationService.getConsultationDetailsByLecID.mockRejectedValue(new Error('Error'))
+    await apiRouter(req, res) // Use the router function from apiRoutes.js
+    expect(res.statusCode).toBe(500)
+  })
 })
 
 describe('GET /api/consultationDetailSearch', () => {
@@ -216,6 +288,22 @@ describe('GET /api/consultationDetailSearch', () => {
     await apiRouter(req, res) // Use the router function from apiRoutes.js
     expect(res.statusCode).toBe(200)
     expect(JSON.parse(res._getData())).toEqual([{ mockReturn: 'returned the correct object' }]) //Compare the returned value to the mocked response
+  })
+  //Check that error is passed back correctly 
+  it('shuold return 500 error', async () => {
+    const userEmail = 'dude@students.wits.ac.za'
+    const req = createRequest({ // Create a mock request object, including oauth0 oicd user object
+      method: 'GET',
+      oidc: {
+        user: {
+          email: userEmail
+        },
+      }
+    })
+    const res = createResponse()
+    getConsultationDetails.mockRejectedValue(new Error('Error'))
+    await apiRouter(req, res)
+    expect(res.statusCode).toBe(500)
   })
 })
 
