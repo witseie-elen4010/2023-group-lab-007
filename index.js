@@ -63,7 +63,7 @@ app.use(function (req, res, next) {
 })
 
 new Promise((resolve, reject) => {
-  mongoose.connect('mongodb+srv://2305164:VZ2jrn9qYUe048tx@cluster.8cexuwk.mongodb.net/StudentConsultationDB', {
+  mongoose.connect(process.env.MONGO, {
     useUnifiedTopology: true,
     useNewUrlParser: true,
   })
