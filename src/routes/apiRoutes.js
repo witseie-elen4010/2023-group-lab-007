@@ -5,6 +5,7 @@ const router = express.Router()
 
 // const lecturerConsultations = require('../lecturerConsultation.js').get()
 // const studentConsultations = require('../studentConsultation.js').getS()
+const studentBookingService = require('../services/student_service')
 
 const insertService = require('../services/insert_service')
 const lecturerService = require('../services/lecturer_service')
@@ -366,5 +367,32 @@ router.get('/api/userStudentNumber', async (req, res) => {
   }
 })
 
+router.get('/api/userStudentBooking', async (req, res) => {
+  try {
+    const studentNumber = req.query.studentNumber // Access the studentNumber query parameter
+    const studentDetails = await studentBookingService.getBookingsByStudentNumber(studentNumber)
+    res.json(studentDetails)
+  } catch (err) {
+    console.error(err)
+    res.sendStatus(500)
+  }
+});
+
+router.get('/api/consultationDetailSearchByID/:consultationId', async (req, res) => {
+  try {
+    const consultationId = req.params.consultationId
+    const consultationDetailsData = await consultationService.getConsultationDetailsByID(consultationId)
+    if (!consultationDetailsData) {
+      // Return a 404 Not Found response if the consultation details are not found
+      res.sendStatus(404)
+    } else {
+      res.json(consultationDetailsData)
+      console.log(consultationDetailsData)
+    }
+  } catch (err) {
+    console.error(err)
+    res.sendStatus(500)
+  }
+})
 
 module.exports = router

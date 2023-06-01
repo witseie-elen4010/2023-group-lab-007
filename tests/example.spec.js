@@ -1,4 +1,4 @@
-import { test, expect, chromium } from '@playwright/test';
+import { test, expect, chromium } from '@playwright/test'
 
 test.skip('search for consultation based on the lecturer name', async () => {
   const browser = await chromium.launch({ headless: false })
