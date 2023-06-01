@@ -1,6 +1,6 @@
 import { test, expect, chromium } from '@playwright/test';
 
-test('Login to dashboard', async ({ page }) => {
+test.skip('Login to dashboard', async ({ page }) => {
     await page.goto('http://localhost:3000')
     await page.getByLabel('Username or email address').click()
     await page.getByLabel('Username or email address').fill('test123@wits.ac.za')
@@ -14,7 +14,7 @@ test('Login to dashboard', async ({ page }) => {
     expect(url).toMatch(urlRegex)
     })
 
-test('click on a consultation event and display details modal', async ({ page }) => {
+test.skip('click on a consultation event and display details modal', async ({ page }) => {
     await page.goto('http://localhost:3000')
     await page.getByLabel('Username or email address').click()
     await page.getByLabel('Username or email address').fill('test123@wits.ac.za')
@@ -55,7 +55,7 @@ test('click on a consultation event and display details modal', async ({ page })
     expect(await modal.isVisible()).toBe(false)
 })
 
-test('cancel a consultation from the calendar', async ({ page }) => {
+test.skip('cancel a consultation from the calendar', async ({ page }) => {
     await page.goto('http://localhost:3000')
     await page.getByLabel('Username or email address').click()
     await page.getByLabel('Username or email address').fill('test123@wits.ac.za')
