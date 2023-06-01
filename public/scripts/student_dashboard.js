@@ -199,7 +199,6 @@ slotDropdownMenu.addEventListener('change', (e) => {
 //format the body of the calendar pop up
 function formatModalBody(data) {
   const consultationInfo = document.createElement("div")
-  console.log('date 2 = ' + data.date)
   consultationInfo.innerHTML = `
     <strong>Lecturer:</strong> ${data.extendedProps.lecturer}<br><br>
     <strong>Date:</strong> ${data.extendedProps.datePopUp}<br><br>
@@ -271,7 +270,6 @@ showConsultation.addEventListener('click', () => {
    
     consultations.forEach(consultation => {
       const { date, startTime, endTime, lecturer, consultationId, studentCount, status, title, role } = consultation
-      console.log('date = ' + date)
       const event = {
         title:title,
         consultationId: consultationId,
@@ -287,8 +285,6 @@ showConsultation.addEventListener('click', () => {
         color: status === "approved" ? "green" : "red", // Change event color based on status
         textColor: status === "approved" ? "white" : "black", // Change text color based on status  
       }
-      console.log(consultations)
-      console.log('Event'+ event.datePopUp)
       calendar.addEvent(event)
     })
 
@@ -940,7 +936,6 @@ async function executeCancel() {
     alert("Invalid consultation ID. PLease select from the calendar.")
     return
   }
-  console.log("Selected consultation ID:", consultationID)
   try {
     const confirmation = confirm("Are you sure you want to cancel the consultation?")
     if (!confirmation) {
@@ -951,7 +946,6 @@ async function executeCancel() {
       method: "DELETE",
     })
     const data = await response.json()
-    console.log("Consultation cancelled in the database:", data)
   } catch (error) {
     console.error("Error cancelling consultation:", error)
   }
