@@ -1,7 +1,5 @@
 const {getStudentByNumber, getBookingsByConsultationId } = require('../src/services/student_service');
 const { lecturerDetails, studentDetails, consultationDetails, studentBooking, consultationPeriods } = require('../src/services/dbProvider');
-const studentDetailsPipeline = require('../src/controllers/studentDetailsPipeline');
-const studentConsultationPipeline = require('../src/controllers/studentConsultationPipeline');
 
 describe('get Student By Number', () => {
     test('should return student details for a student', async () => {
