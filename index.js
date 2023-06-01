@@ -110,5 +110,4 @@ if (require.main === module) {
     console.log('Express server running on port', port)
   })
 }
-console.log('Express server running on port 3000')
 module.exports = app

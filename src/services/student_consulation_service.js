@@ -1,6 +1,7 @@
 const { lecturerDetails, studentDetails, consultationDetails, studentBooking, consultationPeriods } = require('./dbProvider')
 const studentConsultationPipeline = require('../controllers/studentConsultationPipeline')
 const studentDetailsPipeline = require('../controllers/studentDetailsPipeline')
+
 async function getStudentConsultationDetails(email) {
     try {
       const studentDetailsData = await studentDetails.aggregate(studentDetailsPipeline(email))
