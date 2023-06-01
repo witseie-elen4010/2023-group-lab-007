@@ -8,8 +8,8 @@ async function getStudentConsultationDetails(email) {
       const consultationDetailsStudentData = await consultationDetails.aggregate(studentConsultationPipeline(studentNumber))
       return consultationDetailsStudentData
     } catch (err) {
-      console.error(err)
-      throw err // Throw the error to handle it in the calling function
+      console.error('An error occurred in getStudentConsultationDetails:', err)
+      throw new Error('Failed to get student consultation details')
     }
   }
 
@@ -19,8 +19,8 @@ async function getStudentDetails(email) {
       const studentDetailsData = await studentDetails.aggregate(studentDetailsPipeline(email))
       return studentDetailsData
     } catch (err) {
-      console.error(err)
-      throw err // Throw the error to handle it in the calling function
+      console.error('An error occurred in getStudentDetails:', err)
+      throw new Error('Failed to get student details')
     }
   }
 
