@@ -3,22 +3,22 @@ const { lecturerDetails, studentDetails, consultationDetails, studentBooking, co
 // Function to get a students details by their student number. 
 async function getStudentByNumber(studentNumber) {
   try {
-    const student = await studentDetails.find({ studentNumber: studentNumber });
-    return student;
+    const student = await studentDetails.find({ studentNumber: studentNumber })
+    return student
   } catch (err) {
-    console.log('Error in getStudentByNumber:', err);
-    throw err;
+    console.log(err)
+    throw err
   }
 }
 
 // Function to bookings for a specific consultationId.
 async function getBookingsByConsultationId(consultationId) {
     try {
-      const studentBookings = await studentBooking.find({ consultationId: consultationId });
-      return studentBookings;
+      const studentBookings = await studentBooking.find({ consultationId: consultationId })
+      return studentBookings
     } catch (err) {
-      console.error(err);
-      throw err; // Throw the error to handle it in the calling function
+      console.error(err)
+      throw err // Throw the error to handle it in the calling function
     }
   }
 
@@ -32,5 +32,5 @@ async function getBookingsByConsultationId(consultationId) {
     }
   }
   
-module.exports = { getStudentByNumber, getBookingsByConsultationId, getBookingsByStudentNumber };
+module.exports = { getStudentByNumber, getBookingsByConsultationId, getBookingsByStudentNumber }
   

@@ -5,7 +5,7 @@ function getPossibleSlots(totalStart, totalEnd, bookedSlots, duration) {
         let [hour, minute] = time.split(':')
         let date = new Date()
         date.setHours(hour, minute, 0, 0)
-        return date;
+        return date
     }
   
     // Function to check overlap
@@ -54,5 +54,26 @@ function getPossibleSlots(totalStart, totalEnd, bookedSlots, duration) {
     return possibleSlots
 }
 
-module.exports = {getPossibleSlots}
+function getNextDate(day, j, daysOfWeek, today = new Date()) {
+    const targetDay = daysOfWeek[day]
+    if (targetDay !== undefined) {
+        const daysUntilNextTargetDay = (targetDay - today.getDay() + 7) % 7
+        today.setDate(today.getDate() + ((j * 7) + daysUntilNextTargetDay))
+        return today
+    } else {
+        throw new Error(`Invalid day name: ${day}`)
+    }
+}
+
+//get correct string format from date object
+function getDateString(date) {
+    const year = date.getFullYear()
+    const month = date.getMonth() + 1 // getMonth returns a zero-based value (where 0 is January)
+    const day = date.getDate()
+  
+    const formattedDate = `${year}-${month < 10 ? '0' + month : month}-${day < 10 ? '0' + day : day}`
+    return formattedDate
+}  
+
+module.exports = {getPossibleSlots, getNextDate, getDateString}
   

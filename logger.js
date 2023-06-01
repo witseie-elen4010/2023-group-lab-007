@@ -4,7 +4,7 @@ const winston = require('winston');
 const { combine, timestamp, printf, colorize, align } = winston.format;
 
 const logger = winston.createLogger({
-  level: process.env.LOG_LEVEL || 'info',
+  level: process.env.LOG_LEVEL || 'info' || 'error',
   //Specify the display format for Winston logger
   format: combine(
     colorize({ all: true }),
@@ -15,11 +15,9 @@ const logger = winston.createLogger({
     printf((info) => `[${info.timestamp}] ${info.level}: ${info.message}`)
   ),
   transports: [
-    new winston.transports.Console(),
-    //Replace with this to write to a file instead of consol logging
-    // new winston.transports.File({
-    //   filename: 'combined.logs',
-    // }),
+    new winston.transports.File({
+      filename: './public/logs.txt',
+    }),
   ],
 });
 

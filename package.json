@@ -6,13 +6,16 @@
   "scripts": {
     "start": "node index.js",
     "test": "jest --detectOpenHandles",
-    "all": "npm run test && npm run start"
+    "all": "npm run test && npm run start",
+    "cov": "jest --coverage"
   },
   "jest": {
     "collectCoverage": true,
     "coverageReporters": [
-      "html"
+      "json",
+      "lcov"
     ],
+    "coverageDirectory": "./coverage",
     "preset": "@shelf/jest-mongodb",
     "testMatch": [
       "**/_tests_/**/*.[jt]s?(x)"
