@@ -100,7 +100,7 @@ bookButton.addEventListener('click', async () => {
         const overlappingConsultation = consultationDetailsCheck.find(check => {
           return (
             ((check.startTime <= String(slotStart) && check.endTime > String(slotStart)) ||
-            (check.startTime >= String(slotStart) && check.endTime < String(slotEnd))) && check.status === 'approved'
+              (check.startTime >= String(slotStart) && check.endTime < String(slotEnd))) && check.status === 'approved'
           )
         })
 
@@ -138,7 +138,7 @@ bookButton.addEventListener('click', async () => {
         messageContainer.textContent = ''
       })
       return
-    } else{
+    } else {
       // Add event listeners to the input fields
       dropdownMenu.addEventListener('change', () => {
         const messageContainer = document.getElementById('messageContainer')
@@ -162,10 +162,10 @@ bookButton.addEventListener('click', async () => {
         const maxConsultationId = Math.max(...consultationIds)
         const consultationId = maxConsultationId + 1
         let title = document.getElementById("consultationTitle").value
-    if(title===""){
-      title = `Consultation at ${slotStart} - ${slotEnd}`
-    }
-    details = {
+        if (title === "") {
+          title = `Consultation at ${slotStart} - ${slotEnd}`
+        }
+        details = {
           consultationId: parseInt(consultationId),
           lecturerId: String(selectedLecturerId),
           date: String(selectedSlot),
@@ -198,7 +198,7 @@ bookButton.addEventListener('click', async () => {
                 bookButton.textContent = 'Book' // Change the button text back to "Book"
                 alert("New Consultation Booking Succesful!")
                 location.reload()
-    // Perform any additional actions after successful booking
+                // Perform any additional actions after successful booking
               })
               .catch(error => {
                 console.error('Failed to create booking:', error)
@@ -219,7 +219,7 @@ bookButton.addEventListener('click', async () => {
     // Search for existing consultation
     const existingConsultationDetails = await getConsultationPerBooking(selectedSlot)
     console.log((existingConsultationDetails[0].date))
-    
+
     // Change the book button text to "Loading..."
     bookButton.textContent = 'Loading...'
 
@@ -237,7 +237,7 @@ bookButton.addEventListener('click', async () => {
         const overlappingConsultation = consultationDetailsCheck.find(check => {
           return (
             ((check.startTime <= String(existingConsultationDetails[0].startTime) && check.endTime > String(existingConsultationDetails[0].startTime)) ||
-            (check.startTime >= String(existingConsultationDetails[0].endTime) && check.endTime < String(existingConsultationDetails[0].endTime))) && check.status === 'approved'
+              (check.startTime >= String(existingConsultationDetails[0].endTime) && check.endTime < String(existingConsultationDetails[0].endTime))) && check.status === 'approved'
           )
         })
 
@@ -269,7 +269,7 @@ bookButton.addEventListener('click', async () => {
         messageContainer.textContent = ''
       })
       return
-    } else{
+    } else {
       // Add event listeners to the input fields
       dropdownMenu.addEventListener('change', () => {
         const messageContainer = document.getElementById('messageContainer')
@@ -282,7 +282,7 @@ bookButton.addEventListener('click', async () => {
       })
     }
 
-    
+
     bookingDetails = {
       consultationId: selectedSlot,
       studentNumber: userStudentNumber,
@@ -297,8 +297,8 @@ bookButton.addEventListener('click', async () => {
         console.log('Booking created successfully:', data)
         bookButton.textContent = 'Book'; // Change the button text back to "Book"
         alert("Succesfully Joined Consultation!")
-    location.reload()
-    // Perform any additional actions after successful booking
+        location.reload()
+        // Perform any additional actions after successful booking
       })
       .catch(error => {
         console.error('Failed to create booking:', error)
@@ -353,11 +353,11 @@ slotDropdownMenu.addEventListener('change', (e) => {
     existingConsultationsMenu.selectedIndex = 0 //reset selection to default
     bookButton.textContent = "Book"
     joinExisting = false
-  } else { 
+  } else {
     existingConsultationsMenu.removeAttribute('disabled') // enable existing consultations
     bookButton.textContent = "Join"
     joinExisting = true
-  }  clearConsultationsContainer()
+  } clearConsultationsContainer()
   // Enable the book button when a slot is selected
   checkButtonStatus()
 })
@@ -377,7 +377,7 @@ function formatModalBody(data) {
   return consultationInfo.innerHTML
 }
 //format the calendar pop up
-function createConsultationDetailsModal(selectedConsultationID , selectedConsultationID, data) {
+function createConsultationDetailsModal(selectedConsultationID, selectedConsultationID, data) {
   const consultationDetails = document.createElement("div")
   consultationDetails.classList.add("modal", "fade")
   consultationDetails.id = "consultationDetailsModal"
@@ -436,11 +436,11 @@ function displayConsultationsOnCalendar() {
   })
   calendar.render()
   getConsultations().then(consultations => {
-   
+
     consultations.forEach(consultation => {
       const { date, startTime, endTime, lecturer, consultationId, studentCount, status, title, role } = consultation
       const event = {
-        title:title,
+        title: title,
         consultationId: consultationId,
         start: `${date}T${startTime}`,
         end: `${date}T${endTime}`,
@@ -476,7 +476,7 @@ function handleEventClick(info) {
     deleteButton.type = "button"
     deleteButton.classList.add("btn", "btn-danger")
     deleteButton.textContent = "Delete Consultation"
-    deleteButton.addEventListener("click", () => { 
+    deleteButton.addEventListener("click", () => {
       console.log("Cancel Consultation button clicked")
       executeCancel()
         .then(() => {
@@ -484,15 +484,15 @@ function handleEventClick(info) {
         })
         .catch((error) => {
           console.error("Error removing consultation:", error)
-        }) 
+        })
     })
     deleteButtonContainer.appendChild(deleteButton)
   }
-    
+
   if (selectedConsultationID === currentConsultationID) {
     // The same consultation is clicked again, show the modal
     const modal = document.getElementById("consultationDetailsModal")
-    const consultationDetails = createConsultationDetailsModal(selectedConsultationID , selectedConsultationID, info.event)
+    const consultationDetails = createConsultationDetailsModal(selectedConsultationID, selectedConsultationID, info.event)
 
     // Display the modal
     document.body.appendChild(consultationDetails)
@@ -547,7 +547,7 @@ function checkButtonStatus() {
 
   const existingConsultationSelected = existingConsultationsMenu.value !== ""
 
-  if (teacherSelected && (slotSelected||existingConsultationSelected)) {
+  if (teacherSelected && (slotSelected || existingConsultationSelected)) {
     bookButton.removeAttribute('disabled')
   } else {
     bookButton.setAttribute('disabled', 'true')
@@ -567,27 +567,42 @@ function getNextDate(day, j) {
 }
 
 //fetch the consultations object stored in lecturerConsultation.js
-function getConsultations() {
-  return fetch('/class/api/studentConsultationDetails')
-    .then(response => response.json())
-    .then(data => {
-      const consultations = data.map(item => {
-        const studentCountTemp = item.student_booking.length
-        return {
-          lecturer: item.lecturerId,
-          consultationId: item.consultationId,
-          date: item.date,
-          startTime: item.startTime,
-          endTime: item.endTime,
-          studentCount: studentCountTemp,
-          status: item.status,
-          title:item.title,
-          role: item.student_booking[0].role
-        }
-      })
-      return consultations
+async function getConsultations() {
+  try {
+    const response = await fetch('/class/api/studentConsultationDetails')
+    const data = await response.json()
+
+    const consultations = data.map(async (item) => {
+      const studentCountTemp = item.student_booking.length
+
+      // Find the student booking for the current user's student number
+      const currentUserStudentNumber = await getUserStudentNumber()
+      const currentUserBooking = item.student_booking.find(
+        (booking) => booking.studentNumber === currentUserStudentNumber
+      )
+
+      // Check if the current user has a booking
+      const role = currentUserBooking ? currentUserBooking.role : null
+
+      return {
+        lecturer: item.lecturerId,
+        consultationId: item.consultationId,
+        date: item.date,
+        startTime: item.startTime,
+        endTime: item.endTime,
+        studentCount: studentCountTemp,
+        status: item.status,
+        title: item.title,
+        role: role
+      }
     })
-    .catch(error => console.error(error))
+
+    // Resolve all the asynchronous consultations promises
+    return Promise.all(consultations)
+  } catch (error) {
+    console.error(error)
+    throw error
+  }
 }
 
 //
@@ -600,7 +615,7 @@ function getStudentNumber() {
       const studentDetails = data.map(item => {
         return {
           studentNumber: item.studentNumber,
-          }
+        }
       })
       return studentDetails
     })
@@ -654,16 +669,16 @@ function searchConsultationsPerLecturer(Id) {
 }
 
 function generateConsultationsHTML(consultation) {
-  let html=''
-    html += '<ul>'
-      html += '<li>'
-      html += `Date: ${consultation.date}<br>` // Display the consultation date
-      html += `Time: ${consultation.startTime} - ${consultation.endTime}<br>` // Display the consultation time range
-      html += `Title: ${consultation.title}<br>` 
-      html += `Maximum number of students: ${consultation.maximumNumberOfStudents}<br>` // Display the maximum number of students
-      html += '</li>'
-    html += '</ul>'
-  
+  let html = ''
+  html += '<ul>'
+  html += '<li>'
+  html += `Date: ${consultation.date}<br>` // Display the consultation date
+  html += `Time: ${consultation.startTime} - ${consultation.endTime}<br>` // Display the consultation time range
+  html += `Title: ${consultation.title}<br>`
+  html += `Maximum number of students: ${consultation.maximumNumberOfStudents}<br>` // Display the maximum number of students
+  html += '</li>'
+  html += '</ul>'
+
   return html
 }
 
@@ -704,23 +719,23 @@ dropdownMenu.addEventListener('change', async (e) => {
     const approvedConsultations = consultations.filter(consultation => consultation.status === "approved")
     const existingConsultations = approvedConsultations.filter(consultation => isPast(consultation.date) === false)
 
-    
+
     // Fill the existing consultations dropdown
-    let numberOfStudents=0
+    let numberOfStudents = 0
     for (let i = 0; i < existingConsultations.length; i++) {
       const consultation = existingConsultations[i]
       numberOfStudents = await getBookings(consultation.consultationId)
-      .then(data => {
-        console.log(data)
-        return data.length
-        // Perform any additional actions after successful booking
-      })
-      .catch(error => {
-        console.error('Failed to fetch booking:', error)
-        // Handle the error appropriately
-      })
+        .then(data => {
+          console.log(data)
+          return data.length
+          // Perform any additional actions after successful booking
+        })
+        .catch(error => {
+          console.error('Failed to fetch booking:', error)
+          // Handle the error appropriately
+        })
       console.log(numberOfStudents)
-      if(numberOfStudents>=consultation.maximumNumberOfStudents){
+      if (numberOfStudents >= consultation.maximumNumberOfStudents) {
         continue
       }
       const option = document.createElement("option")
@@ -737,21 +752,21 @@ dropdownMenu.addEventListener('change', async (e) => {
   }
 })
 
-function getBookings(consultationId){ // get all the bookings for a consultation. 
+function getBookings(consultationId) { // get all the bookings for a consultation. 
   const url = `class/api/bookingsByConsultationId?consultationId=${consultationId}`
   return fetch(url)
-  .then(response => response.json())
-  .catch(error => console.error('Error fetching lecturer details:', error))
+    .then(response => response.json())
+    .catch(error => console.error('Error fetching lecturer details:', error))
 }
 
-existingConsultationsMenu.addEventListener('change', function() {
+existingConsultationsMenu.addEventListener('change', function () {
   if (this.value !== "") { //if the user has  selected an existing consultation, change the button from "Book" to "Join"
-    details={
+    details = {
       date: existingConsultationsMenu[existingConsultationsMenu.selectedIndex].text,
-      startTime : this.options[this.selectedIndex].dataset.startTime,
-      endTime : this.options[this.selectedIndex].dataset.endTime,
-      maximumNumberOfStudents : existingConsultationsMenu[existingConsultationsMenu.selectedIndex].dataset.numberOfStudents,
-      title : existingConsultationsMenu[existingConsultationsMenu.selectedIndex].dataset.title,
+      startTime: this.options[this.selectedIndex].dataset.startTime,
+      endTime: this.options[this.selectedIndex].dataset.endTime,
+      maximumNumberOfStudents: existingConsultationsMenu[existingConsultationsMenu.selectedIndex].dataset.numberOfStudents,
+      title: existingConsultationsMenu[existingConsultationsMenu.selectedIndex].dataset.title,
     }
     const consultationsHTML = generateConsultationsHTML(details)
     displayConsultations(consultationsHTML)
@@ -793,7 +808,7 @@ function getStudentDetails(studentNumber) {
     .catch(error => {
       console.error("Error fetching student details:", error)
     })
-  
+
 }
 
 function getConsultationPerBooking(consultationId) {
@@ -809,7 +824,7 @@ function getConsultationPerBooking(consultationId) {
       console.error('Error fetching consultation details:', error)
       throw error; // Re-throw the error to handle it in the calling function
     })
-} 
+}
 
 //function to get a list of all consultations
 function getAllConsultations() {
@@ -829,19 +844,19 @@ function createBooking(bookingDetails) {
     },
     body: JSON.stringify(bookingDetails),
   })
-  .then(response => {
-        if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`)
-    }
-    // Check if the response is JSON before trying to parse it
-    const contentType = response.headers.get("content-type")
-    if(contentType && contentType.indexOf("application/json") !== -1) {
-      return response.json()
-    } else {
-      throw new Error('Response not JSON')
-    }
-  })
-  
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`)
+      }
+      // Check if the response is JSON before trying to parse it
+      const contentType = response.headers.get("content-type")
+      if (contentType && contentType.indexOf("application/json") !== -1) {
+        return response.json()
+      } else {
+        throw new Error('Response not JSON')
+      }
+    })
+
 }
 
 function createConsultation(bookingDetails) {
@@ -852,18 +867,18 @@ function createConsultation(bookingDetails) {
     },
     body: JSON.stringify(bookingDetails),
   })
-  .then(response => {
-        if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`)
-    }
-    // Check if the response is JSON before trying to parse it
-    const contentType = response.headers.get("content-type")
-    if(contentType && contentType.indexOf("application/json") !== -1) {
-      return response.json()
-    } else {
-      throw new Error('Response not JSON')
-    }
-  }) 
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`)
+      }
+      // Check if the response is JSON before trying to parse it
+      const contentType = response.headers.get("content-type")
+      if (contentType && contentType.indexOf("application/json") !== -1) {
+        return response.json()
+      } else {
+        throw new Error('Response not JSON')
+      }
+    })
 }
 
 // Container where the subperiod dropdown will go
@@ -873,7 +888,7 @@ const dropdownContainer = document.querySelector('#dropdownContainer')
 function createSubperiodDropdown(possibleSlots, duration) {
   // Calculate the number of subperiods
   removeSubperiodDropdown()
-  
+
   // Create the subperiod dropdown
   const subperiodDropdown = document.createElement('select')
   subperiodDropdown.classList.add('form-control')
@@ -915,7 +930,7 @@ function createSubperiodDropdown(possibleSlots, duration) {
   title.id = "consultationTitle"
   dropdownContainer.appendChild(title)
 
-  subperiodDropdown.addEventListener('change', function() {
+  subperiodDropdown.addEventListener('change', function () {
     bookButton.removeAttribute('disabled')
   })
 }
@@ -940,7 +955,7 @@ function removeSubperiodDropdown() {
 if (hideConsultation) {
   console.log('Clicked hide consultation button') //log to the web console
   hideConsultation.addEventListener('click', () => {
-  
+
     // Remove all existing events from the calendar
     calendar.getEvents().forEach((event) => event.remove())
     // Remove existing delete button if present
@@ -952,7 +967,7 @@ if (hideConsultation) {
 }
 
 // Event listener for when a slot is selected
-slotDropdownMenu.addEventListener('change',async function() {
+slotDropdownMenu.addEventListener('change', async function () {
   if (this.value !== "") { //if a slot is selected
     existingConsultationsMenu.setAttribute('disabled', true) // disable existing consultations
     existingConsultationsMenu.selectedIndex = 0 //reset selection to default
@@ -960,7 +975,7 @@ slotDropdownMenu.addEventListener('change',async function() {
     joinExisting = false
 
     selectedTeacher = dropdownMenu.value
-    
+
     const consultations = await getExistingConsultations(selectedTeacher)
     const approvedConsultations = consultations.filter(consultation => consultation.status === "approved")
     const date = slotDropdownMenu.value
@@ -972,14 +987,14 @@ slotDropdownMenu.addEventListener('change',async function() {
     const numOfBookedConsultations = existingConsultations.length
     const maxNumberOfConsultations = this.options[this.selectedIndex].dataset.maxConsultations
     console.log(numOfBookedConsultations, maxNumberOfConsultations)
-    if(numOfBookedConsultations>=maxNumberOfConsultations){
+    if (numOfBookedConsultations >= maxNumberOfConsultations) {
       alert("This consultation period already has the maximum number of consultations booked!")
-      slotDropdownMenu.selectedIndex=0
+      slotDropdownMenu.selectedIndex = 0
       document.getElementById('durationSelector').style.display = 'none' // Hide the duration selector
       return
     }
     bookedSlots = []
-    for(let i=0;i<numOfBookedConsultations;i++){
+    for (let i = 0; i < numOfBookedConsultations; i++) {
       start = existingConsultations[i].startTime
       end = existingConsultations[i].endTime
       bookedSlots.push([start, end])
@@ -989,7 +1004,7 @@ slotDropdownMenu.addEventListener('change',async function() {
     possibleSlots = getPossibleSlots(startTime, endTime, bookedSlots, duration)
     createSubperiodDropdown(possibleSlots, duration)
 
-  } else { 
+  } else {
     existingConsultationsMenu.removeAttribute('disabled') // enable existing consultations
     bookButton.textContent = "Join"
     joinExisting = true
@@ -1004,29 +1019,29 @@ slotDropdownMenu.addEventListener('change',async function() {
 function getPossibleSlots(totalStart, totalEnd, bookedSlots, duration) {
   // Create date object and set time
   const setDateTime = (time) => {
-      let [hour, minute] = time.split(':')
-      let date = new Date()
-      date.setHours(hour, minute, 0, 0)
-      return date
+    let [hour, minute] = time.split(':')
+    let date = new Date()
+    date.setHours(hour, minute, 0, 0)
+    return date
   }
 
   // Function to check overlap
   const isOverlap = (start1, end1, start2, end2) => {
-      if (start1 >= start2 && start1 < end2) return true
-      if (start2 >= start1 && start2 < end1) return true
-      return false
+    if (start1 >= start2 && start1 < end2) return true
+    if (start2 >= start1 && start2 < end1) return true
+    return false
   }
 
   // Function to add minutes to a date object
   const addMinutes = (date, minutes) => {
-      return new Date(date.getTime() + minutes*60000)
+    return new Date(date.getTime() + minutes * 60000)
   }
 
   // Function to format date object to time string
   const formatTime = (date) => {
-      let hours = date.getHours().toString().padStart(2, '0')
-      let minutes = date.getMinutes().toString().padStart(2, '0')
-      return `${hours}:${minutes}`
+    let hours = date.getHours().toString().padStart(2, '0')
+    let minutes = date.getMinutes().toString().padStart(2, '0')
+    return `${hours}:${minutes}`
   }
 
   // Convert total period strings to date objects
@@ -1038,19 +1053,19 @@ function getPossibleSlots(totalStart, totalEnd, bookedSlots, duration) {
 
   // Iterate over the total period, advancing by the duration each time
   for (let start = totalStartObj; start < totalEndObj; start = addMinutes(start, 15)) {
-      let end = addMinutes(start, duration)
+    let end = addMinutes(start, duration)
 
-      if (end > totalEndObj) break
+    if (end > totalEndObj) break
 
-      let overlap = bookedSlots.some(booked => {
-          let bookedStart = setDateTime(booked[0])
-          let bookedEnd = setDateTime(booked[1])
-          return isOverlap(start, end, bookedStart, bookedEnd)
-      });
+    let overlap = bookedSlots.some(booked => {
+      let bookedStart = setDateTime(booked[0])
+      let bookedEnd = setDateTime(booked[1])
+      return isOverlap(start, end, bookedStart, bookedEnd)
+    });
 
-      if (!overlap) {
-          possibleSlots.push([formatTime(start), formatTime(end)])
-      }
+    if (!overlap) {
+      possibleSlots.push([formatTime(start), formatTime(end)])
+    }
   }
 
   return possibleSlots
@@ -1058,55 +1073,55 @@ function getPossibleSlots(totalStart, totalEnd, bookedSlots, duration) {
 
 // Existing duration adjustment code here...
 
-slotDropdownMenu.addEventListener('change', function() {
+slotDropdownMenu.addEventListener('change', function () {
   var selectedOption = this.value
-  if (selectedOption !== '') { 
-      document.getElementById('durationSelector').style.display = 'block' // Show the duration selector
-      document.getElementById('duration').value = '15'
-      document.getElementById('duration').dataset.maxDuration = this.options[this.selectedIndex].dataset.maxDuration
+  if (selectedOption !== '') {
+    document.getElementById('durationSelector').style.display = 'block' // Show the duration selector
+    document.getElementById('duration').value = '15'
+    document.getElementById('duration').dataset.maxDuration = this.options[this.selectedIndex].dataset.maxDuration
   } else {
-      document.getElementById('durationSelector').style.display = 'none' // Hide the duration selector
+    document.getElementById('durationSelector').style.display = 'none' // Hide the duration selector
   }
 })
 
 
-document.getElementById('minus').addEventListener('click', function() {
+document.getElementById('minus').addEventListener('click', function () {
   removeSubperiodDropdown()
   var durationInput = document.getElementById('duration')
   var currentValue = parseInt(durationInput.value, 10)
-  if(currentValue>0){
+  if (currentValue > 0) {
 
   }
-  else{
-    currentValue=15
+  else {
+    currentValue = 15
   }
   if (currentValue > 15) { // Prevent the value from dropping below 15
-      durationInput.value = currentValue - 15
+    durationInput.value = currentValue - 15
   }
   showAvailableConsultations()
 })
 
-document.getElementById('plus').addEventListener('click', function() {
+document.getElementById('plus').addEventListener('click', function () {
   removeSubperiodDropdown()
   var durationInput = document.getElementById('duration')
   const maxDuration = durationInput.dataset.maxDuration
   console.log(maxDuration)
   var currentValue = parseInt(durationInput.value, 10)
-  if(currentValue>0){
+  if (currentValue > 0) {
 
   }
-  else{
-    currentValue=15
+  else {
+    currentValue = 15
   }
-  if (currentValue+15<=maxDuration){
-  durationInput.value = currentValue + 15
+  if (currentValue + 15 <= maxDuration) {
+    durationInput.value = currentValue + 15
   }
   showAvailableConsultations()
 })
 
-async function showAvailableConsultations(){
+async function showAvailableConsultations() {
   selectedTeacher = dropdownMenu.value
-    
+
   const consultations = await getExistingConsultations(selectedTeacher)
   const approvedConsultations = consultations.filter(consultation => consultation.status === "approved")
   const date = slotDropdownMenu.value
@@ -1115,7 +1130,7 @@ async function showAvailableConsultations(){
   const startTime = slotDropdownMenu.options[slotDropdownMenu.selectedIndex].dataset.start
   const endTime = slotDropdownMenu.options[slotDropdownMenu.selectedIndex].dataset.end
   bookedSlots = []
-  for(let i=0;i<existingConsultations.length;i++){
+  for (let i = 0; i < existingConsultations.length; i++) {
     start = existingConsultations[i].startTime
     end = existingConsultations[i].endTime
     bookedSlots.push([start, end])
@@ -1137,7 +1152,7 @@ async function executeCancel() {
     const confirmation = confirm("Are you sure you want to cancel the consultation?")
     if (!confirmation) {
       console.log("Consultation cancellation canceled by user")
-      return 
+      return
     }
     const response = await fetch(`/class/api/cancelConsultation/${consultationID}`, {
       method: "DELETE",
@@ -1150,10 +1165,10 @@ async function executeCancel() {
 
 function isPast(dateString) {
   const date = new Date(dateString)
-  
+
   const today = new Date()
   today.setHours(0, 0, 0, 0)
 
   // If date is less than today, it's in the past
-  return date < today
+  return date < today
 }
