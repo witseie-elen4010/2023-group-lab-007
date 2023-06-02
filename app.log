@@ -99,3 +99,158 @@
 [2023-06-01 11:02:31.332 PM] [32minfo[39m: 	[32mFetched consultation details for this lecturer david@wits.ac.za from the database [david@wits.ac.za][39m
 [2023-06-01 11:02:31.647 PM] [32minfo[39m: 	[32mNavigated to settings page [david@wits.ac.za][39m
 [2023-06-01 11:02:33.432 PM] [32minfo[39m: 	[32mNavigated to logs page [david@wits.ac.za][39m
+[2023-06-02 11:03:52.566 AM] [32minfo[39m: 	[32mFetched all bookings/consultations for this student [dude@students.wits.ac.za][39m
+[2023-06-02 11:03:52.633 AM] [31merror[39m: 	[31mError[39m
+[2023-06-02 11:03:52.641 AM] [32minfo[39m: 	[32mFetched all bookings for consultation (undefined) from the database [dude@students.wits.ac.za][39m
+[2023-06-02 11:03:52.645 AM] [31merror[39m: 	[31mError[39m
+[2023-06-02 11:03:52.649 AM] [32minfo[39m: 	[32mFetched student (undefined) details from the database [dude@students.wits.ac.za][39m
+[2023-06-02 11:03:52.656 AM] [32minfo[39m: 	[32mSearched through a list of available consultation periods for a lecturer [dude@wits.ac.za][39m
+[2023-06-02 11:03:52.660 AM] [32minfo[39m: 	[32mSearched through a list of available consultation periods for a lecturer [dude@wits.ac.za][39m
+[2023-06-02 11:03:52.665 AM] [31merror[39m: 	[31mError[39m
+[2023-06-02 11:03:52.673 AM] [32minfo[39m: 	[32mFetched consultation details for this 4 ID from the database [dude@wits.ac.za][39m
+[2023-06-02 11:03:52.738 AM] [31merror[39m: 	[31mError[39m
+[2023-06-02 11:03:52.744 AM] [32minfo[39m: 	[32mFetched consultation details for this lecturer dude@wits.ac.za from the database [dude@wits.ac.za][39m
+[2023-06-02 11:03:52.749 AM] [32minfo[39m: 	[32mFetched consultation details from the database [dude@students.wits.ac.za][39m
+[2023-06-02 11:03:52.760 AM] [31merror[39m: 	[31mError[39m
+[2023-06-02 11:03:52.764 AM] [32minfo[39m: 	[32mSearched through a list of available consultation periods for this lecturer undefined [dude@students.wits.ac.za][39m
+[2023-06-02 11:03:52.772 AM] [31merror[39m: 	[31mError[39m
+[2023-06-02 11:03:52.778 AM] [32minfo[39m: 	[32mFetched existing consultation periods for this lecturer dude@wits.ac.za [dude@wits.ac.za][39m
+[2023-06-02 11:03:52.783 AM] [31merror[39m: 	[31mError[39m
+[2023-06-02 11:03:52.789 AM] [32minfo[39m: 	[32mFetched lecturers details from the database [dude@wits.ac.za][39m
+[2023-06-02 11:03:52.793 AM] [31merror[39m: 	[31mError[39m
+[2023-06-02 11:03:52.805 AM] [32minfo[39m: 	[32mFetched student number for this student [2351852@students.wits.ac.za][39m
+[2023-06-02 11:03:52.810 AM] [32minfo[39m: 	[32mFetched student details [2351852@students.wits.ac.za][39m
+[2023-06-02 11:03:52.813 AM] [31merror[39m: 	[31mError[39m
+[2023-06-02 11:03:52.815 AM] [32minfo[39m: 	[32mOrganised a new consultation [dude@wits.ac.za][39m
+[2023-06-02 11:03:52.821 AM] [31merror[39m: 	[31mError[39m
+[2023-06-02 11:03:52.824 AM] [32minfo[39m: 	[32mInserted lecturer details [dude@wits.ac.za][39m
+[2023-06-02 11:03:52.827 AM] [31merror[39m: 	[31mError[39m
+[2023-06-02 11:03:52.830 AM] [32minfo[39m: 	[32mInserted student details [dude@wits.ac.za][39m
+[2023-06-02 11:03:52.832 AM] [31merror[39m: 	[31mError[39m
+[2023-06-02 11:03:52.839 AM] [32minfo[39m: 	[32mStudent joined an existing consultation [dude@wits.ac.za][39m
+[2023-06-02 11:03:52.842 AM] [31merror[39m: 	[31mError[39m
+[2023-06-02 11:06:26.296 AM] [32minfo[39m: 	[32mNavigated to landing page [david@wits.ac.za][39m
+[2023-06-02 11:06:27.063 AM] [32minfo[39m: 	[32mFetched consultation details for this lecturer david@wits.ac.za from the database [david@wits.ac.za][39m
+[2023-06-02 11:07:03.778 AM] [32minfo[39m: 	[32mLogged out [david@wits.ac.za][39m
+[2023-06-02 11:16:33.690 AM] [32minfo[39m: 	[32mNavigated to notamember page [brycegrahn@gmail.com][39m
+[2023-06-02 11:20:42.091 AM] [32minfo[39m: 	[32mNavigated to notamember page [brycegrahn@gmail.com][39m
+[2023-06-02 11:21:56.869 AM] [32minfo[39m: 	[32mNavigated to notamember page [johndavids@students.wit.ac.za][39m
+[2023-06-02 11:22:37.443 AM] [32minfo[39m: 	[32mNavigated to more details page [sdafsgbn@students.wits.ac.za][39m
+[2023-06-02 11:23:28.790 AM] [32minfo[39m: 	[32mNavigated to more details page [sdafsgbn@students.wits.ac.za][39m
+[2023-06-02 11:23:34.174 AM] [32minfo[39m: 	[32mLogged out [sdafsgbn@students.wits.ac.za][39m
+[2023-06-02 11:24:16.217 AM] [32minfo[39m: 	[32mNavigated to notamember page [brycegrahn@gmail.com][39m
+[2023-06-02 11:25:12.991 AM] [32minfo[39m: 	[32mNavigated to more details page [johndavids@students.wits.ac.za][39m
+[2023-06-02 11:25:52.246 AM] [32minfo[39m: 	[32mInserted student details [johndavids@students.wits.ac.za][39m
+[2023-06-02 11:25:52.563 AM] [32minfo[39m: 	[32mNavigated to landing page [johndavids@students.wits.ac.za][39m
+[2023-06-02 11:25:53.223 AM] [32minfo[39m: 	[32mFetched lecturers details from the database [johndavids@students.wits.ac.za][39m
+[2023-06-02 11:25:54.410 AM] [32minfo[39m: 	[32mFetched all bookings/consultations for this student [johndavids@students.wits.ac.za][39m
+[2023-06-02 11:26:11.277 AM] [32minfo[39m: 	[32mLogged out [johndavids@students.wits.ac.za][39m
+[2023-06-02 11:26:53.594 AM] [32minfo[39m: 	[32mNavigated to more details page [mich@wits.ac.za][39m
+[2023-06-02 11:27:04.956 AM] [32minfo[39m: 	[32mInserted lecturer details [mich@wits.ac.za][39m
+[2023-06-02 11:27:05.272 AM] [32minfo[39m: 	[32mNavigated to landing page [mich@wits.ac.za][39m
+[2023-06-02 11:27:06.784 AM] [32minfo[39m: 	[32mFetched consultation details for this lecturer mich@wits.ac.za from the database [mich@wits.ac.za][39m
+[2023-06-02 11:27:17.526 AM] [32minfo[39m: 	[32mNavigated to settings page [mich@wits.ac.za][39m
+[2023-06-02 11:28:16.908 AM] [32minfo[39m: 	[32mFetched existing consultation periods for this lecturer mich@wits.ac.za [mich@wits.ac.za][39m
+[2023-06-02 11:28:44.205 AM] [32minfo[39m: 	[32mNavigated to settings page [mich@wits.ac.za][39m
+[2023-06-02 11:30:15.713 AM] [32minfo[39m: 	[32mNavigated to settings page [mich@wits.ac.za][39m
+[2023-06-02 11:31:40.013 AM] [32minfo[39m: 	[32mFetched existing consultation periods for this lecturer mich@wits.ac.za [mich@wits.ac.za][39m
+[2023-06-02 11:31:40.034 AM] [32minfo[39m: 	[32mInserted a new consultation availability period for this lecturer [mich@wits.ac.za][39m
+[2023-06-02 11:32:02.408 AM] [32minfo[39m: 	[32mFetched existing consultation periods for this lecturer mich@wits.ac.za [mich@wits.ac.za][39m
+[2023-06-02 11:32:09.012 AM] [32minfo[39m: 	[32mFetched existing consultation periods for this lecturer mich@wits.ac.za [mich@wits.ac.za][39m
+[2023-06-02 11:32:10.368 AM] [32minfo[39m: 	[32mFetched existing consultation periods for this lecturer mich@wits.ac.za [mich@wits.ac.za][39m
+[2023-06-02 11:32:10.371 AM] [32minfo[39m: 	[32mInserted a new consultation availability period for this lecturer [mich@wits.ac.za][39m
+[2023-06-02 11:32:18.121 AM] [32minfo[39m: 	[32mDeleted a consultation availability period for this lecturer [mich@wits.ac.za][39m
+[2023-06-02 11:32:21.763 AM] [32minfo[39m: 	[32mNavigated to settings page [mich@wits.ac.za][39m
+[2023-06-02 11:32:24.491 AM] [32minfo[39m: 	[32mFetched existing consultation periods for this lecturer mich@wits.ac.za [mich@wits.ac.za][39m
+[2023-06-02 11:32:35.257 AM] [32minfo[39m: 	[32mFetched existing consultation periods for this lecturer mich@wits.ac.za [mich@wits.ac.za][39m
+[2023-06-02 11:32:56.607 AM] [32minfo[39m: 	[32mNavigated to logs page [mich@wits.ac.za][39m
+[2023-06-02 11:33:10.186 AM] [32minfo[39m: 	[32mNavigated to logs page [mich@wits.ac.za][39m
+[2023-06-02 11:34:54.741 AM] [32minfo[39m: 	[32mNavigated to lecturer dashboard page [mich@wits.ac.za][39m
+[2023-06-02 11:34:56.031 AM] [32minfo[39m: 	[32mFetched consultation details for this lecturer mich@wits.ac.za from the database [mich@wits.ac.za][39m
+[2023-06-02 11:34:59.290 AM] [32minfo[39m: 	[32mNavigated to settings page [mich@wits.ac.za][39m
+[2023-06-02 11:35:02.560 AM] [32minfo[39m: 	[32mFetched existing consultation periods for this lecturer mich@wits.ac.za [mich@wits.ac.za][39m
+[2023-06-02 11:35:36.750 AM] [32minfo[39m: 	[32mNavigated to lecturer dashboard page [mich@wits.ac.za][39m
+[2023-06-02 11:35:37.646 AM] [32minfo[39m: 	[32mFetched consultation details for this lecturer mich@wits.ac.za from the database [mich@wits.ac.za][39m
+[2023-06-02 11:35:38.285 AM] [32minfo[39m: 	[32mNavigated to settings page [mich@wits.ac.za][39m
+[2023-06-02 11:35:40.169 AM] [32minfo[39m: 	[32mNavigated to lecturer dashboard page [mich@wits.ac.za][39m
+[2023-06-02 11:35:41.030 AM] [32minfo[39m: 	[32mFetched consultation details for this lecturer mich@wits.ac.za from the database [mich@wits.ac.za][39m
+[2023-06-02 11:35:41.792 AM] [32minfo[39m: 	[32mNavigated to lecturer dashboard page [mich@wits.ac.za][39m
+[2023-06-02 11:35:42.305 AM] [32minfo[39m: 	[32mNavigated to settings page [mich@wits.ac.za][39m
+[2023-06-02 11:35:43.118 AM] [32minfo[39m: 	[32mNavigated to settings page [mich@wits.ac.za][39m
+[2023-06-02 11:35:45.292 AM] [32minfo[39m: 	[32mFetched existing consultation periods for this lecturer mich@wits.ac.za [mich@wits.ac.za][39m
+[2023-06-02 11:36:43.899 AM] [32minfo[39m: 	[32mDeleted a consultation availability period for this lecturer [mich@wits.ac.za][39m
+[2023-06-02 11:37:56.515 AM] [32minfo[39m: 	[32mFetched existing consultation periods for this lecturer mich@wits.ac.za [mich@wits.ac.za][39m
+[2023-06-02 11:38:35.340 AM] [32minfo[39m: 	[32mFetched existing consultation periods for this lecturer mich@wits.ac.za [mich@wits.ac.za][39m
+[2023-06-02 11:38:35.357 AM] [32minfo[39m: 	[32mInserted a new consultation availability period for this lecturer [mich@wits.ac.za][39m
+[2023-06-02 11:39:35.559 AM] [32minfo[39m: 	[32mInserted a new consultation availability period for this lecturer [mich@wits.ac.za][39m
+[2023-06-02 11:39:35.565 AM] [32minfo[39m: 	[32mFetched existing consultation periods for this lecturer mich@wits.ac.za [mich@wits.ac.za][39m
+[2023-06-02 11:39:46.201 AM] [32minfo[39m: 	[32mFetched existing consultation periods for this lecturer mich@wits.ac.za [mich@wits.ac.za][39m
+[2023-06-02 11:40:06.037 AM] [32minfo[39m: 	[32mNavigated to settings page [mich@wits.ac.za][39m
+[2023-06-02 11:56:29.410 AM] [32minfo[39m: 	[32mNavigated to settings page [mich@wits.ac.za][39m
+[2023-06-02 11:56:36.094 AM] [32minfo[39m: 	[32mFetched existing consultation periods for this lecturer mich@wits.ac.za [mich@wits.ac.za][39m
+[2023-06-02 11:56:45.423 AM] [32minfo[39m: 	[32mFetched existing consultation periods for this lecturer mich@wits.ac.za [mich@wits.ac.za][39m
+[2023-06-02 11:56:45.436 AM] [32minfo[39m: 	[32mInserted a new consultation availability period for this lecturer [mich@wits.ac.za][39m
+[2023-06-02 12:01:07.777 PM] [32minfo[39m: 	[32mNavigated to settings page [mich@wits.ac.za][39m
+[2023-06-02 12:01:11.255 PM] [32minfo[39m: 	[32mFetched existing consultation periods for this lecturer mich@wits.ac.za [mich@wits.ac.za][39m
+[2023-06-02 12:01:52.323 PM] [32minfo[39m: 	[32mFetched existing consultation periods for this lecturer mich@wits.ac.za [mich@wits.ac.za][39m
+[2023-06-02 12:01:52.617 PM] [32minfo[39m: 	[32mFetched existing consultation periods for this lecturer mich@wits.ac.za [mich@wits.ac.za][39m
+[2023-06-02 12:03:12.461 PM] [32minfo[39m: 	[32mNavigated to settings page [mich@wits.ac.za][39m
+[2023-06-02 12:03:14.658 PM] [32minfo[39m: 	[32mFetched existing consultation periods for this lecturer mich@wits.ac.za [mich@wits.ac.za][39m
+[2023-06-02 12:04:53.141 PM] [32minfo[39m: 	[32mNavigated to landing page [mich@wits.ac.za][39m
+[2023-06-02 12:04:53.974 PM] [32minfo[39m: 	[32mFetched consultation details for this lecturer mich@wits.ac.za from the database [mich@wits.ac.za][39m
+[2023-06-02 12:04:57.980 PM] [32minfo[39m: 	[32mNavigated to settings page [mich@wits.ac.za][39m
+[2023-06-02 12:04:59.861 PM] [32minfo[39m: 	[32mFetched existing consultation periods for this lecturer mich@wits.ac.za [mich@wits.ac.za][39m
+[2023-06-02 12:05:02.979 PM] [32minfo[39m: 	[32mDeleted a consultation availability period for this lecturer [mich@wits.ac.za][39m
+[2023-06-02 12:05:10.855 PM] [32minfo[39m: 	[32mFetched existing consultation periods for this lecturer mich@wits.ac.za [mich@wits.ac.za][39m
+[2023-06-02 12:05:10.859 PM] [32minfo[39m: 	[32mInserted a new consultation availability period for this lecturer [mich@wits.ac.za][39m
+[2023-06-02 12:05:15.811 PM] [32minfo[39m: 	[32mFetched existing consultation periods for this lecturer mich@wits.ac.za [mich@wits.ac.za][39m
+[2023-06-02 12:06:37.598 PM] [32minfo[39m: 	[32mNavigated to landing page [mich@wits.ac.za][39m
+[2023-06-02 12:06:38.417 PM] [32minfo[39m: 	[32mFetched consultation details for this lecturer mich@wits.ac.za from the database [mich@wits.ac.za][39m
+[2023-06-02 12:06:39.319 PM] [32minfo[39m: 	[32mNavigated to settings page [mich@wits.ac.za][39m
+[2023-06-02 12:06:42.515 PM] [32minfo[39m: 	[32mFetched existing consultation periods for this lecturer mich@wits.ac.za [mich@wits.ac.za][39m
+[2023-06-02 12:07:01.169 PM] [32minfo[39m: 	[32mInserted a new consultation availability period for this lecturer [mich@wits.ac.za][39m
+[2023-06-02 12:07:01.174 PM] [32minfo[39m: 	[32mFetched existing consultation periods for this lecturer mich@wits.ac.za [mich@wits.ac.za][39m
+[2023-06-02 12:07:09.556 PM] [32minfo[39m: 	[32mFetched existing consultation periods for this lecturer mich@wits.ac.za [mich@wits.ac.za][39m
+[2023-06-02 12:08:30.045 PM] [32minfo[39m: 	[32mNavigated to landing page [mich@wits.ac.za][39m
+[2023-06-02 12:08:30.868 PM] [32minfo[39m: 	[32mFetched consultation details for this lecturer mich@wits.ac.za from the database [mich@wits.ac.za][39m
+[2023-06-02 12:08:32.029 PM] [32minfo[39m: 	[32mNavigated to settings page [mich@wits.ac.za][39m
+[2023-06-02 12:08:34.894 PM] [32minfo[39m: 	[32mFetched existing consultation periods for this lecturer mich@wits.ac.za [mich@wits.ac.za][39m
+[2023-06-02 12:08:39.079 PM] [32minfo[39m: 	[32mDeleted a consultation availability period for this lecturer [mich@wits.ac.za][39m
+[2023-06-02 12:08:50.518 PM] [32minfo[39m: 	[32mInserted a new consultation availability period for this lecturer [mich@wits.ac.za][39m
+[2023-06-02 12:08:50.788 PM] [32minfo[39m: 	[32mFetched existing consultation periods for this lecturer mich@wits.ac.za [mich@wits.ac.za][39m
+[2023-06-02 12:08:55.689 PM] [32minfo[39m: 	[32mDeleted a consultation availability period for this lecturer [mich@wits.ac.za][39m
+[2023-06-02 12:09:02.453 PM] [32minfo[39m: 	[32mInserted a new consultation availability period for this lecturer [mich@wits.ac.za][39m
+[2023-06-02 12:09:02.721 PM] [32minfo[39m: 	[32mFetched existing consultation periods for this lecturer mich@wits.ac.za [mich@wits.ac.za][39m
+[2023-06-02 12:09:09.560 PM] [32minfo[39m: 	[32mNavigated to settings page [mich@wits.ac.za][39m
+[2023-06-02 12:09:13.261 PM] [32minfo[39m: 	[32mFetched existing consultation periods for this lecturer mich@wits.ac.za [mich@wits.ac.za][39m
+[2023-06-02 12:09:27.322 PM] [32minfo[39m: 	[32mInserted a new consultation availability period for this lecturer [mich@wits.ac.za][39m
+[2023-06-02 12:09:27.620 PM] [32minfo[39m: 	[32mFetched existing consultation periods for this lecturer mich@wits.ac.za [mich@wits.ac.za][39m
+[2023-06-02 12:09:29.753 PM] [32minfo[39m: 	[32mDeleted a consultation availability period for this lecturer [mich@wits.ac.za][39m
+[2023-06-02 12:09:30.253 PM] [32minfo[39m: 	[32mDeleted a consultation availability period for this lecturer [mich@wits.ac.za][39m
+[2023-06-02 12:09:34.175 PM] [32minfo[39m: 	[32mDeleted a consultation availability period for this lecturer [mich@wits.ac.za][39m
+[2023-06-02 12:10:52.239 PM] [32minfo[39m: 	[32mLogged out [mich@wits.ac.za][39m
+[2023-06-02 12:12:58.491 PM] [32minfo[39m: 	[32mNavigated to notamember page [brycegrahn@gmail.com][39m
+[2023-06-02 12:14:20.249 PM] [32minfo[39m: 	[32mNavigated to more details page [student1@students.wits.ac.za][39m
+[2023-06-02 12:14:54.068 PM] [32minfo[39m: 	[32mInserted student details [student1@students.wits.ac.za][39m
+[2023-06-02 12:14:54.356 PM] [32minfo[39m: 	[32mNavigated to landing page [student1@students.wits.ac.za][39m
+[2023-06-02 12:14:54.717 PM] [32minfo[39m: 	[32mFetched lecturers details from the database [student1@students.wits.ac.za][39m
+[2023-06-02 12:14:55.222 PM] [32minfo[39m: 	[32mFetched all bookings/consultations for this student [student1@students.wits.ac.za][39m
+[2023-06-02 12:15:02.199 PM] [32minfo[39m: 	[32mLogged out [student1@students.wits.ac.za][39m
+[2023-06-02 12:15:41.622 PM] [32minfo[39m: 	[32mNavigated to more details page [lecturer12@wits.ac.za][39m
+[2023-06-02 12:15:58.247 PM] [32minfo[39m: 	[32mInserted lecturer details [lecturer12@wits.ac.za][39m
+[2023-06-02 12:15:58.526 PM] [32minfo[39m: 	[32mNavigated to landing page [lecturer12@wits.ac.za][39m
+[2023-06-02 12:15:59.463 PM] [32minfo[39m: 	[32mFetched consultation details for this lecturer lecturer12@wits.ac.za from the database [lecturer12@wits.ac.za][39m
+[2023-06-02 12:16:12.527 PM] [32minfo[39m: 	[32mLogged out [lecturer12@wits.ac.za][39m
+[2023-06-02 12:16:21.637 PM] [32minfo[39m: 	[32mNavigated to landing page [lecturer12@wits.ac.za][39m
+[2023-06-02 12:16:22.396 PM] [32minfo[39m: 	[32mFetched consultation details for this lecturer lecturer12@wits.ac.za from the database [lecturer12@wits.ac.za][39m
+[2023-06-02 12:16:25.803 PM] [32minfo[39m: 	[32mNavigated to settings page [lecturer12@wits.ac.za][39m
+[2023-06-02 12:17:10.491 PM] [32minfo[39m: 	[32mFetched existing consultation periods for this lecturer lecturer12@wits.ac.za [lecturer12@wits.ac.za][39m
+[2023-06-02 12:17:53.452 PM] [32minfo[39m: 	[32mInserted a new consultation availability period for this lecturer [lecturer12@wits.ac.za][39m
+[2023-06-02 12:17:53.718 PM] [32minfo[39m: 	[32mFetched existing consultation periods for this lecturer lecturer12@wits.ac.za [lecturer12@wits.ac.za][39m
+[2023-06-02 12:19:11.328 PM] [32minfo[39m: 	[32mInserted a new consultation availability period for this lecturer [lecturer12@wits.ac.za][39m
+[2023-06-02 12:19:11.594 PM] [32minfo[39m: 	[32mFetched existing consultation periods for this lecturer lecturer12@wits.ac.za [lecturer12@wits.ac.za][39m
+[2023-06-02 12:19:18.859 PM] [32minfo[39m: 	[32mDeleted a consultation availability period for this lecturer [lecturer12@wits.ac.za][39m
+[2023-06-02 12:19:22.493 PM] [32minfo[39m: 	[32mNavigated to settings page [lecturer12@wits.ac.za][39m
+[2023-06-02 12:19:26.005 PM] [32minfo[39m: 	[32mFetched existing consultation periods for this lecturer lecturer12@wits.ac.za [lecturer12@wits.ac.za][39m
+[2023-06-02 12:19:34.796 PM] [32minfo[39m: 	[32mNavigated to logs page [lecturer12@wits.ac.za][39m
+[2023-06-02 12:19:41.911 PM] [32minfo[39m: 	[32mNavigated to logs page [lecturer12@wits.ac.za][39m

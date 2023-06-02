@@ -20,6 +20,7 @@ form.addEventListener('submit', async (event) => {
   const maxStudents = document.querySelector('input[name="maxStudents"]').value;
   const maxConsultations = document.querySelector('input[name="maxConsultations"]').value
   const duration = document.querySelector('select[name="maxDuration"]').value
+  let status = true
 
   const entry = {
     lecturerId: email,
@@ -31,16 +32,21 @@ form.addEventListener('submit', async (event) => {
     numberOfStudents: maxStudents,
   };
 
-  const status = checkForOverlap(dayOfWeek, convertToMinutes(startTime), convertToMinutes(endTime), entries)
-
-  if (!status) {
-    handleEmail(email)
-    entries.push(entry)
-    displayEntries()
-    insertConsultationPeriods(entry)
+  if (startTime.includes("NaN") || endTime.includes("NaN")) {
+    status = true
   }
   else {
-    displayStatus();
+    status = checkForOverlap(dayOfWeek, convertToMinutes(startTime), convertToMinutes(endTime), entries)
+  }
+
+  if (!status) {
+    await insertConsultationPeriods(entry)
+    await handleEmail(email)
+    displayStatus(false);
+    displayEntries()
+  }
+  else {
+    displayStatus(true);
   }
 });
 
@@ -127,8 +133,14 @@ async function getConsultationPeriods(lecturerID) {
   }
 }
 
-function displayStatus() {
-  statusMessage.innerHTML = 'Canceled. There appears to be a conflict with an existing consultation period. Please try again.'
+function displayStatus(state) {
+  if (state) {
+    statusMessage.innerHTML = 'Canceled. There appears to be a conflict with an existing consultation period. Please try again.'
+  }
+  else {
+    statusMessage.innerHTML = ''
+  }
+
 }
 
 //Display existing consultation settings as a list
