@@ -13,7 +13,7 @@ The entire team collaborated and created the table discussing what went well, wh
 
 We debriefed and although it was stressful we all agreed this project was a valuable learning experience. Ruth-Ann pointed out, and the team agreed, that the project would have been better if we had been given a few weeks to plan before starting the project. 
 
-Sprint Velocity for Sprint 4: The number of story points completed was 14. For the final sprint, the stories were focussed on ensuring that the project was finished. Time management was important, and it was encouraging that 7 user stories were completed per week and that the more than 7 stories were not left for the last week.
+Sprint Velocity for Sprint 4: The number of story points completed was 18. For the final sprint, the stories were focussed on ensuring that the project was finished. Time management was important, and it was encouraging that 7 user stories were completed per week and that the more than 7 stories were not left for the last week.
 
 ## Tickets
 - A user must be able to access the log information (SP: 2)
